@@ -1,6 +1,6 @@
 import { Head, useForm } from '@inertiajs/react';
 // Assuming logo import works in your environment
-import logo from '../../../images/logos/logo-sr33.png';
+import logo from '../../../images/logos/logo secundario.png';
 
 export default function AdminLogin() {
     const { data, setData, post, processing, errors } = useForm({
@@ -16,12 +16,15 @@ export default function AdminLogin() {
 
     return (
         <div className="bg-opacity-50 fixed top-0 left-0 z-10 flex h-screen w-screen flex-col items-center justify-center gap-10 bg-black/50">
+            <a className="absolute top-4 left-5 text-lg text-white underline" href="/">
+                Volver a la pagina principal
+            </a>
             <Head>
                 <title>Administrador</title>
             </Head>
             <div className="font-roboto-condensed top-10 right-10 z-20 flex h-fit w-fit flex-col rounded-lg bg-white p-5 shadow-md">
                 <a className="self-center py-5" href={'/'}>
-                    <img className="max-w-30" src={logo} alt="Logo" />
+                    <img className="" src={logo} alt="Logo" />
                 </a>
 
                 <form onSubmit={onSubmit} className="flex h-full w-fit flex-col justify-around gap-8">
@@ -42,7 +45,7 @@ export default function AdminLogin() {
                                 name="user"
                                 id="user"
                             />
-                            {errors.name && <div className="mt-1 pl-3 text-sm text-red-500">{errors.name}</div>}
+                            {errors.name && <div className="mt-1 pl-3 text-sm break-words text-red-500">{errors.name}</div>}
                         </div>
 
                         <div className="flex flex-col gap-2">

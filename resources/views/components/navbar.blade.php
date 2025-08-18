@@ -62,26 +62,27 @@
     <!-- Franja superior -->
 
     <!-- Contenido principal navbar -->
-    <div
-        class="mx-auto flex h-full max-sm:h-[96px] w-[1200px] max-xl:w-full max-xl:px-6 max-lg:px-4 max-sm:px-4 items-center justify-between">
+    <div class="mx-auto flex h-[96px] w-[1224px] items-center justify-between">
         <!-- Logo -->
-        <div class="flex flex-row items-end gap-10">
+        <div class="flex flex-row items-end h-fit gap-10 w-full justify-between">
 
-            <a class="min-w-[258px] min-h-[57px]" href="/">
-                <img class="w-full h-full object-contain" :src="logoPrincipal" alt="Logo" />
+            <a class="min-w-[258px] min-h-[57px] " href="/">
+                <img class="w-full h-full object-contain" :src="scrolled ? logoSecundario : logoPrincipal" alt="Logo" />
             </a>
 
 
+
             <!-- Navegación desktop -->
-            <div class="flex flex-col items-end justify-between text-white  leading-none h-full gap-5">
-                <div class="flex flex-row gap-4 items-center">
+            <div class="flex flex-col items-end justify-between text-white leading-none h-full gap-5 max-w-full">
+                <div class="flex flex-row gap-4 items-center shrink-0" :class="scrolled ? 'text-black' : 'text-white'">
                     <p class="m-0 leading-none">en</p>
                     <span>|</span>
-                    <button
-                        class="border border-white rounded-sm text-white font-bold leading-none w-[136px] h-[42px]">ÁREA
-                        CLIENTE</button>
+                    <button class="border  rounded-sm  text-[14px] leading-none w-[136px] h-[42px]"
+                        :class="scrolled ? 'border-black text-black' : 'border-white text-white'">
+                        ÁREA CLIENTE
+                    </button>
                 </div>
-                <div class="hidden lg:flex gap-8 max-xl:gap-6 items-end">
+                <div class="flex gap-6 items-end flex-wrap">
                     @foreach(($isPrivate ? $privateLinks : $defaultLinks) as $link)
                         <a href="{{ $link['href'] }}" :class="scrolled ? 'text-black' : 'text-white'"
                             class="text-[15px] max-xl:text-[15px] font-normal hover:text-primary-orange transition-colors duration-300 whitespace-nowrap leading-none {{ Request::is(ltrim($link['href'], '/')) ? 'font-bold' : '' }}">
@@ -90,6 +91,7 @@
                     @endforeach
                 </div>
             </div>
+
         </div>
 
 
@@ -111,7 +113,7 @@
             @foreach(($isPrivate ? $privateLinks : $defaultLinks) as $link)
                 <a href="{{ $link['href'] }}"
                     class="block px-4 py-3 max-sm:px-3 max-sm:py-2 text-sm max-sm:text-xs text-gray-700 hover:bg-gray-50 hover:text-primary-orange transition-colors duration-300 border-b border-gray-100 last:border-b-0
-                                                                                                                                                                                                                                                                                                                                                                                                {{ Request::is(ltrim($link['href'], '/')) ? 'font-bold bg-orange-50 text-primary-orange' : '' }}"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            {{ Request::is(ltrim($link['href'], '/')) ? 'font-bold bg-orange-50 text-primary-orange' : '' }}"
                     @click="mobileMenuOpen = false">
                     {{ $link['title'] }}
                 </a>

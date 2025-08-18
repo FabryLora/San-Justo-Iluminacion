@@ -21,7 +21,7 @@
                         <div
                             class="w-fit items-center text-center justify-center max-sm:max-w-full text-white flex flex-col gap-8">
 
-                            <h1 class="text-[32px] font-bold w-fit font-custom leading-none">
+                            <h1 class="text-[32px] font-bold w-fit font-custom! leading-none">
                                 {{ $slider->title }}
                             </h1>
                             <h3 class="text-[20px] max-w-[524px] ">{{$slider->subtitle}}</h3>

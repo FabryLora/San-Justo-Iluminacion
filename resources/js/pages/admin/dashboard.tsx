@@ -17,7 +17,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
-import logo from '../../../images/logos/logo-sr33.png';
+import logo from '../../../images/logos/logo secundario.png';
 
 /* import bronzenLogo from "../assets/logos/bronzen-logo.png"; */
 
