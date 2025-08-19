@@ -24,9 +24,7 @@ class HomePages extends Controller
 {
     public function home()
     {
-        if (Auth::check()) {
-            return redirect('/privada/productos');
-        }
+
 
         $metadatos = Metadatos::where('title', 'Inicio')->first();
 

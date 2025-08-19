@@ -12,7 +12,7 @@ use Inertia\Inertia;
 
 
 
-# ---------------------- Rutas de zona pública ---------------------- #
+// routes/web.php
 
 Route::get('/', [HomePages::class, 'home'])->name('home');
 Route::get('/nosotros', [HomePages::class, 'nosotros'])->name('nosotros');
@@ -21,9 +21,11 @@ Route::get('/novedades', [HomePages::class, 'novedades'])->name('novedades');
 Route::get('/contacto', [HomePages::class, 'contacto'])->name('contacto');
 Route::get('/novedades/{id}', [NovedadesController::class, 'novedadesShow'])->name('novedades');
 Route::post('/contacto/sendemail', [ContactoController::class, 'sendContact'])->name('send.contact');
+# ---------------------- Rutas de zona pública ---------------------- #
+
+
 
 Route::get('/productos', [ProductoController::class, 'indexVistaPrevia'])->name('productos');
-Route::get('/p/{codigo}', [ProductoController::class, 'show'])->name('producto');
 
 Route::get('/busqueda', [ProductoController::class, 'SearchProducts'])->name('searchproducts');
 

@@ -9,6 +9,6 @@
     <x-slider :sliders="$sliders" />
 
 
-    <x-banner-portada :bannerPortada="$bannerPortada" />
+
 
 @endsection

@@ -28,8 +28,7 @@
 
 
                             <a href="{{ $slider->link}}"
-                                class="flex justify-center items-center w-[280px] h-[42px] bg-primary-orange rounded-sm font-medium text-[14px]">CONOCÉ
-                                NUESTROS PRODUCTOS</a>
+                                class="flex justify-center items-center w-[280px] h-[42px] bg-primary-orange rounded-sm font-medium text-[14px]">{{__('CONOCE NUESTROS PRODUCTOS')}}</a>
                         </div>
                         {{-- <a href="{{ route('categorias') }}"
                             class="border border-white w-[180px] sm:w-[200px] lg:w-[230px] text-center py-2 sm:py-2.5 text-sm sm:text-base rounded-full hover:bg-white hover:text-black transition duration-300">Ver
