@@ -47,7 +47,7 @@ export default function MarcasAdmin() {
                         >
                             <form onSubmit={handleSubmit} method="POST" className="text-black">
                                 <div className="w-[500px] rounded-md bg-white p-4">
-                                    <h2 className="mb-4 text-2xl font-semibold">Cargar archivo</h2>
+                                    <h2 className="mb-4 text-2xl font-semibold">Cargar catalogo</h2>
                                     <div className="flex flex-col gap-4">
                                         <label htmlFor="ordennn">Orden</label>
                                         <input
@@ -67,25 +67,16 @@ export default function MarcasAdmin() {
                                             id="nombree"
                                             onChange={(e) => setData('name', e.target.value)}
                                         />
-                                        <label htmlFor="imagenn">Imagen</label>
-
-                                        <span className="text-base font-normal">Resolucion recomendada: 501x181px</span>
-                                        <div className="flex flex-row">
-                                            <input
-                                                type="file"
-                                                name="imagen"
-                                                id="imagenn"
-                                                onChange={(e) => setData('image', e.target.files[0])}
-                                                className="hidden"
-                                            />
-                                            <label
-                                                className="border-primary-orange text-primary-orange hover:bg-primary-orange cursor-pointer rounded-md border px-2 py-1 transition duration-300 hover:text-white"
-                                                htmlFor="imagenn"
-                                            >
-                                                Elegir imagen
-                                            </label>
-                                            <p className="self-center px-2">{data?.image?.name}</p>
-                                        </div>
+                                        <label htmlFor="subtitulo">
+                                            Subtitulo <span className="text-red-500">*</span>
+                                        </label>
+                                        <input
+                                            className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
+                                            type="text"
+                                            name="subtitulo"
+                                            id="subtitulo"
+                                            onChange={(e) => setData('subtitle', e.target.value)}
+                                        />
 
                                         <label htmlFor="archivo">Archivo</label>
 
@@ -128,11 +119,11 @@ export default function MarcasAdmin() {
                     )}
                 </AnimatePresence>
                 <div className="mx-auto flex w-full flex-col gap-3">
-                    <h2 className="border-primary-orange text-primary-orange text-bold w-full border-b-2 text-2xl">Archivos</h2>
+                    <h2 className="border-primary-orange text-primary-orange text-bold w-full border-b-2 text-2xl">Catalogos</h2>
                     <div className="flex h-fit w-full flex-row gap-5">
                         <input
                             type="text"
-                            placeholder="Buscar archivos..."
+                            placeholder="Buscar catalogo..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             className="w-full rounded-md border border-gray-300 px-3"
@@ -141,7 +132,7 @@ export default function MarcasAdmin() {
                             onClick={() => setCreateView(true)}
                             className="bg-primary-orange w-[200px] rounded px-4 py-1 font-bold text-white hover:bg-orange-400"
                         >
-                            Cargar Archivo
+                            Cargar catalogo
                         </button>
                     </div>
 
@@ -152,8 +143,9 @@ export default function MarcasAdmin() {
                                     <td className="text-center">ORDEN</td>
 
                                     <td className="text-center">NOMBRE</td>
-                                    <td className="w-[400px] px-3 py-2 text-center">IMAGEN</td>
-                                    <td className="text-center">ARCHIVO</td>
+                                    <td className="text-center">SUBTITULO</td>
+
+                                    <td className="py-2 text-center">ARCHIVO</td>
 
                                     <td className="text-center">EDITAR</td>
                                 </tr>

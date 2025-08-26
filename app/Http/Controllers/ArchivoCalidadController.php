@@ -27,8 +27,8 @@ class ArchivoCalidadController extends Controller
     {
         $data = $request->validate([
             'name' => 'required|string|max:255',
+            'subtitle' => 'nullable|string|max:255',
             'order' => 'nullable|string|max:255',
-            'image' => 'nullable|file',
             'archivo' => 'required|file',
         ]);
 
@@ -38,10 +38,7 @@ class ArchivoCalidadController extends Controller
             $data['archivo'] = $filePath;
         }
 
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('images', 'public');
-            $data['image'] = $imagePath;
-        }
+
 
         ArchivoCalidad::create($data);
     }
@@ -63,23 +60,12 @@ class ArchivoCalidadController extends Controller
 
         $data = $request->validate([
             'name' => 'sometimes|string|max:255',
+            'subtitle' => 'sometimes|string|max:255',
             'order' => 'sometimes|string|max:255',
-            'image' => 'sometimes|file',
             'archivo' => 'sometimes|file',
         ]);
 
-        if ($request->hasFile('image')) {
-            // Guardar la ruta del archivo antiguo para eliminarlo después
-            $oldImagePath = $archivoCalidad->getRawOriginal('image');
 
-            // Guardar el nuevo archivo
-            $data['image'] = $request->file('image')->store('images', 'public');
-
-            // Eliminar el archivo antiguo si existe
-            if ($oldImagePath && Storage::disk('public')->exists($oldImagePath)) {
-                Storage::disk('public')->delete($oldImagePath);
-            }
-        }
 
         if ($request->hasFile('archivo')) {
             // Guardar la ruta del archivo antiguo para eliminarlo después
@@ -110,13 +96,7 @@ class ArchivoCalidadController extends Controller
         if (!$archivoCalidad) {
             return redirect()->back()->with('error', 'ArchivoCalidad not found.');
         }
-        // Delete the image if it exists
-        if ($archivoCalidad->image) {
-            $absolutePath = public_path('storage/' . $archivoCalidad->image);
-            if (file_exists($absolutePath)) {
-                unlink($absolutePath);
-            }
-        }
+
 
         // Delete the archivo if it exists
         if ($archivoCalidad->archivo) {

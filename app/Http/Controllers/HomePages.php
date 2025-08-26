@@ -30,18 +30,17 @@ class HomePages extends Controller
 
         $categorias = Categoria::orderBy('order', 'asc')->get();
         $subcategorias = SubCategoria::orderBy('order', 'asc')->get();
-        $sliders = Slider::orderBy('order', 'asc')->get();
-        $bannerPortada = BannerPortada::first();
+        $homeInfo = BannerPortada::first();
         $novedades = Novedades::where('featured', true)->orderBy('order', 'asc')->get();
         $productos = Producto::where('destacado', true)
             ->orderBy('order', 'asc')
             ->with(['imagenes', 'marca', 'modelo', 'precio', 'categoria'])
             ->get();
-
+        $catalogos = ArchivoCalidad::orderBy('order', 'asc')->get();
 
         return view('home', [
-            'sliders' => $sliders,
-            'bannerPortada' => $bannerPortada,
+            'catalogos' => $catalogos,
+            'homeInfo' => $homeInfo,
             'novedades' => $novedades,
             'categorias' => $categorias,
             'subcategorias' => $subcategorias,

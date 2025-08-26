@@ -12,7 +12,7 @@ export default function ArchivoCalidadAdminRow({ archivo }) {
     const updateForm = useForm({
         order: archivo?.order,
         name: archivo?.name,
-
+        subtitle: archivo?.subtitle,
         id: archivo?.id,
     });
 
@@ -21,25 +21,25 @@ export default function ArchivoCalidadAdminRow({ archivo }) {
         updateForm.post(route('admin.archivos.update'), {
             preserveScroll: true,
             onSuccess: () => {
-                toast.success('Archivo actualizada correctamente');
+                toast.success('Catalogo actualizada correctamente');
                 setEdit(false);
             },
             onError: (errors) => {
-                toast.error('Error al actualizar archivo');
+                toast.error('Error al actualizar catalogo');
                 console.log(errors);
             },
         });
     };
 
     const deleteMarca = () => {
-        if (confirm('¿Estas seguro de eliminar esta publicacion?')) {
+        if (confirm('¿Estas seguro de eliminar este catalogo?')) {
             updateForm.delete(route('admin.archivos.destroy'), {
                 preserveScroll: true,
                 onSuccess: () => {
-                    toast.success('Archivo eliminada correctamente');
+                    toast.success('Catalogo eliminada correctamente');
                 },
                 onError: (errors) => {
-                    toast.error('Error al eliminar archivo');
+                    toast.error('Error al eliminar catalogo');
                     console.log(errors);
                 },
             });
@@ -78,10 +78,7 @@ export default function ArchivoCalidadAdminRow({ archivo }) {
         <tr className={`border text-black odd:bg-gray-100 even:bg-white`}>
             <td className="align-middle">{archivo?.order}</td>
             <td className="align-middle">{archivo?.name}</td>
-
-            <td className="h-[90px] w-[90px] px-8">
-                <img className="h-full w-full object-contain" src={archivo?.image} alt="" />
-            </td>
+            <td className="h-[90px] align-middle">{archivo?.subtitle}</td>
 
             <td className="align-middle">
                 <button className="text-blue-500" onClick={handleDownload}>
@@ -109,7 +106,7 @@ export default function ArchivoCalidadAdminRow({ archivo }) {
                     >
                         <form onSubmit={handleUpdate} method="POST" className="text-black">
                             <div className="w-[500px] rounded-md bg-white p-4">
-                                <h2 className="mb-4 text-2xl font-semibold">Actualizar Archivo</h2>
+                                <h2 className="mb-4 text-2xl font-semibold">Actualizar catalogo</h2>
                                 <div className="flex flex-col gap-4">
                                     <label htmlFor="ordennn">Orden</label>
                                     <input
@@ -121,7 +118,7 @@ export default function ArchivoCalidadAdminRow({ archivo }) {
                                         onChange={(e) => updateForm.setData('order', e.target.value)}
                                     />
                                     <label htmlFor="nombree">
-                                        name <span className="text-red-500">*</span>
+                                        Nombre <span className="text-red-500">*</span>
                                     </label>
                                     <input
                                         className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
@@ -131,25 +128,16 @@ export default function ArchivoCalidadAdminRow({ archivo }) {
                                         value={updateForm?.data?.name}
                                         onChange={(e) => updateForm.setData('name', e.target.value)}
                                     />
-                                    <label htmlFor="imagenn">Imagen</label>
-
-                                    <span className="text-base font-normal">Resolucion recomendada: 501x181px</span>
-                                    <div className="flex flex-row">
-                                        <input
-                                            type="file"
-                                            name="imagen"
-                                            id="imagenn"
-                                            onChange={(e) => updateForm.setData('image', e.target.files[0])}
-                                            className="hidden"
-                                        />
-                                        <label
-                                            className="border-primary-orange text-primary-orange hover:bg-primary-orange cursor-pointer rounded-md border px-2 py-1 transition duration-300 hover:text-white"
-                                            htmlFor="imagenn"
-                                        >
-                                            Elegir imagen
-                                        </label>
-                                        <p className="self-center px-2">{updateForm?.data?.image?.name}</p>
-                                    </div>
+                                    <label htmlFor="subtitulo">
+                                        Subtitulo <span className="text-red-500">*</span>
+                                    </label>
+                                    <input
+                                        className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
+                                        type="text"
+                                        name="subtitulo"
+                                        id="subtitulo"
+                                        onChange={(e) => updateForm.setData('subtitle', e.target.value)}
+                                    />
 
                                     <label htmlFor="archivo">Archivo</label>
 

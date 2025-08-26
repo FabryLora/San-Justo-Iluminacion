@@ -44,7 +44,10 @@ export default function Dashboard({ children }) {
             title: 'Inicio',
             icon: faHouse,
             href: '#',
-            subHref: [{ title: 'Contenido', href: 'bannerportada' }],
+            subHref: [
+                { title: 'Contenido', href: 'bannerportada' },
+                { title: 'Catalogos', href: 'archivos' },
+            ],
         },
 
         {
@@ -78,10 +81,7 @@ export default function Dashboard({ children }) {
             title: 'Trabaja con nosotros',
             icon: faStar,
             href: 'trabaja-con-nosotros',
-            subHref: [
-                { title: 'Contenido', href: 'calidad' },
-                { title: 'Archivos', href: 'archivos' },
-            ],
+            subHref: [{ title: 'Contenido', href: 'calidad' }],
         },
         {
             id: 'lanzamientos',

@@ -6,9 +6,10 @@
 @section('keywords', $metadatos->keywords ?? "")
 
 @section('content')
-    <x-slider :sliders="$sliders" />
-
-
-
+    <x-banner-portada :homeInfo="$homeInfo" />
+    <x-seccion-uno :homeInfo="$homeInfo" />
+    <x-catalogos :catalogos="$catalogos" />
+    <x-seccion-dos :homeInfo="$homeInfo" />
+    <x-seccion-tres :homeInfo="$homeInfo" />
 
 @endsection

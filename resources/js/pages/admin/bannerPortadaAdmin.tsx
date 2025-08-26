@@ -1,33 +1,222 @@
 import Dashboard from '@/pages/admin/dashboard';
 import { useForm, usePage } from '@inertiajs/react';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
+
+/**
+ * Smaller, composable components to remove repetition
+ */
+const SectionHeader = ({ children }) => (
+    <h2 className="border-primary-orange text-primary-orange text-bold col-span-2 w-full border-b-2 text-2xl">{children}</h2>
+);
+
+const FieldShell = ({ label, htmlFor, error, children }) => (
+    <div className="w-full">
+        <label htmlFor={htmlFor} className="block text-lg font-medium text-gray-900">
+            {label}
+        </label>
+        <div className="mt-2">
+            <div
+                className={`flex items-center rounded-md bg-white pl-3 outline outline-1 -outline-offset-1 ${
+                    error ? 'outline-red-500' : 'outline-gray-300'
+                } focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600`}
+            >
+                <div className="shrink-0 text-base text-gray-500 select-none sm:text-sm/6" />
+                {children}
+            </div>
+            {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
+        </div>
+    </div>
+);
+
+const TextInput = ({ name, label, data, setData, errors, id = name, type = 'text' }) => (
+    <FieldShell label={label} htmlFor={id} error={errors?.[name]}>
+        <input
+            value={data?.[name] ?? ''}
+            onChange={(ev) => setData(name, ev.target.value)}
+            id={id}
+            name={name}
+            type={type}
+            className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
+        />
+    </FieldShell>
+);
+
+const ImagePicker = ({ name, label, previewUrl, data, setData }) => (
+    <div className="col-span-2 flex flex-row justify-between gap-5">
+        <div className="w-full">
+            <label htmlFor={name} className="block text-lg font-medium text-gray-900">
+                {label}
+            </label>
+            <div className="mt-2 flex justify-between rounded-lg border shadow-lg">
+                <div className="h-[200px] w-1/2 bg-[rgba(0,0,0,0.2)]">
+                    {previewUrl ? (
+                        <img className="h-full w-full rounded-md object-cover" src={previewUrl} alt="" />
+                    ) : (
+                        <div className="flex h-full w-full items-center justify-center text-sm text-gray-500">Sin imagen</div>
+                    )}
+                </div>
+                <div className="flex w-1/2 items-center justify-center">
+                    <div className="h-fit items-center self-center text-center">
+                        <div className="relative mt-4 flex flex-col items-center text-sm/6 text-gray-600">
+                            <label htmlFor={name} className="bg-primary-red relative cursor-pointer rounded-md px-2 py-1 font-semibold text-black">
+                                <span>Cambiar Imagen</span>
+                                <input
+                                    id={name}
+                                    name={name}
+                                    onChange={(e) => setData(name, e.target.files?.[0])}
+                                    type="file"
+                                    accept="image/*"
+                                    className="sr-only"
+                                />
+                            </label>
+                            <p className="absolute top-10 max-w-[200px] break-words">{data?.[name]?.name}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+);
+
+// Nuevo: selector que acepta imagen o video con preview automática
+const MediaPicker = ({ name, label, previewUrl, data, setData }) => {
+    const [localPreview, setLocalPreview] = useState(null);
+    const file = data?.[name];
+
+    useEffect(() => {
+        if (file instanceof File) {
+            const objUrl = URL.createObjectURL(file);
+            setLocalPreview(objUrl);
+            return () => URL.revokeObjectURL(objUrl);
+        }
+        setLocalPreview(null);
+    }, [file]);
+
+    const isVideoUrl = (url) => /\.(mp4|webm|ogg|m4v|mov)$/i.test(url ?? '');
+    const fileIsVideo = file instanceof File && file.type?.startsWith('video/');
+    const effectiveUrl = localPreview || previewUrl || '';
+    const showVideo = fileIsVideo || isVideoUrl(effectiveUrl);
+
+    return (
+        <div className="col-span-2 flex flex-row justify-between gap-5">
+            <div className="w-full">
+                <label htmlFor={name} className="block text-lg font-medium text-gray-900">
+                    {label}
+                </label>
+                <div className="mt-2 flex justify-between rounded-lg border shadow-lg">
+                    <div className="h-[200px] w-1/2 bg-[rgba(0,0,0,0.2)]">
+                        {effectiveUrl ? (
+                            showVideo ? (
+                                <video className="h-full w-full rounded-md object-cover" src={effectiveUrl} controls />
+                            ) : (
+                                <img className="h-full w-full rounded-md object-cover" src={effectiveUrl} alt="" />
+                            )
+                        ) : (
+                            <div className="flex h-full w-full items-center justify-center text-sm text-gray-500">Sin media</div>
+                        )}
+                    </div>
+                    <div className="flex w-1/2 items-center justify-center">
+                        <div className="h-fit items-center self-center text-center">
+                            <div className="relative mt-4 flex flex-col items-center text-sm/6 text-gray-600">
+                                <label
+                                    htmlFor={name}
+                                    className="bg-primary-red relative cursor-pointer rounded-md px-2 py-1 font-semibold text-black"
+                                >
+                                    <span>Cambiar Imagen/Video</span>
+                                    <input
+                                        id={name}
+                                        name={name}
+                                        onChange={(e) => setData(name, e.target.files?.[0])}
+                                        type="file"
+                                        accept="image/*,video/*"
+                                        className="sr-only"
+                                    />
+                                </label>
+                                <p className="absolute top-10 max-w-[200px] break-words">{file?.name}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
 export default function BannerPortadaAdmin() {
     const banner = usePage().props.banner;
 
-    const { data, setData, errors, processing, post, reset } = useForm({
-        title: banner?.title,
-        text: banner?.text,
-    });
+    // Single source of truth: all fields that exist in the form
+    const initialData = useMemo(
+        () => ({
+            // Banner principal
+            title_banner_es: banner?.title_banner_es ?? '',
+            title_banner_en: banner?.title_banner_en ?? '',
+            text_banner_es: banner?.text_banner_es ?? '',
+            text_banner_en: banner?.text_banner_en ?? '',
+            image_banner: null,
 
-    const [text, setText] = useState(banner?.text || '');
+            // Sección 1
+            title_seccion_uno_es: banner?.title_seccion_uno_es ?? '',
+            title_seccion_uno_en: banner?.title_seccion_uno_en ?? '',
+            text_seccion_uno_es: banner?.text_seccion_uno_es ?? '',
+            text_seccion_uno_en: banner?.text_seccion_uno_en ?? '',
+            image_seccion_uno: null,
 
-    useEffect(() => {
-        setData('text', text);
-    }, [text]);
+            // Sección 2
+            title_seccion_dos_es: banner?.title_seccion_dos_es ?? '',
+            title_seccion_dos_en: banner?.title_seccion_dos_en ?? '',
+            text_seccion_dos_es: banner?.text_seccion_dos_es ?? '',
+            text_seccion_dos_en: banner?.text_seccion_dos_en ?? '',
+            image_seccion_dos: null,
+
+            title_seccion_tres_es: banner?.title_seccion_tres_es ?? '',
+            title_seccion_tres_en: banner?.title_seccion_tres_en ?? '',
+            text_seccion_tres_es: banner?.text_seccion_tres_es ?? '',
+            text_seccion_tres_en: banner?.text_seccion_tres_en ?? '',
+            image_seccion_tres: null,
+        }),
+        [banner],
+    );
+
+    const { data, setData, errors, processing, post, reset } = useForm(initialData);
+
+    const TEXT_FIELDS = [
+        // Banner principal
+        { name: 'title_banner_es', label: 'Título (Español)' },
+        { name: 'title_banner_en', label: 'Título (Inglés)' },
+        { name: 'text_banner_es', label: 'Sub-título (Español)' },
+        { name: 'text_banner_en', label: 'Sub-título (Inglés)' },
+        // Sección 1
+        { name: 'title_seccion_uno_es', label: 'Título (Español)' },
+        { name: 'title_seccion_uno_en', label: 'Título (Inglés)' },
+        { name: 'text_seccion_uno_es', label: 'Sub-título (Español)' },
+        { name: 'text_seccion_uno_en', label: 'Sub-título (Inglés)' },
+        // Sección 2
+        { name: 'title_seccion_dos_es', label: 'Título (Español)' },
+        { name: 'title_seccion_dos_en', label: 'Título (Inglés)' },
+        { name: 'text_seccion_dos_es', label: 'Sub-título (Español)' },
+        { name: 'text_seccion_dos_en', label: 'Sub-título (Inglés)' },
+
+        //seccion 3
+        { name: 'title_seccion_tres_es', label: 'Título (Español)' },
+        { name: 'title_seccion_tres_en', label: 'Título (Inglés)' },
+        { name: 'text_seccion_tres_es', label: 'Sub-título (Español)' },
+        { name: 'text_seccion_tres_en', label: 'Sub-título (Inglés)' },
+    ];
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
         post(route('admin.bannerportada.update'), {
             preserveScroll: true,
+            forceFormData: true, // ensure file uploads are sent as FormData
             onSuccess: () => {
-                reset();
                 toast.success('Banner actualizado correctamente');
+                reset();
             },
-            onError: (errors) => {
+            onError: () => {
                 toast.error('Error al actualizar el banner');
-                console.log(errors);
             },
         });
     };
@@ -36,496 +225,49 @@ export default function BannerPortadaAdmin() {
         <Dashboard>
             <Toaster />
             <form onSubmit={handleSubmit} className="grid h-fit grid-cols-2 justify-between gap-5 p-6">
-                <h2 className="border-primary-orange text-primary-orange text-bold col-span-2 w-full border-b-2 text-2xl">Banner de Inicio</h2>
-                <div className="w-full">
-                    <div className="">
-                        <label htmlFor="title" className="block text-lg font-medium text-gray-900">
-                            Titulo {'(Espa;ol)'}
-                        </label>
-                        <div className="mt-2">
-                            <div
-                                className={`flex items-center rounded-md bg-white pl-3 outline outline-1 -outline-offset-1 ${errors.desc ? 'outline-red-500' : 'outline-gray-300'} focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600`}
-                            >
-                                <div className="shrink-0 text-base text-gray-500 select-none sm:text-sm/6"></div>
-                                <input
-                                    value={data?.title}
-                                    onChange={(ev) => setData('title', ev.target.value)}
-                                    id="title"
-                                    name="title"
-                                    type="text"
-                                    className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
-                                />
-                            </div>
-                            {errors.title && <p className="mt-2 text-sm text-red-600">{errors.title}</p>}
-                        </div>
-                    </div>
-                </div>
-                <div className="w-full">
-                    <div className="">
-                        <label htmlFor="title_en" className="block text-lg font-medium text-gray-900">
-                            Titulo {'(Ingles)'}
-                        </label>
-                        <div className="mt-2">
-                            <div
-                                className={`flex items-center rounded-md bg-white pl-3 outline outline-1 -outline-offset-1 ${errors.desc ? 'outline-red-500' : 'outline-gray-300'} focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600`}
-                            >
-                                <div className="shrink-0 text-base text-gray-500 select-none sm:text-sm/6"></div>
-                                <input
-                                    value={data?.title_en}
-                                    onChange={(ev) => setData('title_en', ev.target.value)}
-                                    id="title_en"
-                                    name="title_en"
-                                    type="text"
-                                    className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
-                                />
-                            </div>
-                            {errors.title && <p className="mt-2 text-sm text-red-600">{errors.title}</p>}
-                        </div>
-                    </div>
-                </div>
-                <div className="w-full">
-                    <div className="">
-                        <label htmlFor="subtitle" className="block text-lg font-medium text-gray-900">
-                            Sub-titulo {'(Espa;ol)'}
-                        </label>
-                        <div className="mt-2">
-                            <div
-                                className={`flex items-center rounded-md bg-white pl-3 outline outline-1 -outline-offset-1 ${errors.desc ? 'outline-red-500' : 'outline-gray-300'} focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600`}
-                            >
-                                <div className="shrink-0 text-base text-gray-500 select-none sm:text-sm/6"></div>
-                                <input
-                                    value={data?.subtitle}
-                                    onChange={(ev) => setData('subtitle', ev.target.value)}
-                                    id="subtitle"
-                                    name="subtitle"
-                                    type="text"
-                                    className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
-                                />
-                            </div>
-                            {errors.title && <p className="mt-2 text-sm text-red-600">{errors.title}</p>}
-                        </div>
-                    </div>
-                </div>
-                <div className="w-full">
-                    <div className="">
-                        <label htmlFor="subtitle_en" className="block text-lg font-medium text-gray-900">
-                            Sub-titulo {'(Ingles)'}
-                        </label>
-                        <div className="mt-2">
-                            <div
-                                className={`flex items-center rounded-md bg-white pl-3 outline outline-1 -outline-offset-1 ${errors.desc ? 'outline-red-500' : 'outline-gray-300'} focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600`}
-                            >
-                                <div className="shrink-0 text-base text-gray-500 select-none sm:text-sm/6"></div>
-                                <input
-                                    value={data?.subtitle_en}
-                                    onChange={(ev) => setData('subtitle_en', ev.target.value)}
-                                    id="subtitle_en"
-                                    name="subtitle_en"
-                                    type="text"
-                                    className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
-                                />
-                            </div>
-                            {errors.subtitle_en && <p className="mt-2 text-sm text-red-600">{errors.title}</p>}
-                        </div>
-                    </div>
-                </div>
-                <div className="col-span-2 flex flex-row justify-between gap-5">
-                    <div className="w-full">
-                        <label htmlFor="logoprincipal" className="block text-lg font-medium text-gray-900">
-                            Imagen
-                        </label>
-                        <div className="mt-2 flex justify-between rounded-lg border shadow-lg">
-                            <div className="h-[200px] w-1/2 bg-[rgba(0,0,0,0.2)]">
-                                <img className="h-full w-full rounded-md object-cover" src={banner?.image} alt="" />
-                            </div>
-                            <div className="flex w-1/2 items-center justify-center">
-                                <div className="h-fit items-center self-center text-center">
-                                    <div className="relative mt-4 flex flex-col items-center text-sm/6 text-gray-600">
-                                        <label
-                                            htmlFor="logoprincipal"
-                                            className="bg-primary-red relative cursor-pointer rounded-md px-2 py-1 font-semibold text-black"
-                                        >
-                                            <span>Cambiar Imagen</span>
-                                            <input
-                                                id="logoprincipal"
-                                                name="logoprincipal"
-                                                onChange={(e) => setData('image', e.target.files[0])}
-                                                type="file"
-                                                className="sr-only"
-                                            />
-                                        </label>
-                                        <p className="absolute top-10 max-w-[200px] break-words"> {data?.image?.name} </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <SectionHeader>Banner de Inicio</SectionHeader>
 
-                <h2 className="border-primary-orange text-primary-orange text-bold col-span-2 w-full border-b-2 text-2xl">Seccion 1</h2>
-                <div className="w-full">
-                    <div className="">
-                        <label htmlFor="title" className="block text-lg font-medium text-gray-900">
-                            Titulo {'(Espa;ol)'}
-                        </label>
-                        <div className="mt-2">
-                            <div
-                                className={`flex items-center rounded-md bg-white pl-3 outline outline-1 -outline-offset-1 ${errors.desc ? 'outline-red-500' : 'outline-gray-300'} focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600`}
-                            >
-                                <div className="shrink-0 text-base text-gray-500 select-none sm:text-sm/6"></div>
-                                <input
-                                    value={data?.title}
-                                    onChange={(ev) => setData('title', ev.target.value)}
-                                    id="title"
-                                    name="title"
-                                    type="text"
-                                    className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
-                                />
-                            </div>
-                            {errors.title && <p className="mt-2 text-sm text-red-600">{errors.title}</p>}
-                        </div>
-                    </div>
-                </div>
-                <div className="w-full">
-                    <div className="">
-                        <label htmlFor="title_en" className="block text-lg font-medium text-gray-900">
-                            Titulo {'(Ingles)'}
-                        </label>
-                        <div className="mt-2">
-                            <div
-                                className={`flex items-center rounded-md bg-white pl-3 outline outline-1 -outline-offset-1 ${errors.desc ? 'outline-red-500' : 'outline-gray-300'} focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600`}
-                            >
-                                <div className="shrink-0 text-base text-gray-500 select-none sm:text-sm/6"></div>
-                                <input
-                                    value={data?.title_en}
-                                    onChange={(ev) => setData('title_en', ev.target.value)}
-                                    id="title_en"
-                                    name="title_en"
-                                    type="text"
-                                    className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
-                                />
-                            </div>
-                            {errors.title && <p className="mt-2 text-sm text-red-600">{errors.title}</p>}
-                        </div>
-                    </div>
-                </div>
-                <div className="col-span-2 flex flex-row justify-between gap-5">
-                    <div className="w-full">
-                        <label htmlFor="logoprincipal" className="block text-lg font-medium text-gray-900">
-                            Exterior
-                        </label>
-                        <div className="mt-2 flex justify-between rounded-lg border shadow-lg">
-                            <div className="h-[200px] w-1/2 bg-[rgba(0,0,0,0.2)]">
-                                <img className="h-full w-full rounded-md object-cover" src={banner?.image} alt="" />
-                            </div>
-                            <div className="flex w-1/2 items-center justify-center">
-                                <div className="h-fit items-center self-center text-center">
-                                    <div className="relative mt-4 flex flex-col items-center text-sm/6 text-gray-600">
-                                        <label
-                                            htmlFor="logoprincipal"
-                                            className="bg-primary-red relative cursor-pointer rounded-md px-2 py-1 font-semibold text-black"
-                                        >
-                                            <span>Cambiar Imagen</span>
-                                            <input
-                                                id="logoprincipal"
-                                                name="logoprincipal"
-                                                onChange={(e) => setData('image', e.target.files[0])}
-                                                type="file"
-                                                className="sr-only"
-                                            />
-                                        </label>
-                                        <p className="absolute top-10 max-w-[200px] break-words"> {data?.image?.name} </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="w-full">
-                        <label htmlFor="logoprincipal" className="block text-lg font-medium text-gray-900">
-                            Interior
-                        </label>
-                        <div className="mt-2 flex justify-between rounded-lg border shadow-lg">
-                            <div className="h-[200px] w-1/2 bg-[rgba(0,0,0,0.2)]">
-                                <img className="h-full w-full rounded-md object-cover" src={banner?.image} alt="" />
-                            </div>
-                            <div className="flex w-1/2 items-center justify-center">
-                                <div className="h-fit items-center self-center text-center">
-                                    <div className="relative mt-4 flex flex-col items-center text-sm/6 text-gray-600">
-                                        <label
-                                            htmlFor="logoprincipal"
-                                            className="bg-primary-red relative cursor-pointer rounded-md px-2 py-1 font-semibold text-black"
-                                        >
-                                            <span>Cambiar Imagen</span>
-                                            <input
-                                                id="logoprincipal"
-                                                name="logoprincipal"
-                                                onChange={(e) => setData('image', e.target.files[0])}
-                                                type="file"
-                                                className="sr-only"
-                                            />
-                                        </label>
-                                        <p className="absolute top-10 max-w-[200px] break-words"> {data?.image?.name} </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <h2 className="border-primary-orange text-primary-orange text-bold col-span-2 w-full border-b-2 text-2xl">Seccion 2</h2>
-                <div className="w-full">
-                    <div className="">
-                        <label htmlFor="title" className="block text-lg font-medium text-gray-900">
-                            Titulo {'(Espa;ol)'}
-                        </label>
-                        <div className="mt-2">
-                            <div
-                                className={`flex items-center rounded-md bg-white pl-3 outline outline-1 -outline-offset-1 ${errors.desc ? 'outline-red-500' : 'outline-gray-300'} focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600`}
-                            >
-                                <div className="shrink-0 text-base text-gray-500 select-none sm:text-sm/6"></div>
-                                <input
-                                    value={data?.title}
-                                    onChange={(ev) => setData('title', ev.target.value)}
-                                    id="title"
-                                    name="title"
-                                    type="text"
-                                    className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
-                                />
-                            </div>
-                            {errors.title && <p className="mt-2 text-sm text-red-600">{errors.title}</p>}
-                        </div>
-                    </div>
-                </div>
-                <div className="w-full">
-                    <div className="">
-                        <label htmlFor="title_en" className="block text-lg font-medium text-gray-900">
-                            Titulo {'(Ingles)'}
-                        </label>
-                        <div className="mt-2">
-                            <div
-                                className={`flex items-center rounded-md bg-white pl-3 outline outline-1 -outline-offset-1 ${errors.desc ? 'outline-red-500' : 'outline-gray-300'} focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600`}
-                            >
-                                <div className="shrink-0 text-base text-gray-500 select-none sm:text-sm/6"></div>
-                                <input
-                                    value={data?.title_en}
-                                    onChange={(ev) => setData('title_en', ev.target.value)}
-                                    id="title_en"
-                                    name="title_en"
-                                    type="text"
-                                    className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
-                                />
-                            </div>
-                            {errors.title && <p className="mt-2 text-sm text-red-600">{errors.title}</p>}
-                        </div>
-                    </div>
-                </div>
-                <div className="w-full">
-                    <div className="">
-                        <label htmlFor="subtitle" className="block text-lg font-medium text-gray-900">
-                            Sub-titulo {'(Espa;ol)'}
-                        </label>
-                        <div className="mt-2">
-                            <div
-                                className={`flex items-center rounded-md bg-white pl-3 outline outline-1 -outline-offset-1 ${errors.desc ? 'outline-red-500' : 'outline-gray-300'} focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600`}
-                            >
-                                <div className="shrink-0 text-base text-gray-500 select-none sm:text-sm/6"></div>
-                                <input
-                                    value={data?.subtitle}
-                                    onChange={(ev) => setData('subtitle', ev.target.value)}
-                                    id="subtitle"
-                                    name="subtitle"
-                                    type="text"
-                                    className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
-                                />
-                            </div>
-                            {errors.title && <p className="mt-2 text-sm text-red-600">{errors.title}</p>}
-                        </div>
-                    </div>
-                </div>
-                <div className="w-full">
-                    <div className="">
-                        <label htmlFor="subtitle_en" className="block text-lg font-medium text-gray-900">
-                            Sub-titulo {'(Ingles)'}
-                        </label>
-                        <div className="mt-2">
-                            <div
-                                className={`flex items-center rounded-md bg-white pl-3 outline outline-1 -outline-offset-1 ${errors.desc ? 'outline-red-500' : 'outline-gray-300'} focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600`}
-                            >
-                                <div className="shrink-0 text-base text-gray-500 select-none sm:text-sm/6"></div>
-                                <input
-                                    value={data?.subtitle_en}
-                                    onChange={(ev) => setData('subtitle_en', ev.target.value)}
-                                    id="subtitle_en"
-                                    name="subtitle_en"
-                                    type="text"
-                                    className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
-                                />
-                            </div>
-                            {errors.subtitle_en && <p className="mt-2 text-sm text-red-600">{errors.title}</p>}
-                        </div>
-                    </div>
-                </div>
-                <div className="col-span-2 flex flex-row justify-between gap-5">
-                    <div className="w-full">
-                        <label htmlFor="logoprincipal" className="block text-lg font-medium text-gray-900">
-                            Imagen
-                        </label>
-                        <div className="mt-2 flex justify-between rounded-lg border shadow-lg">
-                            <div className="h-[200px] w-1/2 bg-[rgba(0,0,0,0.2)]">
-                                <img className="h-full w-full rounded-md object-cover" src={banner?.image} alt="" />
-                            </div>
-                            <div className="flex w-1/2 items-center justify-center">
-                                <div className="h-fit items-center self-center text-center">
-                                    <div className="relative mt-4 flex flex-col items-center text-sm/6 text-gray-600">
-                                        <label
-                                            htmlFor="logoprincipal"
-                                            className="bg-primary-red relative cursor-pointer rounded-md px-2 py-1 font-semibold text-black"
-                                        >
-                                            <span>Cambiar Imagen</span>
-                                            <input
-                                                id="logoprincipal"
-                                                name="logoprincipal"
-                                                onChange={(e) => setData('image', e.target.files[0])}
-                                                type="file"
-                                                className="sr-only"
-                                            />
-                                        </label>
-                                        <p className="absolute top-10 max-w-[200px] break-words"> {data?.image?.name} </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <h2 className="border-primary-orange text-primary-orange text-bold col-span-2 w-full border-b-2 text-2xl">Seccion 3</h2>
-                <div className="w-full">
-                    <div className="">
-                        <label htmlFor="title" className="block text-lg font-medium text-gray-900">
-                            Titulo {'(Espa;ol)'}
-                        </label>
-                        <div className="mt-2">
-                            <div
-                                className={`flex items-center rounded-md bg-white pl-3 outline outline-1 -outline-offset-1 ${errors.desc ? 'outline-red-500' : 'outline-gray-300'} focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600`}
-                            >
-                                <div className="shrink-0 text-base text-gray-500 select-none sm:text-sm/6"></div>
-                                <input
-                                    value={data?.title}
-                                    onChange={(ev) => setData('title', ev.target.value)}
-                                    id="title"
-                                    name="title"
-                                    type="text"
-                                    className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
-                                />
-                            </div>
-                            {errors.title && <p className="mt-2 text-sm text-red-600">{errors.title}</p>}
-                        </div>
-                    </div>
-                </div>
-                <div className="w-full">
-                    <div className="">
-                        <label htmlFor="title_en" className="block text-lg font-medium text-gray-900">
-                            Titulo {'(Ingles)'}
-                        </label>
-                        <div className="mt-2">
-                            <div
-                                className={`flex items-center rounded-md bg-white pl-3 outline outline-1 -outline-offset-1 ${errors.desc ? 'outline-red-500' : 'outline-gray-300'} focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600`}
-                            >
-                                <div className="shrink-0 text-base text-gray-500 select-none sm:text-sm/6"></div>
-                                <input
-                                    value={data?.title_en}
-                                    onChange={(ev) => setData('title_en', ev.target.value)}
-                                    id="title_en"
-                                    name="title_en"
-                                    type="text"
-                                    className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
-                                />
-                            </div>
-                            {errors.title && <p className="mt-2 text-sm text-red-600">{errors.title}</p>}
-                        </div>
-                    </div>
-                </div>
-                <div className="w-full">
-                    <div className="">
-                        <label htmlFor="subtitle" className="block text-lg font-medium text-gray-900">
-                            Sub-titulo {'(Espa;ol)'}
-                        </label>
-                        <div className="mt-2">
-                            <div
-                                className={`flex items-center rounded-md bg-white pl-3 outline outline-1 -outline-offset-1 ${errors.desc ? 'outline-red-500' : 'outline-gray-300'} focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600`}
-                            >
-                                <div className="shrink-0 text-base text-gray-500 select-none sm:text-sm/6"></div>
-                                <input
-                                    value={data?.subtitle}
-                                    onChange={(ev) => setData('subtitle', ev.target.value)}
-                                    id="subtitle"
-                                    name="subtitle"
-                                    type="text"
-                                    className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
-                                />
-                            </div>
-                            {errors.title && <p className="mt-2 text-sm text-red-600">{errors.title}</p>}
-                        </div>
-                    </div>
-                </div>
-                <div className="w-full">
-                    <div className="">
-                        <label htmlFor="subtitle_en" className="block text-lg font-medium text-gray-900">
-                            Sub-titulo {'(Ingles)'}
-                        </label>
-                        <div className="mt-2">
-                            <div
-                                className={`flex items-center rounded-md bg-white pl-3 outline outline-1 -outline-offset-1 ${errors.desc ? 'outline-red-500' : 'outline-gray-300'} focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600`}
-                            >
-                                <div className="shrink-0 text-base text-gray-500 select-none sm:text-sm/6"></div>
-                                <input
-                                    value={data?.subtitle_en}
-                                    onChange={(ev) => setData('subtitle_en', ev.target.value)}
-                                    id="subtitle_en"
-                                    name="subtitle_en"
-                                    type="text"
-                                    className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
-                                />
-                            </div>
-                            {errors.subtitle_en && <p className="mt-2 text-sm text-red-600">{errors.title}</p>}
-                        </div>
-                    </div>
-                </div>
-                <div className="col-span-2 flex flex-row justify-between gap-5">
-                    <div className="w-full">
-                        <label htmlFor="logoprincipal" className="block text-lg font-medium text-gray-900">
-                            Imagen
-                        </label>
-                        <div className="mt-2 flex justify-between rounded-lg border shadow-lg">
-                            <div className="h-[200px] w-1/2 bg-[rgba(0,0,0,0.2)]">
-                                <img className="h-full w-full rounded-md object-cover" src={banner?.image} alt="" />
-                            </div>
-                            <div className="flex w-1/2 items-center justify-center">
-                                <div className="h-fit items-center self-center text-center">
-                                    <div className="relative mt-4 flex flex-col items-center text-sm/6 text-gray-600">
-                                        <label
-                                            htmlFor="logoprincipal"
-                                            className="bg-primary-red relative cursor-pointer rounded-md px-2 py-1 font-semibold text-black"
-                                        >
-                                            <span>Cambiar Imagen</span>
-                                            <input
-                                                id="logoprincipal"
-                                                name="logoprincipal"
-                                                onChange={(e) => setData('image', e.target.files[0])}
-                                                type="file"
-                                                className="sr-only"
-                                            />
-                                        </label>
-                                        <p className="absolute top-10 max-w-[200px] break-words"> {data?.image?.name} </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {/* Banner principal - textos */}
+                {TEXT_FIELDS.slice(0, 4).map((f) => (
+                    <TextInput key={f.name} {...f} data={data} setData={setData} errors={errors} />
+                ))}
+
+                {/* Banner principal - imagen */}
+                <MediaPicker name="image_banner" label="Imagen/Video" previewUrl={banner?.image_banner} data={data} setData={setData} />
+
+                <SectionHeader>Sección 1</SectionHeader>
+
+                {/* Sección 1 - textos */}
+                {TEXT_FIELDS.slice(4, 8).map((f) => (
+                    <TextInput key={f.name} {...f} data={data} setData={setData} errors={errors} />
+                ))}
+
+                {/* Sección 1 - imagen */}
+                <ImagePicker name="image_seccion_uno" label="Imagen" previewUrl={banner?.image_seccion_uno} data={data} setData={setData} />
+
+                <SectionHeader>Sección 2</SectionHeader>
+
+                {/* Sección 2 - textos */}
+                {TEXT_FIELDS.slice(8, 12).map((f) => (
+                    <TextInput key={f.name} {...f} data={data} setData={setData} errors={errors} />
+                ))}
+
+                {/* Sección 2 - imagen */}
+                <ImagePicker name="image_seccion_dos" label="Imagen" previewUrl={banner?.image_seccion_dos} data={data} setData={setData} />
+
+                <SectionHeader>Seccion 3</SectionHeader>
+
+                {TEXT_FIELDS.slice(12, 16).map((f) => (
+                    <TextInput key={f.name} {...f} data={data} setData={setData} errors={errors} />
+                ))}
+
                 <div className="flex items-center justify-start gap-x-6">
                     <button
                         type="submit"
                         disabled={processing}
-                        className={`bg-primary-orange rounded-full px-3 py-2 text-sm font-semibold text-white shadow-sm transition-transform hover:scale-95 ${processing ? 'cursor-not-allowed opacity-70' : ''}`}
+                        className={`bg-primary-orange rounded-full px-3 py-2 text-sm font-semibold text-white shadow-sm transition-transform hover:scale-95 ${
+                            processing ? 'cursor-not-allowed opacity-70' : ''
+                        }`}
                     >
                         {processing ? 'Actualizando...' : 'Actualizar'}
                     </button>

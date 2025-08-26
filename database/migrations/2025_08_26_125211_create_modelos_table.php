@@ -11,13 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('archivo_calidads', function (Blueprint $table) {
+        Schema::create('modelos', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->nullable();
-            $table->string('subtitle')->nullable();
-            $table->string('image')->nullable();
-            $table->string('order')->default("zzz");
-            $table->string('archivo')->nullable();
             $table->timestamps();
         });
     }
@@ -27,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('archivo_calidads');
+        Schema::dropIfExists('modelos');
     }
 };
