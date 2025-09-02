@@ -20,7 +20,7 @@ class CategoriaController extends Controller
 
         if ($request->has('search') && !empty($request->search)) {
             $searchTerm = $request->search;
-            $query->where('name', 'LIKE', '%' . $searchTerm . '%');
+            $query->where('name_es', 'LIKE', '%' . $searchTerm . '%');
         }
 
         $categorias = $query->paginate($perPage);
@@ -41,7 +41,8 @@ class CategoriaController extends Controller
     {
         $data = $request->validate([
             'order' => 'nullable|sometimes|string',
-            'name' => 'required|string|max:255',
+            'name_es' => 'required|string|max:255',
+            'name_en' => 'required|string|max:255',
         ]);
 
 
@@ -66,7 +67,8 @@ class CategoriaController extends Controller
 
         $data = $request->validate([
             'order' => 'sometimes|string',
-            'name' => 'sometimes|string|max:255',
+            'name_es' => 'sometimes|string|max:255',
+            'name_en' => 'sometimes|string|max:255',
         ]);
 
 

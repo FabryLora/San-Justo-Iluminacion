@@ -2,14 +2,17 @@
 
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AmbienteController;
 use App\Http\Controllers\ArchivoCalidadController;
 use App\Http\Controllers\BannerPortadaController;
 use App\Http\Controllers\CalidadController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\ContactoController;
+use App\Http\Controllers\EspacioController;
 use App\Http\Controllers\ImagenProductoController;
 use App\Http\Controllers\ImportController;
 use App\Http\Controllers\InformacionDePagoController;
+use App\Http\Controllers\LineaController;
 use App\Http\Controllers\ListaDePreciosController;
 use App\Http\Controllers\LogosController;
 use App\Http\Controllers\MarcaController;
@@ -26,6 +29,7 @@ use App\Http\Controllers\SubCategoriaController;
 use App\Http\Controllers\SubProductoController;
 use App\Http\Controllers\SucursalController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UsoController;
 use App\Http\Controllers\ValoresController;
 use App\Models\InformacionImportante;
 use Illuminate\Support\Facades\Auth;
@@ -70,10 +74,7 @@ Route::middleware('auth:admin')->group(function () {
     Route::post('admin/marcas/update', [MarcaController::class, 'update'])->name('admin.marcas.update');
     Route::delete('admin/marcas/destroy', [MarcaController::class, 'destroy'])->name('admin.marcas.destroy');
 
-    Route::get('admin/modelos', [ModeloController::class, 'index'])->name('admin.modelos');
-    Route::post('admin/modelos', [ModeloController::class, 'store'])->name('admin.modelos.store');
-    Route::post('admin/modelos/update', [ModeloController::class, 'update'])->name('admin.modelos.update');
-    Route::delete('admin/modelos/destroy', [ModeloController::class, 'destroy'])->name('admin.modelos.destroy');
+
 
     Route::get('admin/productos', [ProductoController::class, 'index'])->name('admin.productos');
     Route::post('admin/productos', [ProductoController::class, 'store'])->name('admin.productos.store');
@@ -179,4 +180,27 @@ Route::middleware('auth:admin')->group(function () {
         }
         return inertia('admin/dashboard');
     })->name('admin.dashboard');
+
+
+    Route::get('admin/espacios', [EspacioController::class, 'index'])->name('admin.espacios');
+    Route::post('admin/espacios', [EspacioController::class, 'store'])->name('admin.espacios.store');
+    Route::post('admin/espacios/update', [EspacioController::class, 'update'])->name('admin.espacios.update');
+    Route::delete('admin/espacios/destroy', [EspacioController::class, 'destroy'])->name('admin.espacios.destroy');
+
+    Route::get('admin/usos', [UsoController::class, 'index'])->name('admin.usos');
+    Route::post('admin/usos', [UsoController::class, 'store'])->name('admin.usos.store');
+    Route::post('admin/usos/update', [UsoController::class, 'update'])->name('admin.usos.update');
+    Route::delete('admin/usos/destroy', [UsoController::class, 'destroy'])->name('admin.usos.destroy');
+
+
+    Route::get('admin/lineas', [LineaController::class, 'index'])->name('admin.lineas');
+    Route::post('admin/lineas', [LineaController::class, 'store'])->name('admin.lineas.store');
+    Route::post('admin/lineas/update', [LineaController::class, 'update'])->name('admin.lineas.update');
+    Route::delete('admin/lineas/destroy', [LineaController::class, 'destroy'])->name('admin.lineas.destroy');
+
+
+    Route::get('admin/ambientes', [AmbienteController::class, 'index'])->name('admin.ambientes');
+    Route::post('admin/ambientes', [AmbienteController::class, 'store'])->name('admin.ambientes.store');
+    Route::post('admin/ambientes/update', [AmbienteController::class, 'update'])->name('admin.ambientes.update');
+    Route::delete('admin/ambientes/destroy', [AmbienteController::class, 'destroy'])->name('admin.ambientes.destroy');
 });

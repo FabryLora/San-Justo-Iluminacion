@@ -9,7 +9,7 @@ export default function MarcasAdmin() {
     const { marcas } = usePage().props;
 
     const { data, setData, post, reset } = useForm({
-        name: '',
+        name_es: '',
     });
 
     const [searchTerm, setSearchTerm] = useState('');
@@ -85,15 +85,27 @@ export default function MarcasAdmin() {
                                             id="ordennn"
                                             onChange={(e) => setData('order', e.target.value)}
                                         />
-                                        <label htmlFor="nombree">
-                                            Nombre <span className="text-red-500">*</span>
+                                        <label htmlFor="nombree_es">
+                                            Nombre {'(Español)'}
+                                            <span className="text-red-500">*</span>
                                         </label>
                                         <input
                                             className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
                                             type="text"
-                                            name="nombree"
-                                            id="nombree"
-                                            onChange={(e) => setData('name', e.target.value)}
+                                            name="nombree_es"
+                                            id="nombree_es"
+                                            onChange={(e) => setData('name_es', e.target.value)}
+                                        />
+
+                                        <label htmlFor="nombree_en">
+                                            Nombre {'(Inglés)'} <span className="text-red-500">*</span>
+                                        </label>
+                                        <input
+                                            className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
+                                            type="text"
+                                            name="nombree_en"
+                                            id="nombree_en"
+                                            onChange={(e) => setData('name_en', e.target.value)}
                                         />
 
                                         <div className="flex justify-end gap-4">
@@ -146,7 +158,8 @@ export default function MarcasAdmin() {
                             <thead className="bg-gray-300 text-sm font-medium text-black uppercase">
                                 <tr>
                                     <td className="text-center">ORDEN</td>
-                                    <td className="py-2 text-center">NOMBRE</td>
+                                    <td className="py-2 text-center">NOMBRE {'(Español)'} </td>
+                                    <td className="py-2 text-center">NOMBRE {'(Inglés)'} </td>
 
                                     <td className="text-center">EDITAR</td>
                                 </tr>

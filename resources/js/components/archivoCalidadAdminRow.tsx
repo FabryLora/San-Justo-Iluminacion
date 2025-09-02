@@ -11,8 +11,10 @@ export default function ArchivoCalidadAdminRow({ archivo }) {
 
     const updateForm = useForm({
         order: archivo?.order,
-        name: archivo?.name,
-        subtitle: archivo?.subtitle,
+        name_es: archivo?.name,
+        name_en: archivo?.name_en,
+        subtitle_es: archivo?.subtitle,
+        subtitle_en: archivo?.subtitle_en,
         id: archivo?.id,
     });
 
@@ -77,8 +79,10 @@ export default function ArchivoCalidadAdminRow({ archivo }) {
     return (
         <tr className={`border text-black odd:bg-gray-100 even:bg-white`}>
             <td className="align-middle">{archivo?.order}</td>
-            <td className="align-middle">{archivo?.name}</td>
-            <td className="h-[90px] align-middle">{archivo?.subtitle}</td>
+            <td className="align-middle">{archivo?.name_es}</td>
+            <td className="align-middle">{archivo?.name_en}</td>
+            <td className="h-[90px] align-middle">{archivo?.subtitle_es}</td>
+            <td className="h-[90px] align-middle">{archivo?.subtitle_en}</td>
 
             <td className="align-middle">
                 <button className="text-blue-500" onClick={handleDownload}>
@@ -107,58 +111,92 @@ export default function ArchivoCalidadAdminRow({ archivo }) {
                         <form onSubmit={handleUpdate} method="POST" className="text-black">
                             <div className="w-[500px] rounded-md bg-white p-4">
                                 <h2 className="mb-4 text-2xl font-semibold">Actualizar catalogo</h2>
-                                <div className="flex flex-col gap-4">
-                                    <label htmlFor="ordennn">Orden</label>
-                                    <input
-                                        className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
-                                        type="text"
-                                        name="ordennn"
-                                        id="ordennn"
-                                        value={updateForm?.data?.order}
-                                        onChange={(e) => updateForm.setData('order', e.target.value)}
-                                    />
-                                    <label htmlFor="nombree">
-                                        Nombre <span className="text-red-500">*</span>
-                                    </label>
-                                    <input
-                                        className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
-                                        type="text"
-                                        name="nombree"
-                                        id="nombree"
-                                        value={updateForm?.data?.name}
-                                        onChange={(e) => updateForm.setData('name', e.target.value)}
-                                    />
-                                    <label htmlFor="subtitulo">
-                                        Subtitulo <span className="text-red-500">*</span>
-                                    </label>
-                                    <input
-                                        className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
-                                        type="text"
-                                        name="subtitulo"
-                                        id="subtitulo"
-                                        onChange={(e) => updateForm.setData('subtitle', e.target.value)}
-                                    />
-
-                                    <label htmlFor="archivo">Archivo</label>
-
-                                    <div className="flex flex-row">
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="col-span-2 flex flex-col gap-2">
+                                        <label htmlFor="ordennn">Orden</label>
                                         <input
-                                            type="file"
-                                            name="imagen"
-                                            id="archivo"
-                                            onChange={(e) => updateForm.setData('archivo', e.target.files[0])}
-                                            className="hidden"
+                                            className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
+                                            type="text"
+                                            name="ordennn"
+                                            id="ordennn"
+                                            defaultValue={archivo?.order}
+                                            onChange={(e) => updateForm.setData('order', e.target.value)}
                                         />
-                                        <label
-                                            className="border-primary-orange text-primary-orange hover:bg-primary-orange cursor-pointer rounded-md border px-2 py-1 transition duration-300 hover:text-white"
-                                            htmlFor="archivo"
-                                        >
-                                            Elegir imagen
+                                    </div>
+                                    <div className="flex flex-col gap-2">
+                                        <label htmlFor="nombree">
+                                            Nombre {'(Español)'} <span className="text-red-500">*</span>
                                         </label>
-                                        <p className="self-center px-2">{updateForm?.data?.archivo?.name}</p>
+                                        <input
+                                            className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
+                                            type="text"
+                                            name="nombree"
+                                            id="nombree"
+                                            defaultValue={archivo?.name_es}
+                                            onChange={(e) => updateForm.setData('name_es', e.target.value)}
+                                        />
+                                    </div>
+                                    <div className="flex flex-col gap-2">
+                                        <label htmlFor="nombree_en">
+                                            Nombre {'(Inglés)'} <span className="text-red-500">*</span>
+                                        </label>
+                                        <input
+                                            className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
+                                            type="text"
+                                            name="nombree_en"
+                                            id="nombree_en"
+                                            defaultValue={archivo?.name_en}
+                                            onChange={(e) => updateForm.setData('name_en', e.target.value)}
+                                        />
+                                    </div>
+                                    <div className="flex flex-col gap-2">
+                                        <label htmlFor="subtitulo">
+                                            Subtitulo {'(Español)'} <span className="text-red-500">*</span>
+                                        </label>
+                                        <input
+                                            className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
+                                            type="text"
+                                            name="subtitulo"
+                                            id="subtitulo"
+                                            defaultValue={archivo?.subtitle_es}
+                                            onChange={(e) => updateForm.setData('subtitle_es', e.target.value)}
+                                        />
+                                    </div>
+                                    <div className="flex flex-col gap-2">
+                                        <label htmlFor="subtitulo_en">
+                                            Subtitulo {'(Inglés)'} <span className="text-red-500">*</span>
+                                        </label>
+                                        <input
+                                            className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
+                                            type="text"
+                                            name="subtitulo_en"
+                                            id="subtitulo_en"
+                                            defaultValue={archivo?.subtitle_en}
+                                            onChange={(e) => updateForm.setData('subtitle_en', e.target.value)}
+                                        />
+                                    </div>
+                                    <div className="col-span-2 flex flex-col gap-2">
+                                        <label htmlFor="archivo">Archivo</label>
+
+                                        <div className="flex flex-row">
+                                            <input
+                                                type="file"
+                                                name="imagen"
+                                                id="archivo"
+                                                onChange={(e) => updateForm.setData('archivo', e.target.files[0])}
+                                                className="hidden"
+                                            />
+                                            <label
+                                                className="border-primary-orange text-primary-orange hover:bg-primary-orange cursor-pointer rounded-md border px-2 py-1 transition duration-300 hover:text-white"
+                                                htmlFor="archivo"
+                                            >
+                                                Elegir Archivo
+                                            </label>
+                                            <p className="self-center px-2">{updateForm.data?.archivo?.name}</p>
+                                        </div>
                                     </div>
 
-                                    <div className="flex justify-end gap-4">
+                                    <div className="col-span-2 flex justify-end gap-4">
                                         <button
                                             type="button"
                                             onClick={() => setEdit(false)}

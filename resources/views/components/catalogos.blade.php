@@ -4,8 +4,8 @@
         <div class="grid grid-cols-2 gap-10">
             @foreach ($catalogos as $catalogo)
                 <div class="bg-white h-[214px] max-w-[392px] rounded-tl-[36px] rounded-br-[36px] flex flex-col  gap-5 p-6">
-                    <h3 class="text-[20px] font-bold">{{$catalogo->name}}</h3>
-                    <p>{{$catalogo->subtitle}}</p>
+                    <h3 class="text-[20px] font-bold">{{$catalogo->name_es}}</h3>
+                    <p>{{$catalogo->subtitle_es}}</p>
                     <div class="flex flex-row justify-between">
                         <button
                             class="text-[14px] w-[156px] h-[42px] font-medium border border-primary-orange  rounded-sm text-primary-orange hover:bg-primary-orange hover:text-white transition duration-300">{{__("VER ONLINE")}}</button>

@@ -9,7 +9,8 @@ export default function CategoriasAdminRow({ categoria }) {
     const [edit, setEdit] = useState(false);
 
     const updateForm = useForm({
-        name: categoria?.name,
+        name_es: categoria?.name_es,
+        name_en: categoria?.name_en,
         order: categoria?.order,
         id: categoria?.id,
     });
@@ -47,7 +48,8 @@ export default function CategoriasAdminRow({ categoria }) {
     return (
         <tr className={`border text-black odd:bg-gray-100 even:bg-white`}>
             <td className="align-middle">{categoria?.order}</td>
-            <td className="h-[90px] align-middle">{categoria?.name}</td>
+            <td className="h-[90px] align-middle">{categoria?.name_es}</td>
+            <td className="h-[90px] align-middle">{categoria?.name_en}</td>
 
             <td className="w-[140px] text-center">
                 <div className="flex flex-row justify-center gap-3">
@@ -81,15 +83,27 @@ export default function CategoriasAdminRow({ categoria }) {
                                         onChange={(e) => updateForm.setData('order', e.target.value)}
                                     />
                                     <label htmlFor="nombree">
-                                        Nombre <span className="text-red-500">*</span>
+                                        Nombre {'(Español)'} <span className="text-red-500">*</span>
                                     </label>
                                     <input
                                         className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
                                         type="text"
                                         name="nombree"
                                         id="nombree"
-                                        value={updateForm?.data?.name}
-                                        onChange={(e) => updateForm.setData('name', e.target.value)}
+                                        value={updateForm?.data?.name_es}
+                                        onChange={(e) => updateForm.setData('name_es', e.target.value)}
+                                    />
+
+                                    <label htmlFor="nombree_en">
+                                        Nombre {'(Inglés)'} <span className="text-red-500">*</span>
+                                    </label>
+                                    <input
+                                        className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
+                                        type="text"
+                                        name="nombree_en"
+                                        id="nombree_en"
+                                        value={updateForm?.data?.name_en}
+                                        onChange={(e) => updateForm.setData('name_en', e.target.value)}
                                     />
 
                                     <div className="flex justify-end gap-4">

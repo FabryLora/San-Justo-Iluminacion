@@ -21,7 +21,7 @@ class MarcaController extends Controller
 
         if ($request->has('search') && !empty($request->search)) {
             $searchTerm = $request->search;
-            $query->where('name', 'LIKE', '%' . $searchTerm . '%');
+            $query->where('name_es', 'LIKE', '%' . $searchTerm . '%');
         }
 
         $marcas = $query->paginate($perPage);
@@ -38,7 +38,8 @@ class MarcaController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name' => 'required|string|max:255',
+            'name_es' => 'required|string|max:255',
+            'name_en' => 'required|string|max:255',
             'order' => 'nullable|string|max:255',
         ]);
 
@@ -58,7 +59,8 @@ class MarcaController extends Controller
         }
 
         $data = $request->validate([
-            'name' => 'sometimes|string|max:255',
+            'name_es' => 'sometimes|string|max:255',
+            'name_en' => 'sometimes|string|max:255',
             'order' => 'nullable|string|max:255',
         ]);
 

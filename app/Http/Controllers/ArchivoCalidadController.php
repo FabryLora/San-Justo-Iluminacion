@@ -26,8 +26,10 @@ class ArchivoCalidadController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name' => 'required|string|max:255',
-            'subtitle' => 'nullable|string|max:255',
+            'name_es' => 'required|string|max:255',
+            'name_en' => 'required|string|max:255',
+            'subtitle_es' => 'nullable|string|max:255',
+            'subtitle_en' => 'nullable|string|max:255',
             'order' => 'nullable|string|max:255',
             'archivo' => 'required|file',
         ]);
@@ -59,8 +61,10 @@ class ArchivoCalidadController extends Controller
         }
 
         $data = $request->validate([
-            'name' => 'sometimes|string|max:255',
-            'subtitle' => 'sometimes|string|max:255',
+            'name_es' => 'sometimes|string|max:255',
+            'name_en' => 'sometimes|string|max:255',
+            'subtitle_es' => 'sometimes|string|max:255',
+            'subtitle_en' => 'sometimes|string|max:255',
             'order' => 'sometimes|string|max:255',
             'archivo' => 'sometimes|file',
         ]);

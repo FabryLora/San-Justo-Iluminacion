@@ -13,8 +13,10 @@ return new class extends Migration
     {
         Schema::create('archivo_calidads', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->nullable();
-            $table->string('subtitle')->nullable();
+            $table->string('name_es')->nullable();
+            $table->string('name_en')->nullable();
+            $table->string('subtitle_es')->nullable();
+            $table->string('subtitle_en')->nullable();
             $table->string('image')->nullable();
             $table->string('order')->default("zzz");
             $table->string('archivo')->nullable();

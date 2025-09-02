@@ -9,12 +9,11 @@ export default function MarcasAdmin() {
     const { archivos } = usePage().props;
 
     const { data, setData, post, reset } = useForm({
-        name: '',
+        name_es: '',
     });
 
-    const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState('');
-    const itemsPerPage = 10;
+
     const [createView, setCreateView] = useState(false);
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -48,56 +47,87 @@ export default function MarcasAdmin() {
                             <form onSubmit={handleSubmit} method="POST" className="text-black">
                                 <div className="w-[500px] rounded-md bg-white p-4">
                                     <h2 className="mb-4 text-2xl font-semibold">Cargar catalogo</h2>
-                                    <div className="flex flex-col gap-4">
-                                        <label htmlFor="ordennn">Orden</label>
-                                        <input
-                                            className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
-                                            type="text"
-                                            name="ordennn"
-                                            id="ordennn"
-                                            onChange={(e) => setData('order', e.target.value)}
-                                        />
-                                        <label htmlFor="nombree">
-                                            Nombre <span className="text-red-500">*</span>
-                                        </label>
-                                        <input
-                                            className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
-                                            type="text"
-                                            name="nombree"
-                                            id="nombree"
-                                            onChange={(e) => setData('name', e.target.value)}
-                                        />
-                                        <label htmlFor="subtitulo">
-                                            Subtitulo <span className="text-red-500">*</span>
-                                        </label>
-                                        <input
-                                            className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
-                                            type="text"
-                                            name="subtitulo"
-                                            id="subtitulo"
-                                            onChange={(e) => setData('subtitle', e.target.value)}
-                                        />
-
-                                        <label htmlFor="archivo">Archivo</label>
-
-                                        <div className="flex flex-row">
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div className="col-span-2 flex flex-col gap-2">
+                                            <label htmlFor="ordennn">Orden</label>
                                             <input
-                                                type="file"
-                                                name="imagen"
-                                                id="archivo"
-                                                onChange={(e) => setData('archivo', e.target.files[0])}
-                                                className="hidden"
+                                                className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
+                                                type="text"
+                                                name="ordennn"
+                                                id="ordennn"
+                                                onChange={(e) => setData('order', e.target.value)}
                                             />
-                                            <label
-                                                className="border-primary-orange text-primary-orange hover:bg-primary-orange cursor-pointer rounded-md border px-2 py-1 transition duration-300 hover:text-white"
-                                                htmlFor="archivo"
-                                            >
-                                                Elegir Archivo
+                                        </div>
+                                        <div className="flex flex-col gap-2">
+                                            <label htmlFor="nombree">
+                                                Nombre {'(Español)'} <span className="text-red-500">*</span>
                                             </label>
-                                            <p className="self-center px-2">{data?.archivo?.name}</p>
+                                            <input
+                                                className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
+                                                type="text"
+                                                name="nombree"
+                                                id="nombree"
+                                                onChange={(e) => setData('name_es', e.target.value)}
+                                            />
+                                        </div>
+                                        <div className="flex flex-col gap-2">
+                                            <label htmlFor="nombree_en">
+                                                Nombre {'(Inglés)'} <span className="text-red-500">*</span>
+                                            </label>
+                                            <input
+                                                className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
+                                                type="text"
+                                                name="nombree_en"
+                                                id="nombree_en"
+                                                onChange={(e) => setData('name_en', e.target.value)}
+                                            />
+                                        </div>
+                                        <div className="flex flex-col gap-2">
+                                            <label htmlFor="subtitulo">
+                                                Subtitulo {'(Español)'} <span className="text-red-500">*</span>
+                                            </label>
+                                            <input
+                                                className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
+                                                type="text"
+                                                name="subtitulo"
+                                                id="subtitulo"
+                                                onChange={(e) => setData('subtitle_es', e.target.value)}
+                                            />
+                                        </div>
+                                        <div className="flex flex-col gap-2">
+                                            <label htmlFor="subtitulo_en">
+                                                Subtitulo {'(Inglés)'} <span className="text-red-500">*</span>
+                                            </label>
+                                            <input
+                                                className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
+                                                type="text"
+                                                name="subtitulo_en"
+                                                id="subtitulo_en"
+                                                onChange={(e) => setData('subtitle_en', e.target.value)}
+                                            />
+                                        </div>
+                                        <div className="col-span-2 flex flex-col gap-2">
+                                            <label htmlFor="archivo">Archivo</label>
+
+                                            <div className="flex flex-row">
+                                                <input
+                                                    type="file"
+                                                    name="imagen"
+                                                    id="archivo"
+                                                    onChange={(e) => setData('archivo', e.target.files[0])}
+                                                    className="hidden"
+                                                />
+                                                <label
+                                                    className="border-primary-orange text-primary-orange hover:bg-primary-orange cursor-pointer rounded-md border px-2 py-1 transition duration-300 hover:text-white"
+                                                    htmlFor="archivo"
+                                                >
+                                                    Elegir Archivo
+                                                </label>
+                                                <p className="self-center px-2">{data?.archivo?.name}</p>
+                                            </div>
                                         </div>
 
-                                        <div className="flex justify-end gap-4">
+                                        <div className="col-span-2 flex justify-end gap-4">
                                             <button
                                                 type="button"
                                                 onClick={() => setCreateView(false)}
@@ -142,11 +172,11 @@ export default function MarcasAdmin() {
                                 <tr>
                                     <td className="text-center">ORDEN</td>
 
-                                    <td className="text-center">NOMBRE</td>
-                                    <td className="text-center">SUBTITULO</td>
-
+                                    <td className="text-center">NOMBRE {'(Español)'}</td>
+                                    <td className="text-center">NOMBRE {'(Inglés)'}</td>
+                                    <td className="text-center">SUBTITULO {'(Español)'}</td>
+                                    <td className="text-center">SUBTITULO {'(Inglés)'}</td>
                                     <td className="py-2 text-center">ARCHIVO</td>
-
                                     <td className="text-center">EDITAR</td>
                                 </tr>
                             </thead>

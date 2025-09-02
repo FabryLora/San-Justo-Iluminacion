@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('marcas', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->nullable();
             $table->string('order')->default('zzz');
+            $table->string('name_es')->nullable();
+            $table->string('name_en')->nullable();
             $table->timestamps();
         });
     }
