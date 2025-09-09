@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('espacios', function (Blueprint $table) {
             $table->id();
             $table->string('order')->default('zzz');
-            $table->string('name')->nullable();
+            $table->string('name_es')->nullable();
+            $table->string('name_en')->nullable();
             $table->boolean('destacado')->default(false);
             $table->string('image')->nullable();
             $table->timestamps();

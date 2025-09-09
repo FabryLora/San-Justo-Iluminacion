@@ -1,12 +1,12 @@
-import UsoAdminRow from '@/components/usoAdminRow';
+import AmbienteAdminRow from '@/components/ambienteAdminRow';
 import { router, useForm, usePage } from '@inertiajs/react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import Dashboard from './dashboard';
 
-export default function UsosAdmin() {
-    const { usos } = usePage().props;
+export default function AmbientesAdmin() {
+    const { ambientes } = usePage().props;
 
     const { data, setData, post, reset } = useForm({
         name_es: '',
@@ -18,15 +18,15 @@ export default function UsosAdmin() {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        post(route('admin.usos.store'), {
+        post(route('admin.ambientes.store'), {
             preserveScroll: true,
             onSuccess: () => {
-                toast.success('Uso creado correctamente');
+                toast.success('Ambiente creado correctamente');
                 reset();
                 setCreateView(false);
             },
             onError: (errors) => {
-                toast.error('Error al crear uso');
+                toast.error('Error al crear ambiente');
                 console.log(errors);
             },
         });
@@ -35,7 +35,7 @@ export default function UsosAdmin() {
     // Manejadores para la paginación del backend
     const handlePageChange = (page) => {
         router.get(
-            route('admin.usos.index'),
+            route('admin.ambientes.index'),
             {
                 page: page,
                 search: searchTerm,
@@ -50,7 +50,7 @@ export default function UsosAdmin() {
     // Función para realizar la búsqueda
     const handleSearch = () => {
         router.get(
-            route('admin.usos.index'),
+            route('admin.ambientes.index'),
             {
                 search: searchTerm,
                 page: 1, // Resetear a la primera página al buscar
@@ -75,7 +75,7 @@ export default function UsosAdmin() {
                         >
                             <form onSubmit={handleSubmit} method="POST" className="text-black">
                                 <div className="w-[500px] rounded-md bg-white p-4">
-                                    <h2 className="mb-4 text-2xl font-semibold">Crear Uso</h2>
+                                    <h2 className="mb-4 text-2xl font-semibold">Crear Ambiente</h2>
                                     <div className="flex flex-col gap-4">
                                         <label htmlFor="ordennn">Orden</label>
                                         <input
@@ -134,7 +134,7 @@ export default function UsosAdmin() {
                     )}
                 </AnimatePresence>
                 <div className="mx-auto flex w-full flex-col gap-3">
-                    <h2 className="border-primary-orange text-primary-orange text-bold w-full border-b-2 text-2xl">Usos</h2>
+                    <h2 className="border-primary-orange text-primary-orange text-bold w-full border-b-2 text-2xl">Ambientes</h2>
                     <div className="flex h-fit w-full flex-row gap-5">
                         <input
                             type="text"
@@ -151,9 +151,9 @@ export default function UsosAdmin() {
                         </button>
                         <button
                             onClick={() => setCreateView(true)}
-                            className="bg-primary-orange w-[200px] rounded px-4 py-1 font-bold text-white hover:bg-orange-400"
+                            className="bg-primary-orange w-[300px] rounded px-4 py-1 font-bold text-white hover:bg-orange-400"
                         >
-                            Crear uso
+                            Crear ambiente
                         </button>
                     </div>
 
@@ -167,15 +167,17 @@ export default function UsosAdmin() {
                                     <td className="text-center">EDITAR</td>
                                 </tr>
                             </thead>
-                            <tbody className="text-center">{usos.data?.map((uso) => <UsoAdminRow key={uso.id} uso={uso} />)}</tbody>
+                            <tbody className="text-center">
+                                {ambientes.data?.map((ambiente) => <AmbienteAdminRow key={ambiente.id} ambiente={ambiente} />)}
+                            </tbody>
                         </table>
                     </div>
 
                     {/* Paginación con datos del backend */}
                     <div className="mt-4 flex justify-center">
-                        {usos.links && (
+                        {ambientes.links && (
                             <div className="flex items-center">
-                                {usos.links.map((link, index) => (
+                                {ambientes.links.map((link, index) => (
                                     <button
                                         key={index}
                                         onClick={() => link.url && handlePageChange(link.url.split('page=')[1])}
@@ -186,7 +188,7 @@ export default function UsosAdmin() {
                                                 : link.url
                                                   ? 'bg-gray-300 text-black'
                                                   : 'bg-gray-200 text-gray-500 opacity-50'
-                                        } ${index === 0 ? 'rounded-l-md' : ''} ${index === usos.links.length - 1 ? 'rounded-r-md' : ''}`}
+                                        } ${index === 0 ? 'rounded-l-md' : ''} ${index === ambientes.links.length - 1 ? 'rounded-r-md' : ''}`}
                                         dangerouslySetInnerHTML={{ __html: link.label }}
                                     />
                                 ))}
@@ -196,7 +198,7 @@ export default function UsosAdmin() {
 
                     {/* Información de paginación */}
                     <div className="mt-2 text-center text-sm text-gray-600">
-                        Mostrando {usos.from || 0} a {usos.to || 0} de {usos.total} resultados
+                        Mostrando {ambientes.from || 0} a {ambientes.to || 0} de {ambientes.total} resultados
                     </div>
                 </div>
             </div>

@@ -35,12 +35,13 @@ class AmbienteController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'order' => 'required|integer',
+        $data = $request->validate([
+            'name_es' => 'required|string|max:255',
+            'name_en' => 'required|string|max:255',
+            'order' => 'nullable|sometimes|string',
         ]);
 
-        Ambiente::create($validated);
+        Ambiente::create($data);
     }
 
 
@@ -50,8 +51,9 @@ class AmbienteController extends Controller
     public function update(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'order' => 'required|integer',
+            'name_es' => 'required|string|max:255',
+            'name_en' => 'required|string|max:255',
+            'order' => 'nullable|sometimes|string',
         ]);
 
         $ambiente = Ambiente::findOrFail($request->id);

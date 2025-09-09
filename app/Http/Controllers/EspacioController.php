@@ -35,7 +35,8 @@ class EspacioController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+            'name_es' => 'required|string|max:255',
+            'name_en' => 'required|string|max:255',
             'image' => 'nullable|sometimes|file',
             'order' => 'nullable|sometimes|string|max:255',
         ]);
@@ -55,7 +56,8 @@ class EspacioController extends Controller
     {
         $validated = $request->validate([
 
-            'name' => 'required|string|max:255',
+            'name_es' => 'required|string|max:255',
+            'name_en' => 'required|string|max:255',
             'image' => 'nullable|sometimes|file',
             'order' => 'nullable|sometimes|string|max:255',
         ]);

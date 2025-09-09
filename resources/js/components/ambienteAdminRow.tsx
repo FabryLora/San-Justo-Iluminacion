@@ -4,42 +4,41 @@ import { useForm } from '@inertiajs/react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import Switch from './Switch';
 
-export default function EspacioAdminRow({ espacio }) {
+export default function AmbienteAdminRow({ ambiente }) {
     const [edit, setEdit] = useState(false);
 
     const updateForm = useForm({
-        name_es: espacio?.name_es,
-        name_en: espacio?.name_en,
-        order: espacio?.order,
-        id: espacio?.id,
+        name_es: ambiente?.name_es,
+        name_en: ambiente?.name_en,
+        order: ambiente?.order,
+        id: ambiente?.id,
     });
 
     const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        updateForm.post(route('admin.espacios.update'), {
+        updateForm.post(route('admin.ambientes.update'), {
             preserveScroll: true,
             onSuccess: () => {
-                toast.success('Espacio actualizado correctamente');
+                toast.success('Ambiente actualizado correctamente');
                 setEdit(false);
             },
             onError: (errors) => {
-                toast.error('Error al actualizar espacio');
+                toast.error('Error al actualizar ambiente');
                 console.log(errors);
             },
         });
     };
 
-    const deleteEspacio = () => {
-        if (confirm('¿Estas seguro de eliminar este espacio?')) {
-            updateForm.delete(route('admin.espacios.destroy'), {
+    const deleteAmbiente = () => {
+        if (confirm('¿Estas seguro de eliminar este ambiente?')) {
+            updateForm.delete(route('admin.ambientes.destroy'), {
                 preserveScroll: true,
                 onSuccess: () => {
-                    toast.success('Espacio eliminada correctamente');
+                    toast.success('Ambiente eliminada correctamente');
                 },
                 onError: (errors) => {
-                    toast.error('Error al eliminar espacio');
+                    toast.error('Error al eliminar ambiente');
                     console.log(errors);
                 },
             });
@@ -48,22 +47,16 @@ export default function EspacioAdminRow({ espacio }) {
 
     return (
         <tr className={`border text-black odd:bg-gray-100 even:bg-white`}>
-            <td className="align-middle">{espacio?.order}</td>
-            <td className="h-[90px] align-middle">{espacio?.name_es}</td>
-            <td className="h-[90px] align-middle">{espacio?.name_en}</td>
-            <td className="flex h-[90px] items-center justify-center">
-                <img className="w-[100px]" src={`/storage/${espacio?.image}`} alt="" />
-            </td>
-            <td>
-                <Switch id={espacio?.id} status={espacio?.destacado == 1} routeName="espacios.changeDestacado" />
-            </td>
+            <td className="align-middle">{ambiente?.order}</td>
+            <td className="h-[90px] align-middle">{ambiente?.name_es}</td>
+            <td className="h-[90px] align-middle">{ambiente?.name_en}</td>
 
             <td className="w-[140px] text-center">
                 <div className="flex flex-row justify-center gap-3">
                     <button onClick={() => setEdit(true)} className="h-10 w-10 rounded-md border border-blue-500 px-2 py-1 text-white">
                         <FontAwesomeIcon icon={faPen} size="lg" color="#3b82f6" />
                     </button>
-                    <button onClick={deleteEspacio} className="h-10 w-10 rounded-md border border-red-500 px-2 py-1 text-white">
+                    <button onClick={deleteAmbiente} className="h-10 w-10 rounded-md border border-red-500 px-2 py-1 text-white">
                         <FontAwesomeIcon icon={faTrash} size="lg" color="#fb2c36" />
                     </button>
                 </div>
@@ -78,7 +71,7 @@ export default function EspacioAdminRow({ espacio }) {
                     >
                         <form onSubmit={handleUpdate} method="POST" className="text-black">
                             <div className="w-[500px] rounded-md bg-white p-4">
-                                <h2 className="mb-4 text-2xl font-semibold">Actualizar Espacio</h2>
+                                <h2 className="mb-4 text-2xl font-semibold">Actualizar Ambiente</h2>
                                 <div className="flex flex-col gap-4">
                                     <label htmlFor="ordennn">Orden</label>
                                     <input
@@ -89,7 +82,7 @@ export default function EspacioAdminRow({ espacio }) {
                                         value={updateForm?.data?.order}
                                         onChange={(e) => updateForm.setData('order', e.target.value)}
                                     />
-                                    <div className="flex w-full flex-row gap-4">
+                                    <div className="flex w-full flex-row gap-5">
                                         <div className="flex w-full flex-col gap-3">
                                             <label htmlFor="nombree_es">
                                                 Nombre {'(Español)'} <span className="text-red-500">*</span>
@@ -117,15 +110,6 @@ export default function EspacioAdminRow({ espacio }) {
                                             />
                                         </div>
                                     </div>
-
-                                    <label htmlFor="imagennn">Imagen</label>
-                                    <input
-                                        className="file:bg-primary-orange focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 file:cursor-pointer file:rounded-sm file:px-2 file:py-1 file:text-white focus:outline"
-                                        type="file"
-                                        name="imagennn"
-                                        id="imagennn"
-                                        onChange={(e) => updateForm.setData('image', e.target.files[0])}
-                                    />
 
                                     <div className="flex justify-end gap-4">
                                         <button

@@ -10,16 +10,21 @@ export default function LineasAdmin() {
     const { lineas } = usePage().props;
 
     const { data, setData, post, reset } = useForm({
-        name: '',
+        name_es: '',
     });
 
     const [searchTerm, setSearchTerm] = useState('');
     const [createView, setCreateView] = useState(false);
-    const [text, setText] = useState('');
+    const [text_es, setTextEs] = useState('');
+    const [text_en, setTextEn] = useState('');
 
     useEffect(() => {
-        setData('text', text);
-    }, [text]);
+        setData('text_es', text_es);
+    }, [text_es]);
+
+    useEffect(() => {
+        setData('text_en', text_en);
+    }, [text_en]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -80,7 +85,7 @@ export default function LineasAdmin() {
                             className="fixed top-0 left-0 z-50 flex h-full w-full items-center justify-center bg-black/50 text-left"
                         >
                             <form onSubmit={handleSubmit} method="POST" className="text-black">
-                                <div className="w-[500px] rounded-md bg-white p-4">
+                                <div className="w-[800px] rounded-md bg-white p-4">
                                     <h2 className="mb-4 text-2xl font-semibold">Crear Linea</h2>
                                     <div className="flex flex-col gap-4">
                                         <label htmlFor="ordennn">Orden</label>
@@ -91,19 +96,42 @@ export default function LineasAdmin() {
                                             id="ordennn"
                                             onChange={(e) => setData('order', e.target.value)}
                                         />
-                                        <label htmlFor="nombree">
-                                            Nombre <span className="text-red-500">*</span>
-                                        </label>
-                                        <input
-                                            className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
-                                            type="text"
-                                            name="nombree"
-                                            id="nombree"
-                                            onChange={(e) => setData('name', e.target.value)}
-                                        />
-
-                                        <label htmlFor="texto">Texto</label>
-                                        <CustomReactQuill value={text} onChange={setText} />
+                                        <div className="flex w-full flex-row gap-5">
+                                            <div className="flex w-full flex-col gap-3">
+                                                <label htmlFor="nombree_es">
+                                                    Nombre {'(Español)'} <span className="text-red-500">*</span>
+                                                </label>
+                                                <input
+                                                    className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
+                                                    type="text"
+                                                    name="nombree_es"
+                                                    id="nombree_es"
+                                                    onChange={(e) => setData('name_es', e.target.value)}
+                                                />
+                                            </div>
+                                            <div className="flex w-full flex-col gap-3">
+                                                <label htmlFor="nombree_en">
+                                                    Nombre {'(Ingles)'} <span className="text-red-500">*</span>
+                                                </label>
+                                                <input
+                                                    className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
+                                                    type="text"
+                                                    name="nombree_en"
+                                                    id="nombree_en"
+                                                    onChange={(e) => setData('name_en', e.target.value)}
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="flex flex-row gap-2">
+                                            <div className="flex flex-col gap-3">
+                                                <label htmlFor="texto">Texto {'(Español)'}</label>
+                                                <CustomReactQuill value={text_es} onChange={setTextEs} />
+                                            </div>
+                                            <div className="flex flex-col gap-3">
+                                                <label htmlFor="texto">Texto {'(Ingles)'}</label>
+                                                <CustomReactQuill value={text_en} onChange={setTextEn} />
+                                            </div>
+                                        </div>
 
                                         <label htmlFor="imagennn">Imagen</label>
                                         <input

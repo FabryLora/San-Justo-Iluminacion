@@ -9,7 +9,8 @@ export default function UsoAdminRow({ uso }) {
     const [edit, setEdit] = useState(false);
 
     const updateForm = useForm({
-        name: uso?.name,
+        name_es: uso?.name_es,
+        name_en: uso?.name_en,
         order: uso?.order,
         id: uso?.id,
     });
@@ -47,7 +48,8 @@ export default function UsoAdminRow({ uso }) {
     return (
         <tr className={`border text-black odd:bg-gray-100 even:bg-white`}>
             <td className="align-middle">{uso?.order}</td>
-            <td className="h-[90px] align-middle">{uso?.name}</td>
+            <td className="h-[90px] align-middle">{uso?.name_es}</td>
+            <td className="h-[90px] align-middle">{uso?.name_en}</td>
 
             <td className="w-[140px] text-center">
                 <div className="flex flex-row justify-center gap-3">
@@ -80,17 +82,34 @@ export default function UsoAdminRow({ uso }) {
                                         value={updateForm?.data?.order}
                                         onChange={(e) => updateForm.setData('order', e.target.value)}
                                     />
-                                    <label htmlFor="nombree">
-                                        Nombre <span className="text-red-500">*</span>
-                                    </label>
-                                    <input
-                                        className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
-                                        type="text"
-                                        name="nombree"
-                                        id="nombree"
-                                        value={updateForm?.data?.name}
-                                        onChange={(e) => updateForm.setData('name', e.target.value)}
-                                    />
+                                    <div className="flex w-full flex-row gap-5">
+                                        <div className="flex w-full flex-col gap-3">
+                                            <label htmlFor="nombree_es">
+                                                Nombre {'(Español)'} <span className="text-red-500">*</span>
+                                            </label>
+                                            <input
+                                                className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
+                                                type="text"
+                                                name="nombree_es"
+                                                id="nombree_es"
+                                                value={updateForm?.data?.name_es}
+                                                onChange={(e) => updateForm.setData('name_es', e.target.value)}
+                                            />
+                                        </div>
+                                        <div className="flex w-full flex-col gap-3">
+                                            <label htmlFor="nombree_en">
+                                                Nombre {'(Ingles)'} <span className="text-red-500">*</span>
+                                            </label>
+                                            <input
+                                                className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
+                                                type="text"
+                                                name="nombree_en"
+                                                id="nombree_en"
+                                                value={updateForm?.data?.name_en}
+                                                onChange={(e) => updateForm.setData('name_en', e.target.value)}
+                                            />
+                                        </div>
+                                    </div>
 
                                     <div className="flex justify-end gap-4">
                                         <button

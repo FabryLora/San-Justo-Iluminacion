@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ambientes', function (Blueprint $table) {
+        Schema::create('titulos', function (Blueprint $table) {
             $table->id();
-            $table->string('order')->default('zzz');
-            $table->string('name_es')->nullable();
-            $table->string('name_en')->nullable();
+            $table->string('seccion');
+            $table->string('title_es');
+            $table->string('title_en');
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('ambientes');
+        Schema::dropIfExists('titulos');
     }
 };

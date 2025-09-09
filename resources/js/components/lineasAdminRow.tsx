@@ -10,17 +10,24 @@ export default function LineasAdminRow({ linea }) {
     const [edit, setEdit] = useState(false);
 
     const updateForm = useForm({
-        name: linea?.name,
+        name_es: linea?.name_es,
+        name_en: linea?.name_en,
         order: linea?.order,
-        text: linea?.text,
+        text_es: linea?.text_es,
+        text_en: linea?.text_en,
         id: linea?.id,
     });
 
-    const [text, setText] = useState(linea?.text);
+    const [text_es, setTextEs] = useState(linea?.text_es);
+    const [text_en, setTextEn] = useState(linea?.text_en);
 
     useEffect(() => {
-        updateForm.setData('text', text);
-    }, [text]);
+        updateForm.setData('text_es', text_es);
+    }, [text_es]);
+
+    useEffect(() => {
+        updateForm.setData('text_en', text_en);
+    }, [text_en]);
 
     const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -55,9 +62,9 @@ export default function LineasAdminRow({ linea }) {
     return (
         <tr className={`border text-black odd:bg-gray-100 even:bg-white`}>
             <td className="align-middle">{linea?.order}</td>
-            <td className="h-[90px] align-middle">{linea?.name}</td>
+            <td className="h-[90px] align-middle">{linea?.name_es}</td>
             <td className="max-w-[100px]">
-                <div className="line-clamp-3 overflow-hidden break-words" dangerouslySetInnerHTML={{ __html: linea?.text }} />
+                <div className="line-clamp-3 overflow-hidden break-words" dangerouslySetInnerHTML={{ __html: linea?.text_es }} />
             </td>
             <td className="flex h-[90px] items-center justify-center">
                 <img className="w-[100px]" src={`/storage/${linea?.image}`} alt="" />
@@ -82,7 +89,7 @@ export default function LineasAdminRow({ linea }) {
                         className="fixed top-0 left-0 z-50 flex h-full w-full items-center justify-center bg-black/50 text-left"
                     >
                         <form onSubmit={handleUpdate} method="POST" className="text-black">
-                            <div className="w-[500px] rounded-md bg-white p-4">
+                            <div className="w-[800px] rounded-md bg-white p-4">
                                 <h2 className="mb-4 text-2xl font-semibold">Actualizar Linea</h2>
                                 <div className="flex flex-col gap-4">
                                     <label htmlFor="ordennn">Orden</label>
@@ -94,20 +101,44 @@ export default function LineasAdminRow({ linea }) {
                                         value={updateForm?.data?.order}
                                         onChange={(e) => updateForm.setData('order', e.target.value)}
                                     />
-                                    <label htmlFor="nombree">
-                                        Nombre <span className="text-red-500">*</span>
-                                    </label>
-                                    <input
-                                        className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
-                                        type="text"
-                                        name="nombree"
-                                        id="nombree"
-                                        value={updateForm?.data?.name}
-                                        onChange={(e) => updateForm.setData('name', e.target.value)}
-                                    />
-
-                                    <label htmlFor="texto">Texto</label>
-                                    <CustomReactQuill value={text} onChange={setText} />
+                                    <div className="flex w-full flex-row gap-5">
+                                        <div className="flex w-full flex-col gap-3">
+                                            <label htmlFor="nombree_es">
+                                                Nombre {'(Español)'} <span className="text-red-500">*</span>
+                                            </label>
+                                            <input
+                                                className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
+                                                type="text"
+                                                name="nombree_es"
+                                                id="nombree_es"
+                                                value={updateForm?.data?.name_es}
+                                                onChange={(e) => updateForm.setData('name_es', e.target.value)}
+                                            />
+                                        </div>
+                                        <div className="flex w-full flex-col gap-3">
+                                            <label htmlFor="nombree_en">
+                                                Nombre {'(Ingles)'} <span className="text-red-500">*</span>
+                                            </label>
+                                            <input
+                                                className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
+                                                type="text"
+                                                name="nombree_en"
+                                                id="nombree_en"
+                                                value={updateForm?.data?.name_en}
+                                                onChange={(e) => updateForm.setData('name_en', e.target.value)}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-row gap-2">
+                                        <div className="flex flex-col gap-3">
+                                            <label htmlFor="texto">Texto {'(Español)'}</label>
+                                            <CustomReactQuill value={text_es} onChange={setTextEs} />
+                                        </div>
+                                        <div className="flex flex-col gap-3">
+                                            <label htmlFor="texto">Texto {'(Ingles)'}</label>
+                                            <CustomReactQuill value={text_en} onChange={setTextEn} />
+                                        </div>
+                                    </div>
 
                                     <label htmlFor="imagennn">Imagen</label>
                                     <input

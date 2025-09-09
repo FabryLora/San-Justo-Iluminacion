@@ -7,6 +7,7 @@ use App\Models\BannerPortada;
 use App\Models\Calidad;
 use App\Models\Categoria;
 use App\Models\Contacto;
+use App\Models\Espacio;
 use App\Models\Marca;
 use App\Models\Metadatos;
 use App\Models\Modelo;
@@ -37,6 +38,7 @@ class HomePages extends Controller
             ->with(['imagenes', 'marca', 'modelo', 'precio', 'categoria'])
             ->get();
         $catalogos = ArchivoCalidad::orderBy('order', 'asc')->get();
+        $espacios = Espacio::orderBy('order', 'asc')->get();
 
         return view('home', [
             'catalogos' => $catalogos,
@@ -46,6 +48,7 @@ class HomePages extends Controller
             'subcategorias' => $subcategorias,
             'productos' => $productos,
             'metadatos' => $metadatos,
+            'espacios' => $espacios,
 
         ]);
     }

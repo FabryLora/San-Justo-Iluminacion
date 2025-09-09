@@ -42,8 +42,10 @@ class LineaController extends Controller
     {
         $data = $request->validate([
             'order' => 'sometimes|nullable|string|max:255',
-            'text' => 'required|string',
-            'name' => 'required|string|max:255',
+            'text_es' => 'required|string',
+            'name_es' => 'required|string|max:255',
+            'text_en' => 'required|string',
+            'name_en' => 'required|string|max:255',
             'image' => 'required|file',
         ]);
 
@@ -63,8 +65,10 @@ class LineaController extends Controller
     {
         $data = $request->validate([
             'order' => 'sometimes|nullable|string|max:255',
-            'name' => 'required|string|max:255',
-            'text' => 'required|string',
+            'name_es' => 'required|string|max:255',
+            'text_es' => 'required|string',
+            'name_en' => 'required|string|max:255',
+            'text_en' => 'required|string',
             'image' => 'sometimes|nullable|file',
         ]);
 

@@ -7,6 +7,7 @@
 
 @section('content')
     <x-banner-portada :homeInfo="$homeInfo" />
+    <x-espacios :espacios="$espacios" />
     <x-seccion-uno :homeInfo="$homeInfo" />
     <x-catalogos :catalogos="$catalogos" />
     <x-seccion-dos :homeInfo="$homeInfo" />

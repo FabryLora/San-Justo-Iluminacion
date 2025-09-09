@@ -9,7 +9,13 @@ export default function EspaciosAdmin() {
     const { espacios } = usePage().props;
 
     const { data, setData, post, reset } = useForm({
-        name: '',
+        name_es: '',
+    });
+
+    const titleForm = useForm({
+        title_es: '',
+        title_en: '',
+        seccion: 'espacios',
     });
 
     const [searchTerm, setSearchTerm] = useState('');
@@ -85,16 +91,32 @@ export default function EspaciosAdmin() {
                                             id="ordennn"
                                             onChange={(e) => setData('order', e.target.value)}
                                         />
-                                        <label htmlFor="nombree">
-                                            Nombre <span className="text-red-500">*</span>
-                                        </label>
-                                        <input
-                                            className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
-                                            type="text"
-                                            name="nombree"
-                                            id="nombree"
-                                            onChange={(e) => setData('name', e.target.value)}
-                                        />
+                                        <div className="flex w-full flex-row justify-between">
+                                            <div className="flex flex-col gap-3">
+                                                <label htmlFor="nombree_es">
+                                                    Nombre {'(Español)'} <span className="text-red-500">*</span>
+                                                </label>
+                                                <input
+                                                    className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
+                                                    type="text"
+                                                    name="nombree_es"
+                                                    id="nombree_es"
+                                                    onChange={(e) => setData('name_es', e.target.value)}
+                                                />
+                                            </div>
+                                            <div className="flex flex-col gap-3">
+                                                <label htmlFor="nombree_en">
+                                                    Nombre {'(Ingles)'} <span className="text-red-500">*</span>
+                                                </label>
+                                                <input
+                                                    className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
+                                                    type="text"
+                                                    name="nombree_en"
+                                                    id="nombree_en"
+                                                    onChange={(e) => setData('name_en', e.target.value)}
+                                                />
+                                            </div>
+                                        </div>
 
                                         {/* imagen */}
                                         <label htmlFor="imagennn">Imagen</label>
@@ -127,6 +149,40 @@ export default function EspaciosAdmin() {
                         </motion.div>
                     )}
                 </AnimatePresence>
+                <h2 className="border-primary-orange text-primary-orange text-bold w-full border-b-2 text-2xl">Titulos seccion espacios inicio</h2>
+                <div className="my-5 flex w-full flex-row items-end gap-5">
+                    <div className="flex w-full flex-col">
+                        <label htmlFor="title_es">
+                            Titulo {'(Español)'} <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                            className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
+                            type="text"
+                            name="title_es"
+                            id="title_es"
+                            onChange={(e) => titleForm.setData('title_es', e.target.value)}
+                        />
+                    </div>
+                    <div className="flex w-full flex-col">
+                        <label htmlFor="title_en">
+                            Titulo {'(Inglés)'} <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                            className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
+                            type="text"
+                            name="title_en"
+                            id="title_en"
+                            onChange={(e) => titleForm.setData('title_en', e.target.value)}
+                        />
+                    </div>
+                    <button
+                        /* onClick={handleSearch} */
+                        type="button"
+                        className="bg-primary-orange h-fit w-[500px] rounded px-4 py-1 font-bold text-white hover:bg-orange-400"
+                    >
+                        Actualizar titulos
+                    </button>
+                </div>
                 <div className="mx-auto flex w-full flex-col gap-3">
                     <h2 className="border-primary-orange text-primary-orange text-bold w-full border-b-2 text-2xl">Espacios</h2>
                     <div className="flex h-fit w-full flex-row gap-5">
@@ -156,7 +212,8 @@ export default function EspaciosAdmin() {
                             <thead className="bg-gray-300 text-sm font-medium text-black uppercase">
                                 <tr>
                                     <td className="text-center">ORDEN</td>
-                                    <td className="py-2 text-center">NOMBRE</td>
+                                    <td className="py-2 text-center">NOMBRE {'(Español)'}</td>
+                                    <td className="py-2 text-center">NOMBRE {'(Inglés)'}</td>
                                     <td className="text-center">IMAGEN</td>
                                     <td className="text-center">DESTACADO</td>
                                     <td className="text-center">EDITAR</td>

@@ -14,9 +14,11 @@ return new class extends Migration
         Schema::create('lineas', function (Blueprint $table) {
             $table->id();
             $table->string('order')->default('zzz');
-            $table->string('name')->nullable();
+            $table->string('name_es')->nullable();
+            $table->string('name_en')->nullable();
             $table->string('image')->nullable();
-            $table->longText('text')->nullable();
+            $table->longText('text_es')->nullable();
+            $table->longText('text_en')->nullable();
             $table->timestamps();
         });
     }
