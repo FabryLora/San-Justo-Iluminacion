@@ -5,8 +5,10 @@
     </div>
 
     <div class="w-full flex flex-col items-start gap-5 py-5">
-        <h2 class="text-[32px] font-semibold font-custom! max-w-[569px]">{{$homeInfo->title_seccion_uno_es}}</h2>
-        <p class="max-w-[569px]">{{$homeInfo->text_seccion_uno_es}}</p>
+        <h2 class="text-[32px] font-semibold font-custom! max-w-[569px]">
+            {{request('lang') == 'en' ? $homeInfo->title_seccion_uno_en : $homeInfo->title_seccion_uno_es}}</h2>
+        <p class="max-w-[569px]">
+            {{request('lang') == 'en' ? $homeInfo->text_seccion_uno_en : $homeInfo->text_seccion_uno_es}}</p>
         <a
             class="flex justify-center items-center w-[280px] h-[42px] bg-primary-orange rounded-sm font-medium text-[14px] text-white">{{__("DESCUBRI COMO TRABAJAMOS")}}</a>
     </div>

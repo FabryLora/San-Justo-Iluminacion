@@ -13,6 +13,8 @@
         ['title' => __('CONTACTO'), 'href' => '/contacto'],
     ];
 
+
+
 @endphp
 
 <div x-data="{
@@ -90,8 +92,8 @@
                             <div class="relative" @click.away="openProductos = false">
                                 <button type="button" @click="openProductos = !openProductos"
                                     class="flex items-center gap-1 text-[15px] max-xl:text-[15px] font-normal 
-                                                                                transition-colors duration-300 whitespace-nowrap leading-none
-                                                                               {{ Request::is(ltrim($link['href'], '/')) ? 'font-bold' : '' }}"
+                                                                                                transition-colors duration-300 whitespace-nowrap leading-none
+                                                                                               {{ Request::is(ltrim($link['href'], '/')) ? 'font-bold' : '' }}"
                                     :class="scrolled ? 'text-black' : 'text-white'">
                                     {{ $link['title'] }}
                                     <!-- Chevron -->
@@ -122,8 +124,8 @@
                         @else
                             <a href="{{ $link['href'] }}" :class="scrolled ? 'text-black' : 'text-white'"
                                 class="text-[15px] max-xl:text-[15px] font-normal hover:text-primary-orange 
-                                                                      transition-colors duration-300 whitespace-nowrap leading-none
-                                                                      {{ Request::is(ltrim($link['href'], '/')) ? 'font-bold' : '' }}">
+                                                                                      transition-colors duration-300 whitespace-nowrap leading-none
+                                                                                      {{ Request::is(ltrim($link['href'], '/')) ? 'font-bold' : '' }}">
                                 {{ $link['title'] }}
                             </a>
                         @endif
@@ -153,7 +155,7 @@
             @foreach(($isPrivate ? $privateLinks : $defaultLinks) as $link)
                 <a href="{{ $link['href'] }}"
                     class="block px-4 py-3 max-sm:px-3 max-sm:py-2 text-sm max-sm:text-xs text-gray-700 hover:bg-gray-50 hover:text-primary-orange transition-colors duration-300 border-b border-gray-100 last:border-b-0
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            {{ Request::is(ltrim($link['href'], '/')) ? 'font-bold bg-orange-50 text-primary-orange' : '' }}"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    {{ Request::is(ltrim($link['href'], '/')) ? 'font-bold bg-orange-50 text-primary-orange' : '' }}"
                     @click="mobileMenuOpen = false">
                     {{ $link['title'] }}
                 </a>

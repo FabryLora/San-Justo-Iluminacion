@@ -7,6 +7,7 @@ use App\Http\Controllers\ArchivoCalidadController;
 use App\Http\Controllers\BannerPortadaController;
 use App\Http\Controllers\CalidadController;
 use App\Http\Controllers\CategoriaController;
+use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ContactoController;
 use App\Http\Controllers\EspacioController;
 use App\Http\Controllers\ImagenProductoController;
@@ -203,4 +204,9 @@ Route::middleware('auth:admin')->group(function () {
     Route::post('admin/ambientes', [AmbienteController::class, 'store'])->name('admin.ambientes.store');
     Route::post('admin/ambientes/update', [AmbienteController::class, 'update'])->name('admin.ambientes.update');
     Route::delete('admin/ambientes/destroy', [AmbienteController::class, 'destroy'])->name('admin.ambientes.destroy');
+
+    Route::get('admin/clientes', [ClienteController::class, 'index'])->name('admin.clientes');
+    Route::post('admin/clientes', [ClienteController::class, 'store'])->name('admin.clientes.store');
+    Route::post('admin/clientes/update', [ClienteController::class, 'update'])->name('admin.clientes.update');
+    Route::delete('admin/clientes/destroy', [ClienteController::class, 'destroy'])->name('admin.clientes.destroy');
 });

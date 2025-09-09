@@ -1,21 +1,15 @@
-import EspacioAdminRow from '@/components/espacioAdminRow';
+import ClienteAdminRow from '@/components/clienteAdminRow';
 import { router, useForm, usePage } from '@inertiajs/react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import Dashboard from './dashboard';
 
-export default function EspaciosAdmin() {
-    const { espacios } = usePage().props;
+export default function ClientesAdmin() {
+    const { clientes } = usePage().props;
 
     const { data, setData, post, reset } = useForm({
-        name_es: '',
-    });
-
-    const titleForm = useForm({
-        title_es: '',
-        title_en: '',
-        seccion: 'espacios',
+        name: '',
     });
 
     const [searchTerm, setSearchTerm] = useState('');
@@ -24,15 +18,15 @@ export default function EspaciosAdmin() {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        post(route('admin.espacios.store'), {
+        post(route('admin.clientes.store'), {
             preserveScroll: true,
             onSuccess: () => {
-                toast.success('Espacio creado correctamente');
+                toast.success('Cliente creado correctamente');
                 reset();
                 setCreateView(false);
             },
             onError: (errors) => {
-                toast.error('Error al crear espacio');
+                toast.error('Error al crear cliente');
                 console.log(errors);
             },
         });
@@ -41,7 +35,7 @@ export default function EspaciosAdmin() {
     // Manejadores para la paginación del backend
     const handlePageChange = (page) => {
         router.get(
-            route('admin.espacios.index'),
+            route('admin.clientes.index'),
             {
                 page: page,
                 search: searchTerm,
@@ -56,7 +50,7 @@ export default function EspaciosAdmin() {
     // Función para realizar la búsqueda
     const handleSearch = () => {
         router.get(
-            route('admin.espacios.index'),
+            route('admin.clientes.index'),
             {
                 search: searchTerm,
                 page: 1, // Resetear a la primera página al buscar
@@ -81,7 +75,7 @@ export default function EspaciosAdmin() {
                         >
                             <form onSubmit={handleSubmit} method="POST" className="text-black">
                                 <div className="w-[500px] rounded-md bg-white p-4">
-                                    <h2 className="mb-4 text-2xl font-semibold">Crear Espacio</h2>
+                                    <h2 className="mb-4 text-2xl font-semibold">Crear cliente</h2>
                                     <div className="flex flex-col gap-4">
                                         <label htmlFor="ordennn">Orden</label>
                                         <input
@@ -91,42 +85,26 @@ export default function EspaciosAdmin() {
                                             id="ordennn"
                                             onChange={(e) => setData('order', e.target.value)}
                                         />
-                                        <div className="flex w-full flex-row justify-between">
-                                            <div className="flex flex-col gap-3">
-                                                <label htmlFor="nombree_es">
-                                                    Nombre {'(Español)'} <span className="text-red-500">*</span>
-                                                </label>
-                                                <input
-                                                    className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
-                                                    type="text"
-                                                    name="nombree_es"
-                                                    id="nombree_es"
-                                                    onChange={(e) => setData('name_es', e.target.value)}
-                                                />
-                                            </div>
-                                            <div className="flex flex-col gap-3">
-                                                <label htmlFor="nombree_en">
-                                                    Nombre {'(Ingles)'} <span className="text-red-500">*</span>
-                                                </label>
-                                                <input
-                                                    className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
-                                                    type="text"
-                                                    name="nombree_en"
-                                                    id="nombree_en"
-                                                    onChange={(e) => setData('name_en', e.target.value)}
-                                                />
-                                            </div>
-                                        </div>
 
-                                        {/* imagen */}
-                                        <label htmlFor="imagennn">Imagen</label>
-                                        <input
-                                            className="file:bg-primary-orange focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 file:cursor-pointer file:rounded-sm file:px-2 file:py-1 file:text-white focus:outline"
-                                            type="file"
-                                            name="imagennn"
-                                            id="imagennn"
-                                            onChange={(e) => setData('image', e.target.files[0])}
-                                        />
+                                        <label htmlFor="imagenn">Imagen</label>
+
+                                        <span className="text-base font-normal">Resolucion recomendada: 501x181px</span>
+                                        <div className="flex flex-row">
+                                            <input
+                                                type="file"
+                                                name="imagen"
+                                                id="imagenn"
+                                                onChange={(e) => setData('image', e.target.files[0])}
+                                                className="hidden"
+                                            />
+                                            <label
+                                                className="border-primary-orange text-primary-orange hover:bg-primary-orange cursor-pointer rounded-md border px-2 py-1 transition duration-300 hover:text-white"
+                                                htmlFor="imagenn"
+                                            >
+                                                Elegir imagen
+                                            </label>
+                                            <p className="self-center px-2">{data?.image?.name}</p>
+                                        </div>
 
                                         <div className="flex justify-end gap-4">
                                             <button
@@ -149,13 +127,12 @@ export default function EspaciosAdmin() {
                         </motion.div>
                     )}
                 </AnimatePresence>
-
                 <div className="mx-auto flex w-full flex-col gap-3">
-                    <h2 className="border-primary-orange text-primary-orange text-bold w-full border-b-2 text-2xl">Espacios</h2>
+                    <h2 className="border-primary-orange text-primary-orange text-bold w-full border-b-2 text-2xl">Clientes</h2>
                     <div className="flex h-fit w-full flex-row gap-5">
                         <input
                             type="text"
-                            placeholder="Buscar espacio..."
+                            placeholder="Buscar cliente..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             className="w-full rounded-md border border-gray-300 px-3"
@@ -170,7 +147,7 @@ export default function EspaciosAdmin() {
                             onClick={() => setCreateView(true)}
                             className="bg-primary-orange w-[200px] rounded px-4 py-1 font-bold text-white hover:bg-orange-400"
                         >
-                            Crear espacio
+                            Crear cliente
                         </button>
                     </div>
 
@@ -179,24 +156,21 @@ export default function EspaciosAdmin() {
                             <thead className="bg-gray-300 text-sm font-medium text-black uppercase">
                                 <tr>
                                     <td className="text-center">ORDEN</td>
-                                    <td className="py-2 text-center">NOMBRE {'(Español)'}</td>
-                                    <td className="py-2 text-center">NOMBRE {'(Inglés)'}</td>
-                                    <td className="text-center">IMAGEN</td>
-                                    <td className="text-center">DESTACADO</td>
+                                    <td className="w-[400px] px-3 py-2 text-center">IMAGEN</td>
                                     <td className="text-center">EDITAR</td>
                                 </tr>
                             </thead>
                             <tbody className="text-center">
-                                {espacios.data?.map((espacio) => <EspacioAdminRow key={espacio.id} espacio={espacio} />)}
+                                {clientes.data?.map((cliente) => <ClienteAdminRow key={cliente.id} cliente={cliente} />)}
                             </tbody>
                         </table>
                     </div>
 
                     {/* Paginación con datos del backend */}
                     <div className="mt-4 flex justify-center">
-                        {espacios.links && (
+                        {clientes.links && (
                             <div className="flex items-center">
-                                {espacios.links.map((link, index) => (
+                                {clientes.links.map((link, index) => (
                                     <button
                                         key={index}
                                         onClick={() => link.url && handlePageChange(link.url.split('page=')[1])}
@@ -207,7 +181,7 @@ export default function EspaciosAdmin() {
                                                 : link.url
                                                   ? 'bg-gray-300 text-black'
                                                   : 'bg-gray-200 text-gray-500 opacity-50'
-                                        } ${index === 0 ? 'rounded-l-md' : ''} ${index === espacios.links.length - 1 ? 'rounded-r-md' : ''}`}
+                                        } ${index === 0 ? 'rounded-l-md' : ''} ${index === clientes.links.length - 1 ? 'rounded-r-md' : ''}`}
                                         dangerouslySetInnerHTML={{ __html: link.label }}
                                     />
                                 ))}
@@ -217,7 +191,7 @@ export default function EspaciosAdmin() {
 
                     {/* Información de paginación */}
                     <div className="mt-2 text-center text-sm text-gray-600">
-                        Mostrando {espacios.from || 0} a {espacios.to || 0} de {espacios.total} resultados
+                        Mostrando {clientes.from || 0} a {clientes.to || 0} de {clientes.total} resultados
                     </div>
                 </div>
             </div>

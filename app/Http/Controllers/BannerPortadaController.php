@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\BannerPortada;
+use App\Models\Titulo;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Storage;
@@ -15,8 +16,11 @@ class BannerPortadaController extends Controller
     public function index()
     {
         $banner = BannerPortada::first();
+        $titulos = Titulo::orderBy('seccion')->get();
 
-        return Inertia::render('admin/bannerPortadaAdmin', ['banner' => $banner]);
+
+
+        return Inertia::render('admin/bannerPortadaAdmin', ['banner' => $banner, 'titulos' => $titulos]);
     }
 
 
@@ -46,6 +50,41 @@ class BannerPortadaController extends Controller
             'image_seccion_dos' => 'nullable|sometimes|file', // Máximo 2MB
         ]);
 
+        $dataTitulos = $request->validate([
+            'title_espacios_es' => 'nullable|sometimes|string|max:255',
+            'title_espacios_en' => 'nullable|sometimes|string|max:255',
+            'title_catalogos_es' => 'nullable|sometimes|string|max:255',
+            'title_catalogos_en' => 'nullable|sometimes|string|max:255',
+            'title_lineas_es' => 'nullable|sometimes|string|max:255',
+            'title_lineas_en' => 'nullable|sometimes|string|max:255',
+            'title_marcas_es' => 'nullable|sometimes|string|max:255',
+            'title_marcas_en' => 'nullable|sometimes|string|max:255',
+        ]);
+
+        // Procesar títulos por sección
+        $secciones = ['espacios', 'catalogos', 'lineas', 'marcas'];
+
+        foreach ($secciones as $seccion) {
+            $titleEsKey = "title_{$seccion}_es";
+            $titleEnKey = "title_{$seccion}_en";
+
+            // Verificar si al menos uno de los campos de esta sección está presente
+            if (isset($dataTitulos[$titleEsKey]) || isset($dataTitulos[$titleEnKey])) {
+                // Buscar o crear el registro para esta sección
+                $titulo = Titulo::firstOrNew(['seccion' => $seccion]);
+
+                // Actualizar solo los campos que están presentes en la request
+                if (isset($dataTitulos[$titleEsKey])) {
+                    $titulo->title_es = $dataTitulos[$titleEsKey];
+                }
+                if (isset($dataTitulos[$titleEnKey])) {
+                    $titulo->title_en = $dataTitulos[$titleEnKey];
+                }
+
+                $titulo->save();
+            }
+        }
+
         $bannerPortada = BannerPortada::first();
 
         // Si no existe, lo creamos
@@ -59,7 +98,6 @@ class BannerPortadaController extends Controller
             if ($request->hasFile('image_seccion_dos')) {
                 $data['image_seccion_dos'] = $request->file('image_seccion_dos')->store('images', 'public');
             }
-
 
             BannerPortada::create($data);
 
@@ -85,7 +123,6 @@ class BannerPortadaController extends Controller
             }
             $data['image_seccion_dos'] = $request->file('image_seccion_dos')->store('images', 'public');
         }
-
 
         $bannerPortada->update($data);
 

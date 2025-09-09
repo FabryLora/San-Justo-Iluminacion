@@ -6,8 +6,10 @@ use App\Models\ArchivoCalidad;
 use App\Models\BannerPortada;
 use App\Models\Calidad;
 use App\Models\Categoria;
+use App\Models\Cliente;
 use App\Models\Contacto;
 use App\Models\Espacio;
+use App\Models\Linea;
 use App\Models\Marca;
 use App\Models\Metadatos;
 use App\Models\Modelo;
@@ -16,6 +18,7 @@ use App\Models\Novedades;
 use App\Models\Producto;
 use App\Models\Slider;
 use App\Models\SubCategoria;
+use App\Models\Titulo;
 use App\Models\Valores;
 use DragonCode\Contracts\Cashier\Resources\Model;
 use Illuminate\Http\Request;
@@ -39,6 +42,9 @@ class HomePages extends Controller
             ->get();
         $catalogos = ArchivoCalidad::orderBy('order', 'asc')->get();
         $espacios = Espacio::orderBy('order', 'asc')->get();
+        $titulos = Titulo::orderBy('seccion')->get();
+        $clientes = Cliente::orderBy('order', 'asc')->get();
+        $lineas = Linea::orderBy('order', 'asc')->get();
 
         return view('home', [
             'catalogos' => $catalogos,
@@ -49,6 +55,9 @@ class HomePages extends Controller
             'productos' => $productos,
             'metadatos' => $metadatos,
             'espacios' => $espacios,
+            'titulos' => $titulos,
+            'clientes' => $clientes,
+            'lineas' => $lineas
 
         ]);
     }

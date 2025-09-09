@@ -144,7 +144,7 @@ const MediaPicker = ({ name, label, previewUrl, data, setData }) => {
 };
 
 export default function BannerPortadaAdmin() {
-    const banner = usePage().props.banner;
+    const { banner, titulos } = usePage().props;
 
     // Single source of truth: all fields that exist in the form
     const initialData = useMemo(
@@ -175,11 +175,27 @@ export default function BannerPortadaAdmin() {
             text_seccion_tres_es: banner?.text_seccion_tres_es ?? '',
             text_seccion_tres_en: banner?.text_seccion_tres_en ?? '',
             image_seccion_tres: null,
+
+            title_espacios_es: titulos?.find((titulo) => titulo?.seccion == 'espacios')?.title_es ?? '',
+            title_espacios_en: titulos?.find((titulo) => titulo?.seccion == 'espacios')?.title_en ?? '',
+
+            title_catalogos_es: titulos?.find((titulo) => titulo?.seccion == 'catalogos')?.title_es ?? '',
+            title_catalogos_en: titulos?.find((titulo) => titulo?.seccion == 'catalogos')?.title_en ?? '',
+
+            title_lineas_es: titulos?.find((titulo) => titulo?.seccion == 'lineas')?.title_es ?? '',
+            title_lineas_en: titulos?.find((titulo) => titulo?.seccion == 'lineas')?.title_en ?? '',
+
+            title_marcas_es: titulos?.find((titulo) => titulo?.seccion == 'marcas')?.title_es ?? '',
+            title_marcas_en: titulos?.find((titulo) => titulo?.seccion == 'marcas')?.title_en ?? '',
         }),
-        [banner],
+        [banner, titulos],
     );
 
     const { data, setData, errors, processing, post, reset } = useForm(initialData);
+
+    useEffect(() => {
+        setData(initialData);
+    }, [initialData]);
 
     const TEXT_FIELDS = [
         // Banner principal
@@ -203,6 +219,18 @@ export default function BannerPortadaAdmin() {
         { name: 'title_seccion_tres_en', label: 'Título (Inglés)' },
         { name: 'text_seccion_tres_es', label: 'Sub-título (Español)' },
         { name: 'text_seccion_tres_en', label: 'Sub-título (Inglés)' },
+        // secciones aparte
+        { name: 'title_espacios_es', label: 'Título (Español)' },
+        { name: 'title_espacios_en', label: 'Título (Inglés)' },
+
+        { name: 'title_catalogos_es', label: 'Título (Español)' },
+        { name: 'title_catalogos_en', label: 'Título (Inglés)' },
+
+        { name: 'title_lineas_es', label: 'Título (Español)' },
+        { name: 'title_lineas_en', label: 'Título (Inglés)' },
+
+        { name: 'title_marcas_es', label: 'Título (Español)' },
+        { name: 'title_marcas_en', label: 'Título (Inglés)' },
     ];
 
     const handleSubmit = (e) => {
@@ -238,6 +266,13 @@ export default function BannerPortadaAdmin() {
                 <SectionHeader>Sección 1</SectionHeader>
 
                 {/* Sección 1 - textos */}
+                {TEXT_FIELDS.slice(16, 18).map((f) => (
+                    <TextInput key={f.name} {...f} data={data} setData={setData} errors={errors} />
+                ))}
+
+                <SectionHeader>Sección 2</SectionHeader>
+
+                {/* Sección 1 - textos */}
                 {TEXT_FIELDS.slice(4, 8).map((f) => (
                     <TextInput key={f.name} {...f} data={data} setData={setData} errors={errors} />
                 ))}
@@ -245,7 +280,21 @@ export default function BannerPortadaAdmin() {
                 {/* Sección 1 - imagen */}
                 <ImagePicker name="image_seccion_uno" label="Imagen" previewUrl={banner?.image_seccion_uno} data={data} setData={setData} />
 
-                <SectionHeader>Sección 2</SectionHeader>
+                <SectionHeader>Sección 3</SectionHeader>
+
+                {/* Sección 2 - textos */}
+                {TEXT_FIELDS.slice(18, 20).map((f) => (
+                    <TextInput key={f.name} {...f} data={data} setData={setData} errors={errors} />
+                ))}
+
+                <SectionHeader>Sección 4</SectionHeader>
+
+                {/* Sección 2 - textos */}
+                {TEXT_FIELDS.slice(20, 22).map((f) => (
+                    <TextInput key={f.name} {...f} data={data} setData={setData} errors={errors} />
+                ))}
+
+                <SectionHeader>Sección 5</SectionHeader>
 
                 {/* Sección 2 - textos */}
                 {TEXT_FIELDS.slice(8, 12).map((f) => (
@@ -255,9 +304,15 @@ export default function BannerPortadaAdmin() {
                 {/* Sección 2 - imagen */}
                 <ImagePicker name="image_seccion_dos" label="Imagen" previewUrl={banner?.image_seccion_dos} data={data} setData={setData} />
 
-                <SectionHeader>Seccion 3</SectionHeader>
+                <SectionHeader>Seccion 6</SectionHeader>
 
                 {TEXT_FIELDS.slice(12, 16).map((f) => (
+                    <TextInput key={f.name} {...f} data={data} setData={setData} errors={errors} />
+                ))}
+
+                <SectionHeader>Seccion 7</SectionHeader>
+
+                {TEXT_FIELDS.slice(22, 24).map((f) => (
                     <TextInput key={f.name} {...f} data={data} setData={setData} errors={errors} />
                 ))}
 

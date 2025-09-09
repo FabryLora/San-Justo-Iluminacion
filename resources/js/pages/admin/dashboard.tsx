@@ -6,7 +6,6 @@ import {
     faGear,
     faHouse,
     faImage,
-    faLock,
     faNewspaper,
     faShield,
     faStar,
@@ -47,6 +46,7 @@ export default function Dashboard({ children }) {
             subHref: [
                 { title: 'Contenido', href: 'bannerportada' },
                 { title: 'Catalogos', href: 'archivos' },
+                { title: 'Clientes', href: 'clientes' },
             ],
         },
 
@@ -100,18 +100,7 @@ export default function Dashboard({ children }) {
             href: 'contacto',
             subHref: [],
         },
-        {
-            id: 'zonaprivada',
-            open: false,
-            title: 'Zona Privada',
-            icon: faLock,
-            href: '#',
-            subHref: [
-                { title: 'Clientes', href: 'clientes' },
-                { title: 'Pedidos', href: 'pedidos' },
-                { title: 'Carrito', href: 'carrito' },
-            ],
-        },
+
         {
             id: 'administradores',
             open: false,

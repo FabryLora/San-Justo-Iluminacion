@@ -164,7 +164,7 @@ export default function LineasAdmin() {
                     )}
                 </AnimatePresence>
                 <div className="mx-auto flex w-full flex-col gap-3">
-                    <h2 className="border-primary-orange text-primary-orange text-bold w-full border-b-2 text-2xl">Lineaso</h2>
+                    <h2 className="border-primary-orange text-primary-orange text-bold w-full border-b-2 text-2xl">Lineas</h2>
                     <div className="flex h-fit w-full flex-row gap-5">
                         <input
                             type="text"

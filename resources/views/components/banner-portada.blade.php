@@ -22,9 +22,10 @@
                         class="w-fit items-center text-center justify-center max-sm:max-w-full text-white flex flex-col gap-8">
 
                         <h1 class="text-[32px] font-bold w-fit font-custom! leading-none">
-                            {{ $homeInfo->title_banner_es }}
+                            {{ request('lang') == 'en' ? $homeInfo->title_banner_en : $homeInfo->title_banner_es }}
                         </h1>
-                        <h3 class="text-[20px] max-w-[524px] ">{{$homeInfo->text_banner_es}}</h3>
+                        <h3 class="text-[20px] max-w-[524px] ">
+                            {{request('lang') == 'en' ? $homeInfo->text_banner_en : $homeInfo->text_banner_es}}</h3>
 
 
                         <a href="{{ $homeInfo->link}}"

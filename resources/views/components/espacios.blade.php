@@ -1,5 +1,8 @@
 <div class="flex flex-col w-[1224px] mx-auto mt-10">
-    <h2 class="text-[32px] font-semibold font-custom! mb-6">Productos para cada estilo y necesidad</h2>
+    {{-- Buscar el titulo con las seccion "espacios" --}}
+    <h2 class="text-[32px] font-semibold font-custom! mb-6">
+        {{request('lang') == 'en' ? $titulo->title_en : $titulo->title_es  }}
+    </h2>
     <div class="flex flex-row w-full gap-6">
         @foreach ($espacios as $espacio)
             <div x-data="{ isHovered: false }" @mouseenter="isHovered = true" @mouseleave="isHovered = false"
@@ -10,7 +13,7 @@
                     <div class="relative w-full h-full">
                         <h2
                             class="absolute rotate-[16.63deg] top-8 right-8 text-[32px] text-white font-semibold font-custom!">
-                            {{ $espacio->name_es }}
+                            {{ request('lang') == 'en' ? $espacio->name_en : $espacio->name_es }}
                         </h2>
 
                     </div>
