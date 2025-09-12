@@ -72,8 +72,9 @@ export default function Dashboard({ children }) {
             icon: faUsers,
             href: 'nosotros',
             subHref: [
-                { title: 'Contenido', href: 'nosotros' },
-                { title: 'Valores', href: 'valores' },
+                { title: 'Banner', href: 'nosotros-banner' },
+                { title: 'Secciones', href: 'nosotros-secciones' },
+                { title: 'Tarjetas', href: 'nosotros-tarjetas' },
             ],
         },
         {
@@ -82,14 +83,22 @@ export default function Dashboard({ children }) {
             title: 'Trabaja con nosotros',
             icon: faStar,
             href: 'trabaja-con-nosotros',
-            subHref: [{ title: 'Contenido', href: 'calidad' }],
+            subHref: [],
         },
         {
-            id: 'lanzamientos',
+            id: 'donde-comprar',
             open: false,
-            title: 'Novedades',
+            title: 'Donde comprar',
             icon: faNewspaper,
             href: 'novedades',
+            subHref: [],
+        },
+        {
+            id: 'comercio-exterior',
+            open: false,
+            title: 'Comercio Exterior',
+            icon: faNewspaper,
+            href: 'comercio-exterior',
             subHref: [],
         },
         {

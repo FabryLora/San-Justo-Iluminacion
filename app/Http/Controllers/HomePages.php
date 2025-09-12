@@ -14,11 +14,15 @@ use App\Models\Marca;
 use App\Models\Metadatos;
 use App\Models\Modelo;
 use App\Models\Nosotros;
+use App\Models\NosotrosBanner;
+use App\Models\NosotrosSecciones;
+use App\Models\NosotrosTarjetas;
 use App\Models\Novedades;
 use App\Models\Producto;
 use App\Models\Slider;
 use App\Models\SubCategoria;
 use App\Models\Titulo;
+use App\Models\TrabajaConNosotros;
 use App\Models\Valores;
 use DragonCode\Contracts\Cashier\Resources\Model;
 use Illuminate\Http\Request;
@@ -65,11 +69,33 @@ class HomePages extends Controller
     public function nosotros()
     {
         $metadatos = Metadatos::where('title', 'Nosotros')->first();
-        $nosotros = Nosotros::first();
-        $valores = Valores::first();
+        $secciones = NosotrosSecciones::orderBy('order')->get();
+        $tarjetas = NosotrosTarjetas::orderBy('order')->get();
+        $banner = NosotrosBanner::first();
         return view('empresa', [
-            'nosotros' => $nosotros,
-            'valores' => $valores,
+            'secciones' => $secciones,
+            'tarjetas' => $tarjetas,
+            'banner' => $banner,
+            'metadatos' => $metadatos,
+        ]);
+    }
+
+    public function trabajaConNosotros()
+    {
+        $metadatos = Metadatos::where('title', 'Trabaja con nosotros')->first();
+        $trabaja = TrabajaConNosotros::first();
+        return view('trabaja-con-nosotros', [
+            'metadatos' => $metadatos,
+            'trabaja' => $trabaja,
+        ]);
+    }
+
+    public function comercioExterior()
+    {
+        $metadatos = Metadatos::where('title', 'Comercio Exterior')->first();
+        $comercio = BannerPortada::first();
+        return view('comercio-exterior', [
+            'comercio' => $comercio,
             'metadatos' => $metadatos,
         ]);
     }

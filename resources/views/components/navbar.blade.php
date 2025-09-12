@@ -54,7 +54,7 @@
         'bg-transparent': !scrolled && {{ $isHome ? 'true' : 'false' }},
         'fixed top-0': {{ $isHome ? 'true' : 'false' }},
         'sticky top-0': {{ $isHome ? 'false' : 'true' }}
-    }" class="z-50 sticky top-0 w-full transition-colors duration-300 h-[100px] max-sm:h-auto flex flex-col">
+    }" class="z-1000 sticky top-0 w-full transition-colors duration-300 h-[100px] max-sm:h-auto flex flex-col">
 
     <!-- Franja superior -->
 
@@ -89,11 +89,11 @@
                 <div class="flex gap-6 items-end flex-wrap" x-data="{ openProductos: false }">
                     @foreach(($isPrivate ? $privateLinks : $defaultLinks) as $link)
                         @if($link['title'] === __('PRODUCTOS'))
-                            <div class="relative" @click.away="openProductos = false">
+                            <div class="" @click.away="openProductos = false">
                                 <button type="button" @click="openProductos = !openProductos"
                                     class="flex items-center gap-1 text-[15px] max-xl:text-[15px] font-normal 
-                                                                                                transition-colors duration-300 whitespace-nowrap leading-none
-                                                                                               {{ Request::is(ltrim($link['href'], '/')) ? 'font-bold' : '' }}"
+                                                                                                                                                                                                                                                                                transition-colors duration-300 whitespace-nowrap leading-none
+                                                                                                                                                                                                                                                                               {{ Request::is(ltrim($link['href'], '/')) ? 'font-bold' : '' }}"
                                     :class="scrolled ? 'text-black' : 'text-white'">
                                     {{ $link['title'] }}
                                     <!-- Chevron -->
@@ -106,26 +106,31 @@
 
                                 <!-- Dropdown -->
                                 <div x-show="openProductos" x-transition
-                                    class="absolute left-0 mt-2 w-48 bg-white shadow-lg border rounded-md z-50">
-                                    <a href="/productos/categoria1"
-                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-primary-orange">
-                                        Categoría 1
-                                    </a>
-                                    <a href="/productos/categoria2"
-                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-primary-orange">
-                                        Categoría 2
-                                    </a>
-                                    <a href="/productos/categoria3"
-                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-primary-orange">
-                                        Categoría 3
-                                    </a>
+                                    class="absolute w-screen left-0 mt-4 h-[243px] p-10 flex flex-col  bg-black text-white z-50">
+                                    <div class="flex flex-col gap-6">
+                                        {{-- @foreach ($espacios as $espacio)
+                                        <div class="flex flex-row ">
+                                            <button class="text-[15px] font-barlow! uppercase">
+                                                {{ request('lang') == 'en' ? $espacio->name_en : $espacio->name_es }}
+                                            </button>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                class="lucide lucide-chevron-right-icon lucide-chevron-right">
+                                                <path d="m9 18 6-6-6-6" />
+                                            </svg>
+                                        </div>
+
+                                        @endforeach --}}
+                                    </div>
+
                                 </div>
                             </div>
                         @else
                             <a href="{{ $link['href'] }}" :class="scrolled ? 'text-black' : 'text-white'"
                                 class="text-[15px] max-xl:text-[15px] font-normal hover:text-primary-orange 
-                                                                                      transition-colors duration-300 whitespace-nowrap leading-none
-                                                                                      {{ Request::is(ltrim($link['href'], '/')) ? 'font-bold' : '' }}">
+                                                                                                                                                                                                                                                                      transition-colors duration-300 whitespace-nowrap leading-none
+                                                                                                                                                                                                                                                                      {{ Request::is(ltrim($link['href'], '/')) ? 'font-bold' : '' }}">
                                 {{ $link['title'] }}
                             </a>
                         @endif
@@ -155,7 +160,7 @@
             @foreach(($isPrivate ? $privateLinks : $defaultLinks) as $link)
                 <a href="{{ $link['href'] }}"
                     class="block px-4 py-3 max-sm:px-3 max-sm:py-2 text-sm max-sm:text-xs text-gray-700 hover:bg-gray-50 hover:text-primary-orange transition-colors duration-300 border-b border-gray-100 last:border-b-0
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    {{ Request::is(ltrim($link['href'], '/')) ? 'font-bold bg-orange-50 text-primary-orange' : '' }}"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            {{ Request::is(ltrim($link['href'], '/')) ? 'font-bold bg-orange-50 text-primary-orange' : '' }}"
                     @click="mobileMenuOpen = false">
                     {{ $link['title'] }}
                 </a>

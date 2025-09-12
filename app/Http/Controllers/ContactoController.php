@@ -29,9 +29,11 @@ class ContactoController extends Controller
 
         $data = [
             'name' => $request->name,
-            'email' => $request->email,
-            'celular' => $request->celular,
+            'apellido' => $request->apellido,
             'empresa' => $request->empresa,
+            'email' => $request->email,
+            'telefono' => $request->telefono,
+            'como_llegaste' => $request->como_llegaste,
             'mensaje' => $request->mensaje,
         ];
 
@@ -61,6 +63,10 @@ class ContactoController extends Controller
             'fb' => 'sometimes|nullable|string|max:255',
             'ig' => 'sometimes|nullable|string|max:255',
             'wp' => 'sometimes|nullable|string|max:255',
+            'title_es' => 'sometimes|nullable|string|max:255',
+            'title_en' => 'sometimes|nullable|string|max:255',
+            'text_es' => 'sometimes|nullable|string',
+            'text_en' => 'sometimes|nullable|string',
         ]);
 
         if (!$contacto) {

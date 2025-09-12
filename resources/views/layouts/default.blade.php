@@ -18,7 +18,7 @@
     <meta name="description" content="@yield('description', 'Autopartes TB - Tu tienda de autopartes en línea') ">
     <meta name="keywords"
         content="@yield('keywords', 'autopartes, repuestos, accesorios, automóviles, tienda en línea')">
-
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 
 <body class="font-sans text-gray-900 antialiased">

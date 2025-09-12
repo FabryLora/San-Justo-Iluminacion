@@ -143,70 +143,30 @@ const MediaPicker = ({ name, label, previewUrl, data, setData }) => {
     );
 };
 
-export default function NosotrosAdmin() {
-    const { nosotros, titulos } = usePage().props;
+export default function ComercioExterior() {
+    const { banner, titulos } = usePage().props;
 
     // Single source of truth: all fields that exist in the form
     const initialData = useMemo(
         () => ({
-            media_banner: null,
-
             // Sección 1
-            title_seccion_uno_es: nosotros?.title_seccion_uno_es ?? '',
-            title_seccion_uno_en: nosotros?.title_seccion_uno_en ?? '',
-            text_seccion_uno_es: nosotros?.text_seccion_uno_es ?? '',
-            text_seccion_uno_en: nosotros?.text_seccion_uno_en ?? '',
-            image_seccion_uno: null,
+            title_seccion_uno_es: banner?.title_seccion_uno_es ?? '',
+            title_seccion_uno_en: banner?.title_seccion_uno_en ?? '',
+            text_seccion_uno_es: banner?.text_seccion_uno_es ?? '',
+            text_seccion_uno_en: banner?.text_seccion_uno_en ?? '',
 
             // Sección 2
-            title_seccion_dos_es: nosotros?.title_seccion_dos_es ?? '',
-            title_seccion_dos_en: nosotros?.title_seccion_dos_en ?? '',
-            text_seccion_dos_es: nosotros?.text_seccion_dos_es ?? '',
-            text_seccion_dos_en: nosotros?.text_seccion_dos_en ?? '',
-            image_seccion_dos: null,
+            title_seccion_dos_es: banner?.title_seccion_dos_es ?? '',
+            title_seccion_dos_en: banner?.title_seccion_dos_en ?? '',
+            text_seccion_dos_es: banner?.text_seccion_dos_es ?? '',
+            text_seccion_dos_en: banner?.text_seccion_dos_en ?? '',
 
-            title_seccion_tres_es: nosotros?.title_seccion_tres_es ?? '',
-            title_seccion_tres_en: nosotros?.title_seccion_tres_en ?? '',
-            text_seccion_tres_es: nosotros?.text_seccion_tres_es ?? '',
-            text_seccion_tres_en: nosotros?.text_seccion_tres_en ?? '',
-            image_seccion_tres: null,
-
-            title_seccion_cuatro_es: nosotros?.title_seccion_cuatro_es ?? '',
-            title_seccion_cuatro_en: nosotros?.title_seccion_cuatro_en ?? '',
-            text_seccion_cuatro_es: nosotros?.text_seccion_cuatro_es ?? '',
-            text_seccion_cuatro_en: nosotros?.text_seccion_cuatro_en ?? '',
-            image_seccion_cuatro: null,
-
-            title_cosas_es: titulos?.find((titulo) => titulo?.seccion == 'cosas')?.title_es ?? '',
-            title_cosas_en: titulos?.find((titulo) => titulo?.seccion == 'cosas')?.title_en ?? '',
-
-            // Sección 1
-            title_cosas_uno_es: nosotros?.title_cosas_uno_es ?? '',
-            title_cosas_uno_en: nosotros?.title_cosas_uno_en ?? '',
-            text_cosas_uno_es: nosotros?.text_cosas_uno_es ?? '',
-            text_cosas_uno_en: nosotros?.text_cosas_uno_en ?? '',
-            image_cosas_uno: null,
-
-            // Sección 2
-            title_cosas_dos_es: nosotros?.title_cosas_dos_es ?? '',
-            title_cosas_dos_en: nosotros?.title_cosas_dos_en ?? '',
-            text_cosas_dos_es: nosotros?.text_cosas_dos_es ?? '',
-            text_cosas_dos_en: nosotros?.text_cosas_dos_en ?? '',
-            image_cosas_dos: null,
-
-            title_cosas_tres_es: nosotros?.title_cosas_tres_es ?? '',
-            title_cosas_tres_en: nosotros?.title_cosas_tres_en ?? '',
-            text_cosas_tres_es: nosotros?.text_cosas_tres_es ?? '',
-            text_cosas_tres_en: nosotros?.text_cosas_tres_en ?? '',
-            image_cosas_tres: null,
-
-            title_cosas_cuatro_es: nosotros?.title_cosas_cuatro_es ?? '',
-            title_cosas_cuatro_en: nosotros?.title_cosas_cuatro_en ?? '',
-            text_cosas_cuatro_es: nosotros?.text_cosas_cuatro_es ?? '',
-            text_cosas_cuatro_en: nosotros?.text_cosas_cuatro_en ?? '',
-            image_cosas_cuatro: null,
+            title_seccion_tres_es: banner?.title_seccion_tres_es ?? '',
+            title_seccion_tres_en: banner?.title_seccion_tres_en ?? '',
+            text_seccion_tres_es: banner?.text_seccion_tres_es ?? '',
+            text_seccion_tres_en: banner?.text_seccion_tres_en ?? '',
         }),
-        [],
+        [banner, titulos],
     );
 
     const { data, setData, errors, processing, post, reset } = useForm(initialData);
@@ -218,7 +178,6 @@ export default function NosotrosAdmin() {
     const TEXT_FIELDS = [
         // Banner principal
 
-        // Sección 1
         { name: 'title_seccion_uno_es', label: 'Título (Español)' },
         { name: 'title_seccion_uno_en', label: 'Título (Inglés)' },
         { name: 'text_seccion_uno_es', label: 'Texto (Español)' },
@@ -234,44 +193,12 @@ export default function NosotrosAdmin() {
         { name: 'title_seccion_tres_en', label: 'Título (Inglés)' },
         { name: 'text_seccion_tres_es', label: 'Texto (Español)' },
         { name: 'text_seccion_tres_en', label: 'Texto (Inglés)' },
-
-        //seccion 4
-        { name: 'title_seccion_cuatro_es', label: 'Título (Español)' },
-        { name: 'title_seccion_cuatro_en', label: 'Título (Inglés)' },
-        { name: 'text_seccion_cuatro_es', label: 'Texto (Español)' },
-        { name: 'text_seccion_cuatro_en', label: 'Texto (Inglés)' },
-        // secciones aparte
-        { name: 'title_cosas_es', label: 'Título Sección Cosas (Español)' },
-        { name: 'title_cosas_en', label: 'Título Sección Cosas (Inglés)' },
-
-        // Sección 1
-        { name: 'title_cosas_uno_es', label: 'Título (Español)' },
-        { name: 'title_cosas_uno_en', label: 'Título (Inglés)' },
-        { name: 'text_cosas_uno_es', label: 'Texto (Español)' },
-        { name: 'text_cosas_uno_en', label: 'Texto (Inglés)' },
-        // Sección 2
-        { name: 'title_cosas_dos_es', label: 'Título (Español)' },
-        { name: 'title_cosas_dos_en', label: 'Título (Inglés)' },
-        { name: 'text_cosas_dos_es', label: 'Texto (Español)' },
-        { name: 'text_cosas_dos_en', label: 'Texto (Inglés)' },
-
-        //seccion 3
-        { name: 'title_cosas_tres_es', label: 'Título (Español)' },
-        { name: 'title_cosas_tres_en', label: 'Título (Inglés)' },
-        { name: 'text_cosas_tres_es', label: 'Texto (Español)' },
-        { name: 'text_cosas_tres_en', label: 'Texto (Inglés)' },
-
-        //seccion 4
-        { name: 'title_cosas_cuatro_es', label: 'Título (Español)' },
-        { name: 'title_cosas_cuatro_en', label: 'Título (Inglés)' },
-        { name: 'text_cosas_cuatro_es', label: 'Texto (Español)' },
-        { name: 'text_cosas_cuatro_en', label: 'Texto (Inglés)' },
     ];
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        post(route('admin.bannerportada.update'), {
+        post(route('admin.comercio-exterior.update'), {
             preserveScroll: true,
             forceFormData: true, // ensure file uploads are sent as FormData
             onSuccess: () => {
@@ -288,19 +215,12 @@ export default function NosotrosAdmin() {
         <Dashboard>
             <Toaster />
             <form onSubmit={handleSubmit} className="grid h-fit grid-cols-2 justify-between gap-5 p-6">
-                <SectionHeader>Banner de Inicio</SectionHeader>
-
-                {/* Banner principal - imagen */}
-                <MediaPicker name="image_banner" label="Imagen/Video" previewUrl={nosotros?.media_banner} data={data} setData={setData} />
-
                 <SectionHeader>Sección 1</SectionHeader>
 
                 {/* Sección 1 - textos */}
                 {TEXT_FIELDS.slice(0, 4).map((f) => (
                     <TextInput key={f.name} {...f} data={data} setData={setData} errors={errors} />
                 ))}
-
-                <ImagePicker name="image_seccion_uno" label="Imagen" previewUrl={nosotros?.image_seccion_uno} data={data} setData={setData} />
 
                 <SectionHeader>Sección 2</SectionHeader>
 
@@ -310,7 +230,7 @@ export default function NosotrosAdmin() {
                 ))}
 
                 {/* Sección 1 - imagen */}
-                <ImagePicker name="image_seccion_dos" label="Imagen" previewUrl={nosotros?.image_seccion_dos} data={data} setData={setData} />
+                <ImagePicker name="image_seccion_dos" label="Imagen" previewUrl={banner?.image_seccion_dos} data={data} setData={setData} />
 
                 <SectionHeader>Sección 3</SectionHeader>
 
@@ -319,56 +239,23 @@ export default function NosotrosAdmin() {
                     <TextInput key={f.name} {...f} data={data} setData={setData} errors={errors} />
                 ))}
 
-                <ImagePicker name="image_seccion_tres" label="Imagen" previewUrl={nosotros?.image_seccion_tres} data={data} setData={setData} />
+                <ImagePicker
+                    name="image_seccion_tres_tres"
+                    label="Imagen"
+                    previewUrl={banner?.image_seccion_tres_tres}
+                    data={data}
+                    setData={setData}
+                />
 
-                <SectionHeader>Sección 4</SectionHeader>
+                <ImagePicker name="image_seccion_tres" label="Icono 1" previewUrl={banner?.image_seccion_tres} data={data} setData={setData} />
 
-                {/* Sección 2 - textos */}
-                {TEXT_FIELDS.slice(12, 16).map((f) => (
-                    <TextInput key={f.name} {...f} data={data} setData={setData} errors={errors} />
-                ))}
-
-                <ImagePicker name="image_seccion_cuatro" label="Imagen" previewUrl={nosotros?.image_seccion_cuatro} data={data} setData={setData} />
-
-                <SectionHeader>Titulo seccion inferior</SectionHeader>
-
-                {/* Sección 2 - textos */}
-                {TEXT_FIELDS.slice(16, 18).map((f) => (
-                    <TextInput key={f.name} {...f} data={data} setData={setData} errors={errors} />
-                ))}
-                <SectionHeader>Tarjeta 1</SectionHeader>
-
-                {/* Sección 2 - textos */}
-                {TEXT_FIELDS.slice(18, 22).map((f) => (
-                    <TextInput key={f.name} {...f} data={data} setData={setData} errors={errors} />
-                ))}
-
-                {/* Sección 2 - imagen */}
-                <ImagePicker name="image_cosas_uno" label="Imagen" previewUrl={nosotros?.image_cosas_uno} data={data} setData={setData} />
-
-                <SectionHeader>Tarjeta 2</SectionHeader>
-
-                {TEXT_FIELDS.slice(22, 26).map((f) => (
-                    <TextInput key={f.name} {...f} data={data} setData={setData} errors={errors} />
-                ))}
-
-                <ImagePicker name="image_cosas_dos" label="Imagen" previewUrl={nosotros?.image_cosas_dos} data={data} setData={setData} />
-
-                <SectionHeader>Tarjeta 3</SectionHeader>
-
-                {TEXT_FIELDS.slice(26, 30).map((f) => (
-                    <TextInput key={f.name} {...f} data={data} setData={setData} errors={errors} />
-                ))}
-
-                <ImagePicker name="image_cosas_tres" label="Imagen" previewUrl={nosotros?.image_cosas_tres} data={data} setData={setData} />
-
-                <SectionHeader>Tarjeta 4</SectionHeader>
-
-                {TEXT_FIELDS.slice(30, 34).map((f) => (
-                    <TextInput key={f.name} {...f} data={data} setData={setData} errors={errors} />
-                ))}
-
-                <ImagePicker name="image_cosas_cuatro" label="Imagen" previewUrl={nosotros?.image_cosas_cuatro} data={data} setData={setData} />
+                <ImagePicker
+                    name="image_seccion_tres_dos"
+                    label="Icono 2"
+                    previewUrl={banner?.image_seccion_tres_dos}
+                    data={data}
+                    setData={setData}
+                />
 
                 <div className="flex items-center justify-start gap-x-6">
                     <button

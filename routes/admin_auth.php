@@ -8,6 +8,7 @@ use App\Http\Controllers\BannerPortadaController;
 use App\Http\Controllers\CalidadController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\ComercioExteriorController;
 use App\Http\Controllers\ContactoController;
 use App\Http\Controllers\EspacioController;
 use App\Http\Controllers\ImagenProductoController;
@@ -21,6 +22,8 @@ use App\Http\Controllers\MarcaProductoController;
 use App\Http\Controllers\MetadatosController;
 use App\Http\Controllers\ModeloController;
 use App\Http\Controllers\NosotrosController;
+use App\Http\Controllers\NosotrosSeccionesController;
+use App\Http\Controllers\NosotrosTarjetasController;
 use App\Http\Controllers\NovedadesController;
 use App\Http\Controllers\PedidoController;
 use App\Http\Controllers\PrivadaController;
@@ -29,6 +32,7 @@ use App\Http\Controllers\SliderController;
 use App\Http\Controllers\SubCategoriaController;
 use App\Http\Controllers\SubProductoController;
 use App\Http\Controllers\SucursalController;
+use App\Http\Controllers\TrabajaConNosotrosController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UsoController;
 use App\Http\Controllers\ValoresController;
@@ -209,4 +213,23 @@ Route::middleware('auth:admin')->group(function () {
     Route::post('admin/clientes', [ClienteController::class, 'store'])->name('admin.clientes.store');
     Route::post('admin/clientes/update', [ClienteController::class, 'update'])->name('admin.clientes.update');
     Route::delete('admin/clientes/destroy', [ClienteController::class, 'destroy'])->name('admin.clientes.destroy');
+
+    Route::get('admin/nosotros-secciones', [NosotrosSeccionesController::class, 'index'])->name('admin.nosotros-secciones');
+    Route::post('admin/nosotros-secciones', [NosotrosSeccionesController::class, 'store'])->name('admin.nosotros-secciones.store');
+    Route::post('admin/nosotros-secciones/update', [NosotrosSeccionesController::class, 'update'])->name('admin.nosotros-secciones.update');
+    Route::delete('admin/nosotros-secciones/destroy', [NosotrosSeccionesController::class, 'destroy'])->name('admin.nosotros-secciones.destroy');
+
+    Route::get('admin/nosotros-tarjetas', [NosotrosTarjetasController::class, 'index'])->name('admin.nosotros-tarjetas');
+    Route::post('admin/nosotros-tarjetas', [NosotrosTarjetasController::class, 'store'])->name('admin.nosotros-tarjetas.store');
+    Route::post('admin/nosotros-tarjetas/update', [NosotrosTarjetasController::class, 'update'])->name('admin.nosotros-tarjetas.update');
+    Route::delete('admin/nosotros-tarjetas/destroy', [NosotrosTarjetasController::class, 'destroy'])->name('admin.nosotros-tarjetas.destroy');
+
+    Route::get('admin/nosotros-banner', [NosotrosController::class, 'bannerView'])->name('admin.nosotros-banner');
+    Route::post('admin/updateNosotrosBanner', [NosotrosController::class, 'updateBanner'])->name('admin.nosotros.updateBanner');
+
+    Route::get('admin/trabaja-con-nosotros', [TrabajaConNosotrosController::class, 'index'])->name('admin.trabaja-con-nosotros');
+    Route::post('admin/trabaja-con-nosotros', [TrabajaConNosotrosController::class, 'update'])->name('admin.trabaja-con-nosotros.update');
+
+    Route::get('admin/comercio-exterior', [ComercioExteriorController::class, 'index'])->name('admin.comercio-exterior');
+    Route::post('admin/comercio-exterior', [ComercioExteriorController::class, 'update'])->name('admin.comercio-exterior.update');
 });

@@ -10,7 +10,7 @@
                     @elseif (in_array($ext, ['mp4', 'webm', 'ogg']))
                         <video class="w-full h-full object-cover object-center" autoplay muted onended="nextSlide()">
                             <source src="{{ asset($slider->media) }}" type="video/{{ $ext }}">
-                            {{ __('Tu navegador no soporta el formato de video.') }}
+                            {{ __(key: 'Tu navegador no soporta el formato de video.') }}
                         </video>
                     @endif
                 </div>

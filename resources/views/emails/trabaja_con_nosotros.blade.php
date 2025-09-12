@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nuevo Mensaje de Contacto - San Justo Iluminacion</title>
+    <title>Nuevo Mensaje de Postulacion - San Justo Iluminacion</title>
     <style>
         /* Estilos generales */
         body {
@@ -148,11 +148,11 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Nuevo Mensaje de Contacto</h1>
+            <h1>Nuevo Mensaje de Postulacion</h1>
         </div>
 
         <div class="content">
-            <p class="message-intro">Se ha recibido un nuevo mensaje a través del formulario de contacto de la página
+            <p class="message-intro">Se ha recibido un nuevo mensaje a través del formulario de postulacion de la página
                 web.</p>
 
             <div class="contact-data">
@@ -160,25 +160,12 @@
 
                 <div class="data-row">
                     <div class="data-label">Nombre:</div>
-                    <div class="data-value">{{ $data['name'] }}</div>
+                    <div class="data-value">{{ $data['nombre'] }}</div>
                 </div>
 
                 <div class="data-row">
                     <div class="data-label">Apellido:</div>
                     <div class="data-value">{{ $data['apellido'] }}</div>
-                </div>
-
-                @if (!empty($data['empresa']))
-                    <div class="data-row">
-                        <div class="data-label">Empresa:</div>
-                        <div class="data-value">{{ $data['empresa'] }}</div>
-                    </div>
-                @endif
-
-
-                <div class="data-row">
-                    <div class="data-label">Email:</div>
-                    <div class="data-value">{{ $data['email'] }}</div>
                 </div>
 
                 <div class="data-row">
@@ -187,17 +174,15 @@
                 </div>
 
                 <div class="data-row">
-                    <div class="data-label">Como llegaste:</div>
-                    <div class="data-value">{{ $data['como_llegaste'] }}</div>
+                    <div class="data-label">Email:</div>
+                    <div class="data-value">{{ $data['email'] }}</div>
                 </div>
 
 
+
             </div>
 
-            <div class="message-container">
-                <h2>Mensaje</h2>
-                <div class="message-text">{{ $data['mensaje'] }}</div>
-            </div>
+
         </div>
 
         <div class="footer">

@@ -11,20 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('contactos', function (Blueprint $table) {
+        Schema::create('trabaja_con_nosotros', function (Blueprint $table) {
             $table->id();
             $table->string('title_es')->nullable();
             $table->string('title_en')->nullable();
             $table->longText('text_es')->nullable();
             $table->longText('text_en')->nullable();
-            $table->string('mail')->nullable();
-            $table->string('mail_info')->nullable();
-            $table->string('mail_pedidos')->nullable();
-            $table->string('phone')->nullable();
-            $table->string('location')->nullable();
-            $table->string('wp')->nullable();
-            $table->string('fb')->nullable();
-            $table->string('ig')->nullable();
+            $table->string('email')->nullable();
             $table->timestamps();
         });
     }
@@ -34,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('contactos');
+        Schema::dropIfExists('trabaja_con_nosotros');
     }
 };

@@ -35,23 +35,21 @@
 
         {{-- Secciones - Desktop/Tablet --}}
         <div class="hidden flex-col  gap-6 lg:flex">
-            <h2 class="text-[16px] font-semibold text-black">SECCIONES</h2>
-            <div class="grid h-fit grid-flow-col grid-cols-2 grid-rows-5 gap-x-20 gap-y-3">
-                <a href="{{ route('nosotros') }}" class="text-[15px] text-black/80">Nosotros</a>
-                <a href="{{ route('productos') }}" class="text-[15px] text-black/80">Productos</a>
-                <a href="{{ route('calidad') }}" class="text-[15px] text-black/80">Novedades</a>
-                <a href="{{ route('contacto') }}" class="text-[15px] text-black/80">Contacto</a>
-                <a href="{{ route('nosotros') }}" class="text-[15px] text-black/80">Nosotros</a>
-                <a href="{{ route('productos') }}" class="text-[15px] text-black/80">Productos</a>
-                <a href="{{ route('calidad') }}" class="text-[15px] text-black/80">Novedades</a>
-                <a href="{{ route('contacto') }}" class="text-[15px] text-black/80">Contacto</a>
-                <a href="{{ route('contacto') }}" class="text-[15px] text-black/80">Contacto</a>
+            <h2 class="text-[16px] font-semibold text-black">{{__("SECCIONES")}}</h2>
+            <div class="grid h-fit grid-flow-col grid-cols-2 grid-rows-3 gap-x-20 gap-y-3">
+                <a href="{{ route('nosotros') }}" class="text-[15px] text-black/80">{{__("Nosotros")}}</a>
+                <a href="{{ route('productos') }}" class="text-[15px] text-black/80">{{__("Productos")}}</a>
+                <a href="{{ route('calidad') }}" class="text-[15px] text-black/80">{{__("Trabaja con nosotros")}}</a>
+                <a href="{{ route('contacto') }}" class="text-[15px] text-black/80">{{__("Donde comprar")}}</a>
+                <a href="{{ route('nosotros') }}" class="text-[15px] text-black/80">{{__("Comercio exterior")}}</a>
+                <a href="{{ route('productos') }}" class="text-[15px] text-black/80">{{__("Contacto")}}</a>
+
             </div>
         </div>
 
         {{-- Secciones - Mobile --}}
         <div class="flex flex-col items-center gap-6 sm:hidden">
-            <h2 class=" text-black text-[16px] font-semibold">Secciones</h2>
+            <h2 class=" text-black text-[16px] font-semibold">{{__("Secciones")}}</h2>
             <div class="flex flex-wrap justify-center gap-x-6 gap-y-4">
                 <a href="{{ route('nosotros') }}" class="text-[15px] text-black/80">Nosotros</a>
                 <a href="{{ route('productos') }}" class="text-[15px] text-black/80">Productos</a>

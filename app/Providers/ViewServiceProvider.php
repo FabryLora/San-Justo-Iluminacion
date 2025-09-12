@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Contacto;
+use App\Models\Espacio;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use App\Models\Logos;
@@ -13,6 +14,7 @@ class ViewServiceProvider extends ServiceProvider
         View::share([
             'contacto' => Contacto::first(),
             'logos' => Logos::first(),
+            'espacios' => Espacio::all(),
         ]);
     }
 

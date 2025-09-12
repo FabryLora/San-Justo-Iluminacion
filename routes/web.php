@@ -7,6 +7,7 @@ use App\Http\Controllers\NovedadesController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SendContactInfoController;
+use App\Http\Controllers\TrabajaConNosotrosController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -16,11 +17,15 @@ use Inertia\Inertia;
 
 Route::get('/', [HomePages::class, 'home'])->name('home');
 Route::get('/nosotros', [HomePages::class, 'nosotros'])->name('nosotros');
+Route::get('/trabaja-con-nosotros', [HomePages::class, 'trabajaConNosotros'])->name('trabaja.con.nosotros');
+Route::get('/comercio-exterior', [HomePages::class, 'comercioExterior'])->name('comercio.exterior');
+
 Route::get('/calidad', [HomePages::class, 'calidad'])->name('calidad');
 Route::get('/novedades', [HomePages::class, 'novedades'])->name('novedades');
 Route::get('/contacto', [HomePages::class, 'contacto'])->name('contacto');
 Route::get('/novedades/{id}', [NovedadesController::class, 'novedadesShow'])->name('novedades');
 Route::post('/contacto/sendemail', [ContactoController::class, 'sendContact'])->name('send.contact');
+Route::post('/trabaja-con-nosotros/enviar', [TrabajaConNosotrosController::class, 'mandarMail'])->name('trabaja.enviar');
 # ---------------------- Rutas de zona pública ---------------------- #
 
 
