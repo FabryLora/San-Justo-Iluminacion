@@ -15,6 +15,13 @@
         }
     </style>
     <script src="//unpkg.com/alpinejs" defer></script>
+
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <meta name="description" content="@yield('description', 'Autopartes TB - Tu tienda de autopartes en línea') ">
     <meta name="keywords"
         content="@yield('keywords', 'autopartes, repuestos, accesorios, automóviles, tienda en línea')">
@@ -22,6 +29,13 @@
 </head>
 
 <body class="font-sans text-gray-900 antialiased">
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- Bootstrap JS -->
+
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     {{-- Navbar --}}
     @include('components.navbar')

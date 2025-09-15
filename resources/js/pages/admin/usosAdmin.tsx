@@ -6,7 +6,7 @@ import toast from 'react-hot-toast';
 import Dashboard from './dashboard';
 
 export default function UsosAdmin() {
-    const { usos } = usePage().props;
+    const { usos, espacios } = usePage().props;
 
     const { data, setData, post, reset } = useForm({
         name_es: '',
@@ -111,6 +111,24 @@ export default function UsosAdmin() {
                                                 />
                                             </div>
                                         </div>
+                                        <div className="flex w-full flex-col gap-3">
+                                            <label htmlFor="espacio_id">
+                                                Espacios <span className="text-red-500">*</span>
+                                            </label>
+                                            <select
+                                                className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
+                                                name="espacio_id"
+                                                id="espacio_id"
+                                                onChange={(e) => setData('espacio_id', e.target.value)}
+                                            >
+                                                <option value="">Seleccione un espacio</option>
+                                                {espacios.map((espacio) => (
+                                                    <option className="text-black" key={espacio.id} value={espacio.id}>
+                                                        {espacio.name_es}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
 
                                         <div className="flex justify-end gap-4">
                                             <button
@@ -164,6 +182,7 @@ export default function UsosAdmin() {
                                     <td className="text-center">ORDEN</td>
                                     <td className="py-2 text-center">NOMBRE {'(Español)'}</td>
                                     <td className="py-2 text-center">NOMBRE {'(Inglés)'}</td>
+                                    <td className="text-center">ESPACIO</td>
                                     <td className="text-center">EDITAR</td>
                                 </tr>
                             </thead>

@@ -9,7 +9,9 @@ use App\Http\Controllers\CalidadController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ComercioExteriorController;
+use App\Http\Controllers\ComercioTarjetasController;
 use App\Http\Controllers\ContactoController;
+use App\Http\Controllers\DondeComprarContenidoController;
 use App\Http\Controllers\EspacioController;
 use App\Http\Controllers\ImagenProductoController;
 use App\Http\Controllers\ImportController;
@@ -28,6 +30,8 @@ use App\Http\Controllers\NovedadesController;
 use App\Http\Controllers\PedidoController;
 use App\Http\Controllers\PrivadaController;
 use App\Http\Controllers\ProductoController;
+use App\Http\Controllers\PuntoVentaController;
+use App\Http\Controllers\RecursosController;
 use App\Http\Controllers\SliderController;
 use App\Http\Controllers\SubCategoriaController;
 use App\Http\Controllers\SubProductoController;
@@ -232,4 +236,20 @@ Route::middleware('auth:admin')->group(function () {
 
     Route::get('admin/comercio-exterior', [ComercioExteriorController::class, 'index'])->name('admin.comercio-exterior');
     Route::post('admin/comercio-exterior', [ComercioExteriorController::class, 'update'])->name('admin.comercio-exterior.update');
+
+    Route::get('admin/comercio-tarjetas', [ComercioTarjetasController::class, 'index'])->name('admin.comercio-tarjetas');
+    Route::post('admin/comercio-tarjetas', [ComercioTarjetasController::class, 'store'])->name('admin.comercio-tarjetas.store');
+    Route::post('admin/comercio-tarjetas/update', [ComercioTarjetasController::class, 'update'])->name('admin.comercio-tarjetas.update');
+    Route::delete('admin/comercio-tarjetas/destroy', [ComercioTarjetasController::class, 'destroy'])->name('admin.comercio-tarjetas.destroy');
+
+    Route::get('admin/recursos', [RecursosController::class, 'index'])->name('admin.recursos');
+    Route::post('admin/recursos', [RecursosController::class, 'update'])->name('admin.recursos.update');
+
+    Route::get('admin/donde-comprar', [PuntoVentaController::class, 'indexAdmin'])->name('admin.donde-comprar');
+    Route::post('admin/donde-comprar', [PuntoVentaController::class, 'store'])->name('admin.donde-comprar.store');
+    Route::post('admin/donde-comprar/update', [PuntoVentaController::class, 'update'])->name('admin.donde-comprar.update');
+    Route::delete('admin/donde-comprar/destroy', [PuntoVentaController::class, 'destroy'])->name('admin.donde-comprar.destroy');
+
+    Route::get('admin/donde-comprar-contenido', [DondeComprarContenidoController::class, 'index'])->name('admin.donde-comprar-contenido');
+    Route::post('admin/donde-comprar-contenido/update', [DondeComprarContenidoController::class, 'update'])->name('admin.donde-comprar-contenido.update');
 });

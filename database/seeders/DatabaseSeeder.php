@@ -32,5 +32,8 @@ class DatabaseSeeder extends Seeder
             'name' => 'pablo',
             'password' => bcrypt('pablopablo'),
         ]);
+
+
+        $this->call(PuntoVentaSeeder::class);
     }
 }

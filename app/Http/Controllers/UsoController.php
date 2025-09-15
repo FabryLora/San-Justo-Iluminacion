@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Espacio;
 use App\Models\Uso;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,7 @@ class UsoController extends Controller
     {
         $perPage = $request->input('per_page', 10);
 
-        $query = Uso::query()->orderBy('order', direction: 'asc');
+        $query = Uso::query()->orderBy('order', direction: 'asc')->with('espacio');
 
         if ($request->has('search') && !empty($request->search)) {
             $searchTerm = $request->search;
@@ -22,9 +23,11 @@ class UsoController extends Controller
         }
 
         $usos = $query->paginate($perPage);
+        $espacios = Espacio::orderBy('order', 'asc')->get();
 
         return inertia('admin/usosAdmin', [
             'usos' => $usos,
+            'espacios' => $espacios,
         ]);
     }
 
@@ -38,7 +41,8 @@ class UsoController extends Controller
         $validatedData = $request->validate([
             'name_es' => 'required|string|max:255',
             'name_en' => 'required|string|max:255',
-            'order' => 'nullable|sometimes|integer',
+            'order' => 'nullable|sometimes|string',
+            'espacio_id' => 'required|exists:espacios,id',
         ]);
 
         Uso::create($validatedData);
@@ -53,6 +57,7 @@ class UsoController extends Controller
             'name_es' => 'required|string|max:255',
             'name_en' => 'required|string|max:255',
             'order' => 'nullable|sometimes|string',
+            'espacio_id' => 'required|exists:espacios,id',
         ]);
 
         Uso::findOrFail($request->id)->update($validatedData);

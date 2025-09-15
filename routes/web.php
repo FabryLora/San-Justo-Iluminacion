@@ -5,6 +5,7 @@ use App\Http\Controllers\DescargarArchivo;
 use App\Http\Controllers\HomePages;
 use App\Http\Controllers\NovedadesController;
 use App\Http\Controllers\ProductoController;
+use App\Http\Controllers\PuntoVentaController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SendContactInfoController;
 use App\Http\Controllers\TrabajaConNosotrosController;
@@ -19,6 +20,8 @@ Route::get('/', [HomePages::class, 'home'])->name('home');
 Route::get('/nosotros', [HomePages::class, 'nosotros'])->name('nosotros');
 Route::get('/trabaja-con-nosotros', [HomePages::class, 'trabajaConNosotros'])->name('trabaja.con.nosotros');
 Route::get('/comercio-exterior', [HomePages::class, 'comercioExterior'])->name('comercio.exterior');
+Route::get('/recursos', [HomePages::class, 'recursos'])->name('recursos');
+Route::get('/donde-comprar', [PuntoVentaController::class, 'index'])->name('donde.comprar');
 
 Route::get('/calidad', [HomePages::class, 'calidad'])->name('calidad');
 Route::get('/novedades', [HomePages::class, 'novedades'])->name('novedades');

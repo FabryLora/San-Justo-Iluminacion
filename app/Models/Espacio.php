@@ -12,4 +12,14 @@ class Espacio extends Model
     {
         return $this->hasMany(Producto::class);
     }
+
+    public function usos()
+    {
+        return $this->hasMany(Uso::class, 'espacio_id');
+    }
+
+    public function producto()
+    {
+        return $this->belongsTo(Producto::class);
+    }
 }

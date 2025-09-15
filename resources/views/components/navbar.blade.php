@@ -4,7 +4,6 @@
     $isPrivate = str_contains($location, 'privada');
 
     $defaultLinks = [
-
         ['title' => __('PRODUCTOS'), 'href' => '/productos'],
         ['title' => __('NOSOTROS'), 'href' => '/nosotros'],
         ['title' => __('TRABAJA CON NOSOTROS'), 'href' => '/trabaja-con-nosotros'],
@@ -12,9 +11,7 @@
         ['title' => __('COMERCIO EXTERIOR'), 'href' => '/comercio-exterior'],
         ['title' => __('CONTACTO'), 'href' => '/contacto'],
     ];
-
-
-
+    /* dd($espacios->first()->usos()->first()->name_es); */
 @endphp
 
 <div x-data="{
@@ -23,6 +20,7 @@
         scrolled: false,
         searchOpen: false,
         mobileMenuOpen: false,
+        espacioSelected: null,
         logoPrincipal: '{{ $logos->logo_principal ?? '' }}',
         logoSecundario: '{{ $logos->logo_secundario ?? '' }}',
         switchToLogin() {
@@ -40,6 +38,9 @@
         },
         toggleMobileMenu() {
             this.mobileMenuOpen = !this.mobileMenuOpen;
+        },
+        selectEspacio(espacio) {
+            this.espacioSelected = espacio;
         }
     }" x-init="
         @if ($isHome)
@@ -56,18 +57,13 @@
         'sticky top-0': {{ $isHome ? 'false' : 'true' }}
     }" class="z-1000 sticky top-0 w-full transition-colors duration-300 h-[100px] max-sm:h-auto flex flex-col">
 
-    <!-- Franja superior -->
-
     <!-- Contenido principal navbar -->
     <div class="mx-auto flex h-[96px] w-[1224px] items-center justify-between">
         <!-- Logo -->
         <div class="flex flex-row items-end h-fit gap-10 w-full justify-between">
-
-            <a class="min-w-[258px] min-h-[57px] " href="/">
+            <a class="min-w-[258px] min-h-[57px]" href="/">
                 <img class="w-full h-full object-contain" :src="scrolled ? logoSecundario : logoPrincipal" alt="Logo" />
             </a>
-
-
 
             <!-- Navegación desktop -->
             <div class="flex flex-col items-end justify-between text-white leading-none h-full gap-5 max-w-full">
@@ -79,21 +75,21 @@
                         <option class="text-black" value="?lang=en" {{ request('lang') === 'en' ? 'selected' : '' }}>EN
                         </option>
                     </select>
-
                     <span>|</span>
-                    <button class="border  rounded-sm  text-[14px] leading-none w-[136px] h-[42px]"
+                    <button class="border rounded-sm text-[14px] leading-none w-[136px] h-[42px]"
                         :class="scrolled ? 'border-black text-black' : 'border-white text-white'">
                         {{__('AREA CLIENTE')}}
                     </button>
                 </div>
+
                 <div class="flex gap-6 items-end flex-wrap" x-data="{ openProductos: false }">
                     @foreach(($isPrivate ? $privateLinks : $defaultLinks) as $link)
                         @if($link['title'] === __('PRODUCTOS'))
                             <div class="" @click.away="openProductos = false">
-                                <button type="button" @click="openProductos = !openProductos"
+                                <button type="button" @click="openProductos = !openProductos; espacioSelected = null"
                                     class="flex items-center gap-1 text-[15px] max-xl:text-[15px] font-normal 
-                                                                                                                                                                                                                                                                                transition-colors duration-300 whitespace-nowrap leading-none
-                                                                                                                                                                                                                                                                               {{ Request::is(ltrim($link['href'], '/')) ? 'font-bold' : '' }}"
+                                                                                                                                                                                                                                                           transition-colors duration-300 whitespace-nowrap leading-none
+                                                                                                                                                                                                                                                           {{ Request::is(ltrim($link['href'], '/')) ? 'font-bold' : '' }}"
                                     :class="scrolled ? 'text-black' : 'text-white'">
                                     {{ $link['title'] }}
                                     <!-- Chevron -->
@@ -106,45 +102,57 @@
 
                                 <!-- Dropdown -->
                                 <div x-show="openProductos" x-transition
-                                    class="absolute w-screen left-0 mt-4 h-[243px] p-10 flex flex-col  bg-black text-white z-50">
-                                    <div class="flex flex-col gap-6">
-                                        {{-- @foreach ($espacios as $espacio)
-                                        <div class="flex flex-row ">
-                                            <button class="text-[15px] font-barlow! uppercase">
-                                                {{ request('lang') == 'en' ? $espacio->name_en : $espacio->name_es }}
-                                            </button>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                class="lucide lucide-chevron-right-icon lucide-chevron-right">
-                                                <path d="m9 18 6-6-6-6" />
-                                            </svg>
+                                    class="absolute w-screen left-1/2 -translate-x-1/2 mt-4 h-[243px] p-10 flex flex-row gap-x-10 bg-black text-white z-50"
+                                    style="margin-left: calc(-100vw + 100%);">
+                                    <div class="w-[1224px] mx-auto flex flex-row gap-10">
+                                        <div class="flex flex-col gap-6">
+                                            @foreach ($espacios as $espacio)
+                                                <div class="flex flex-row items-center cursor-pointer  transition-colors"
+                                                    @click="selectEspacio({{ json_encode($espacio) }})">
+                                                    <button class="text-[15px] font-barlow uppercase"
+                                                        :class="{ '': espacioSelected && espacioSelected.id === {{ $espacio->id }} }">
+                                                        {{ request('lang') == 'en' ? $espacio->name_en : $espacio->name_es }}
+                                                    </button>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                        stroke-linecap="round" stroke-linejoin="round"
+                                                        class="lucide lucide-chevron-right ml-2">
+                                                        <path d="m9 18 6-6-6-6" />
+                                                    </svg>
+                                                </div>
+                                            @endforeach
                                         </div>
 
-                                        @endforeach --}}
+                                        <!-- Segunda columna: Usos del espacio seleccionado -->
+                                        <div x-show="espacioSelected" x-transition class="flex flex-col gap-4">
+
+
+                                            <template x-for="uso in espacioSelected.usos" :key="uso.id">
+                                                <div class="flex flex-row items-center cursor-pointer  transition-colors">
+                                                    <a :href="'/productos/'" class="text-[15px] font-barlow uppercase"
+                                                        x-text="uso.name_{{ request('lang') == 'en' ? 'en' : 'es' }}"></a>
+
+                                                </div>
+                                            </template>
+                                        </div>
                                     </div>
+
+                                    <!-- Primera columna: Espacios -->
 
                                 </div>
                             </div>
                         @else
                             <a href="{{ $link['href'] }}" :class="scrolled ? 'text-black' : 'text-white'"
                                 class="text-[15px] max-xl:text-[15px] font-normal hover:text-primary-orange 
-                                                                                                                                                                                                                                                                      transition-colors duration-300 whitespace-nowrap leading-none
-                                                                                                                                                                                                                                                                      {{ Request::is(ltrim($link['href'], '/')) ? 'font-bold' : '' }}">
+                                                                                                                                                                                                                                                       transition-colors duration-300 whitespace-nowrap leading-none
+                                                                                                                                                                                                                                                       {{ Request::is(ltrim($link['href'], '/')) ? 'font-bold' : '' }}">
                                 {{ $link['title'] }}
                             </a>
                         @endif
                     @endforeach
                 </div>
-
             </div>
-
         </div>
-
-
-
-
-
     </div>
 
     <!-- Menú móvil -->
@@ -160,7 +168,7 @@
             @foreach(($isPrivate ? $privateLinks : $defaultLinks) as $link)
                 <a href="{{ $link['href'] }}"
                     class="block px-4 py-3 max-sm:px-3 max-sm:py-2 text-sm max-sm:text-xs text-gray-700 hover:bg-gray-50 hover:text-primary-orange transition-colors duration-300 border-b border-gray-100 last:border-b-0
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            {{ Request::is(ltrim($link['href'], '/')) ? 'font-bold bg-orange-50 text-primary-orange' : '' }}"
+                                                                                                                                   {{ Request::is(ltrim($link['href'], '/')) ? 'font-bold bg-orange-50 text-primary-orange' : '' }}"
                     @click="mobileMenuOpen = false">
                     {{ $link['title'] }}
                 </a>
@@ -171,9 +179,4 @@
     <!-- Overlay del modal -->
     <div x-show="showModal" x-transition.opacity x-cloak class="fixed inset-0 bg-black/50 z-50" @click="closeModal()">
     </div>
-
-
-
-
-
 </div>

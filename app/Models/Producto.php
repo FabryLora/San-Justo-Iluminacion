@@ -7,30 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 class Producto extends Model
 {
     protected $guarded = [];
-    public function categoria()
-    {
-        return $this->belongsTo(Categoria::class, 'categoria_id');
-    }
 
 
 
-    public function modelo()
-    {
-        return $this->belongsTo(Modelo::class);
-    }
-    public function marca()
-    {
-        return $this->belongsTo(Marca::class);
-    }
 
     public function imagenes()
     {
         return $this->hasMany(ImagenProducto::class, 'producto_id');
-    }
-
-    public function subproductos()
-    {
-        return $this->hasMany(SubProducto::class);
     }
 
     public function getImageAttribute($value)
@@ -38,19 +21,23 @@ class Producto extends Model
         return url("storage/" . $value);
     }
 
-    public function precio()
+    public function uso()
     {
-        return $this->hasOne(ListaProductos::class, 'producto_id')
-            ->where('lista_de_precios_id',  session('cliente_seleccionado') ? session('cliente_seleccionado')->lista_de_precios_id : auth()->user()->lista_de_precios_id ?? null);
+        return $this->belongsTo(Uso::class, 'uso_id');
     }
 
-    public function pedidos()
+    public function espacio()
     {
-        return $this->hasMany(PedidoProducto::class, 'producto_id');
+        return $this->belongsTo(Espacio::class, 'espacio_id');
     }
 
-    public function ofertas()
+    public function linea()
     {
-        return $this->hasMany(Oferta::class, 'producto_id');
+        return $this->belongsTo(Linea::class, 'linea_id');
+    }
+
+    public function ambiente()
+    {
+        return $this->belongsTo(Ambiente::class, 'ambiente_id');
     }
 }

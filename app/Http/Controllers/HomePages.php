@@ -7,6 +7,8 @@ use App\Models\BannerPortada;
 use App\Models\Calidad;
 use App\Models\Categoria;
 use App\Models\Cliente;
+use App\Models\ComercioExterior;
+use App\Models\ComercioTarjetas;
 use App\Models\Contacto;
 use App\Models\Espacio;
 use App\Models\Linea;
@@ -19,6 +21,7 @@ use App\Models\NosotrosSecciones;
 use App\Models\NosotrosTarjetas;
 use App\Models\Novedades;
 use App\Models\Producto;
+use App\Models\Recursos;
 use App\Models\Slider;
 use App\Models\SubCategoria;
 use App\Models\Titulo;
@@ -45,7 +48,7 @@ class HomePages extends Controller
             ->with(['imagenes', 'marca', 'modelo', 'precio', 'categoria'])
             ->get();
         $catalogos = ArchivoCalidad::orderBy('order', 'asc')->get();
-        $espacios = Espacio::orderBy('order', 'asc')->get();
+        $espacios = Espacio::orderBy('order', 'asc')->with('usos')->get();
         $titulos = Titulo::orderBy('seccion')->get();
         $clientes = Cliente::orderBy('order', 'asc')->get();
         $lineas = Linea::orderBy('order', 'asc')->get();
@@ -93,9 +96,27 @@ class HomePages extends Controller
     public function comercioExterior()
     {
         $metadatos = Metadatos::where('title', 'Comercio Exterior')->first();
-        $comercio = BannerPortada::first();
+        $comercio = ComercioExterior::first();
+        $tarjetas = ComercioTarjetas::orderBy('order')->get();
+        $homeInfo = BannerPortada::first();
+        $titulo = Titulo::where('seccion', 'marcas')->first();
+        $clientes = Cliente::orderBy('order', 'asc')->get();
         return view('comercio-exterior', [
             'comercio' => $comercio,
+            'metadatos' => $metadatos,
+            'tarjetas' => $tarjetas,
+            'homeInfo' => $homeInfo,
+            'titulo' => $titulo,
+            'clientes' => $clientes,
+        ]);
+    }
+
+    public function recursos()
+    {
+        $metadatos = Metadatos::where('title', 'Recursos')->first();
+        $recursos = Recursos::first();
+        return view('recursos', [
+            'recursos' => $recursos,
             'metadatos' => $metadatos,
         ]);
     }

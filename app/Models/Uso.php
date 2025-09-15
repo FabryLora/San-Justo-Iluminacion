@@ -12,4 +12,14 @@ class Uso extends Model
     {
         return $this->hasMany(Producto::class);
     }
+
+    public function espacio()
+    {
+        return $this->belongsTo(Espacio::class);
+    }
+
+    public function producto()
+    {
+        return $this->belongsTo(Producto::class);
+    }
 }

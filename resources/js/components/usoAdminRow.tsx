@@ -1,6 +1,6 @@
 import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useForm } from '@inertiajs/react';
+import { useForm, usePage } from '@inertiajs/react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
@@ -8,9 +8,12 @@ import toast from 'react-hot-toast';
 export default function UsoAdminRow({ uso }) {
     const [edit, setEdit] = useState(false);
 
+    const { espacios } = usePage().props;
+
     const updateForm = useForm({
         name_es: uso?.name_es,
         name_en: uso?.name_en,
+        espacio_id: uso?.espacio_id,
         order: uso?.order,
         id: uso?.id,
     });
@@ -50,6 +53,7 @@ export default function UsoAdminRow({ uso }) {
             <td className="align-middle">{uso?.order}</td>
             <td className="h-[90px] align-middle">{uso?.name_es}</td>
             <td className="h-[90px] align-middle">{uso?.name_en}</td>
+            <td className="h-[90px] align-middle">{uso?.espacio?.name_es}</td>
 
             <td className="w-[140px] text-center">
                 <div className="flex flex-row justify-center gap-3">
@@ -110,6 +114,26 @@ export default function UsoAdminRow({ uso }) {
                                             />
                                         </div>
                                     </div>
+
+                                    <div className="flex w-full flex-col gap-3">
+                                        <label htmlFor="espacio_id">
+                                            Espacios <span className="text-red-500">*</span>
+                                        </label>
+                                        <select
+                                            className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
+                                            name="espacio_id"
+                                            id="espacio_id"
+                                            value={updateForm?.data?.espacio_id || ''}
+                                            onChange={(e) => updateForm.setData('espacio_id', e.target.value)}
+                                        >
+                                            <option value="">Seleccione un espacio</option>
+                                            {espacios.map((espacio) => (
+                                                <option className="text-black" key={espacio.id} value={espacio.id}>
+                                                    {espacio.name_es}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>  
 
                                     <div className="flex justify-end gap-4">
                                         <button

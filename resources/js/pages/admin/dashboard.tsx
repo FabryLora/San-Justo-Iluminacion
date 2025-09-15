@@ -90,7 +90,18 @@ export default function Dashboard({ children }) {
             open: false,
             title: 'Donde comprar',
             icon: faNewspaper,
-            href: 'novedades',
+            href: 'donde-comprar',
+            subHref: [
+                { title: 'Contenido', href: 'donde-comprar-contenido' },
+                { title: 'Puntos de venta', href: 'donde-comprar' },
+            ],
+        },
+        {
+            id: 'recursos',
+            open: false,
+            title: 'Recursos',
+            icon: faNewspaper,
+            href: 'recursos',
             subHref: [],
         },
         {
@@ -99,7 +110,10 @@ export default function Dashboard({ children }) {
             title: 'Comercio Exterior',
             icon: faNewspaper,
             href: 'comercio-exterior',
-            subHref: [],
+            subHref: [
+                { title: 'Contenido', href: 'comercio-exterior' },
+                { title: 'Tarjetas', href: 'comercio-tarjetas' },
+            ],
         },
         {
             id: 'contacto',

@@ -14,7 +14,7 @@ class ViewServiceProvider extends ServiceProvider
         View::share([
             'contacto' => Contacto::first(),
             'logos' => Logos::first(),
-            'espacios' => Espacio::all(),
+            'espacios' => Espacio::orderBy('order', 'asc')->with('usos')->get(),
         ]);
     }
 

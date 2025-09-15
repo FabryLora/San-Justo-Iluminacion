@@ -51,15 +51,19 @@
                         <div class="h-[66px]">
                             <img class="w-full h-full object-cover" src="{{ $tarjeta->image }}" alt="">
                         </div>
-                        <h2 class="text-[20px] font-semibold font-custom! py-4">
-                            {{request('lang') == 'en' ? $tarjeta->name_en : $tarjeta->name_es}}</h2>
+                        <h2 class="text-[20px] text-center font-semibold font-custom! py-4">
+                            {{request('lang') == 'en' ? $tarjeta->name_en : $tarjeta->name_es}}
+                        </h2>
                         <div class="text-[16px]! text-center! break-words w-full">
-                            {!! request('lang') == 'en' ? $tarjeta->text_en : $tarjeta->text_es !!}</div>
+                            {!! request('lang') == 'en' ? $tarjeta->text_en : $tarjeta->text_es !!}
+                        </div>
                     </div>
                 @endforeach
             </div>
         </div>
     </div>
+
+
 
 
 

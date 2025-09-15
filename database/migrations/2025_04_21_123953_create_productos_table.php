@@ -1,11 +1,15 @@
 <?php
 
+use App\Models\Ambiente;
 use App\Models\Categoria;
+use App\Models\Espacio;
 use App\Models\ImagenProducto;
+use App\Models\Linea;
 use App\Models\Marca;
 use App\Models\MarcaProducto;
 use App\Models\Modelo;
 use App\Models\SubCategoria;
+use App\Models\Uso;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -22,13 +26,22 @@ return new class extends Migration
             $table->string('order')->default("zzz");
             $table->string('name')->nullable();
             $table->string('code')->nullable();
-            $table->string('code_sr')->nullable();
-            $table->longText('desc')->nullable();
-            $table->unsignedBigInteger('unidad_pack')->default(1);
-            $table->boolean('destacado')->default(false);
-            $table->foreignIdFor(Categoria::class)->nullable()
-                ->constrained('categorias')
+            $table->string('medidas')->nullable();
+            $table->string('certificado')->nullable();
+            $table->string('instructivo')->nullable();
+            $table->foreignIdFor(Espacio::class)->nullable()
+                ->constrained('espacios')
                 ->nullOnDelete();
+            $table->foreignIdFor(Uso::class)->nullable()
+                ->constrained('usos')
+                ->nullOnDelete();
+            $table->foreignIdFor(Linea::class)->nullable()
+                ->constrained('lineas')
+                ->nullOnDelete();
+            $table->foreignIdFor(Ambiente::class)->nullable()
+                ->constrained('ambientes')
+                ->nullOnDelete();
+
 
             $table->timestamps();
         });
