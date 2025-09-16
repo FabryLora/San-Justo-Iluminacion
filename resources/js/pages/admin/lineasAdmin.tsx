@@ -4,19 +4,29 @@ import { router, useForm, usePage } from '@inertiajs/react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import Select from 'react-select';
 import Dashboard from './dashboard';
 
 export default function LineasAdmin() {
-    const { lineas } = usePage().props;
+    const { lineas, ambientes } = usePage().props;
 
     const { data, setData, post, reset } = useForm({
         name_es: '',
+        ambientes: [],
     });
 
     const [searchTerm, setSearchTerm] = useState('');
     const [createView, setCreateView] = useState(false);
     const [text_es, setTextEs] = useState('');
     const [text_en, setTextEn] = useState('');
+    const [ambienteSelected, setAmbienteSelected] = useState([]);
+
+    useEffect(() => {
+        setData(
+            'ambientes',
+            ambienteSelected.map((a) => a.value),
+        );
+    }, [ambienteSelected]);
 
     useEffect(() => {
         setData('text_es', text_es);
@@ -133,6 +143,21 @@ export default function LineasAdmin() {
                                             </div>
                                         </div>
 
+                                        <label htmlFor="subcategoria">
+                                            Ambientes <span className="text-red-500">*</span>
+                                        </label>
+                                        <Select
+                                            options={ambientes?.map((ambiente) => ({
+                                                value: ambiente.id,
+                                                label: ambiente.name_es,
+                                            }))}
+                                            onChange={(options) => setAmbienteSelected(options)}
+                                            className=""
+                                            name="subcategoria"
+                                            id="subcategoria"
+                                            isMulti
+                                        />
+
                                         <label htmlFor="imagennn">Imagen</label>
                                         <input
                                             className="file:bg-primary-orange focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 file:cursor-pointer file:rounded-sm file:px-2 file:py-1 file:text-white focus:outline"
@@ -194,6 +219,7 @@ export default function LineasAdmin() {
                                     <td className="text-center">ORDEN</td>
                                     <td className="py-2 text-center">NOMBRE</td>
                                     <td className="text-center">TEXTO</td>
+                                    <td className="text-center">AMBIENTES</td>
                                     <td className="text-center">IMAGEN</td>
                                     <td className="text-center">EDITAR</td>
                                 </tr>

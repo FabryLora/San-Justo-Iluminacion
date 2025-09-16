@@ -22,6 +22,9 @@ Route::get('/trabaja-con-nosotros', [HomePages::class, 'trabajaConNosotros'])->n
 Route::get('/comercio-exterior', [HomePages::class, 'comercioExterior'])->name('comercio.exterior');
 Route::get('/recursos', [HomePages::class, 'recursos'])->name('recursos');
 Route::get('/donde-comprar', [PuntoVentaController::class, 'index'])->name('donde.comprar');
+// En tu archivo web.php o routes/web.php
+Route::get('/api/usos-by-espacio', [ProductoController::class, 'getUsosByEspacio'])->name('api.usos.by.espacio');
+Route::get('/api/ambientes-by-linea', [ProductoController::class, 'getAmbientesByLinea'])->name('api.ambientes.by.linea');
 
 Route::get('/calidad', [HomePages::class, 'calidad'])->name('calidad');
 Route::get('/novedades', [HomePages::class, 'novedades'])->name('novedades');
@@ -34,7 +37,7 @@ Route::post('/trabaja-con-nosotros/enviar', [TrabajaConNosotrosController::class
 
 
 Route::get('/productos', [ProductoController::class, 'indexVistaPrevia'])->name('productos');
-
+Route::get('/productos/{id}', [ProductoController::class, 'show'])->name('producto.show');
 Route::get('/busqueda', [ProductoController::class, 'SearchProducts'])->name('searchproducts');
 
 

@@ -1,13 +1,16 @@
 import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useForm } from '@inertiajs/react';
+import { useForm, usePage } from '@inertiajs/react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import Select from 'react-select';
 import CustomReactQuill from './CustomReactQuill';
 
 export default function LineasAdminRow({ linea }) {
     const [edit, setEdit] = useState(false);
+
+    const { lineas, ambientes } = usePage().props;
 
     const updateForm = useForm({
         name_es: linea?.name_es,
@@ -16,10 +19,19 @@ export default function LineasAdminRow({ linea }) {
         text_es: linea?.text_es,
         text_en: linea?.text_en,
         id: linea?.id,
+        ambientes: linea?.ambientes?.map((ambiente) => ambiente.id) || [],
     });
 
     const [text_es, setTextEs] = useState(linea?.text_es);
     const [text_en, setTextEn] = useState(linea?.text_en);
+    const [ambienteSelected, setAmbienteSelected] = useState([]);
+
+    useEffect(() => {
+        updateForm.setData(
+            'ambientes',
+            ambienteSelected.map((a) => a.value),
+        );
+    }, [ambienteSelected]);
 
     useEffect(() => {
         updateForm.setData('text_es', text_es);
@@ -65,6 +77,13 @@ export default function LineasAdminRow({ linea }) {
             <td className="h-[90px] align-middle">{linea?.name_es}</td>
             <td className="max-w-[100px]">
                 <div className="line-clamp-3 overflow-hidden break-words" dangerouslySetInnerHTML={{ __html: linea?.text_es }} />
+            </td>
+            <td className="">
+                {linea?.ambientes?.map((ambiente) => (
+                    <span key={ambiente.id} className="bg-primary-orange mx-1 inline-block rounded px-2 py-1 text-xs font-semibold text-white">
+                        {ambiente.name_es}
+                    </span>
+                ))}
             </td>
             <td className="flex h-[90px] items-center justify-center">
                 <img className="w-[100px]" src={`/storage/${linea?.image}`} alt="" />
@@ -139,6 +158,25 @@ export default function LineasAdminRow({ linea }) {
                                             <CustomReactQuill value={text_en} onChange={setTextEn} />
                                         </div>
                                     </div>
+
+                                    <label htmlFor="categoria">
+                                        Ambientes <span className="text-red-500">*</span>
+                                    </label>
+                                    <Select
+                                        options={ambientes?.map((ambiente) => ({
+                                            value: ambiente.id,
+                                            label: ambiente.name_es,
+                                        }))}
+                                        defaultValue={linea?.ambientes?.map((ambiente) => ({
+                                            value: ambiente.id,
+                                            label: ambiente.name_es,
+                                        }))}
+                                        onChange={(options) => setAmbienteSelected(options)}
+                                        className=""
+                                        name="categoria"
+                                        id="categoria"
+                                        isMulti
+                                    />
 
                                     <label htmlFor="imagennn">Imagen</label>
                                     <input

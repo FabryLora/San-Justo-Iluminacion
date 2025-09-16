@@ -2,17 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Ambiente;
 use App\Models\Categoria;
-
+use App\Models\Espacio;
 use App\Models\ImagenProducto;
+use App\Models\Linea;
 use App\Models\Marca;
 use App\Models\Metadatos;
 use App\Models\Modelo;
 use App\Models\Producto;
+use App\Models\ProductoAmbiente;
+use App\Models\ProductoColor;
 use App\Models\ProductoMarca;
 use App\Models\ProductoModelo;
 use App\Models\SubCategoria;
 use App\Models\SubProducto;
+use App\Models\Uso;
 use Illuminate\Support\Facades\Auth;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
@@ -28,13 +33,11 @@ class ProductoController extends Controller
     public function index(Request $request)
     {
 
-        $categorias = Categoria::select('id', 'name')->get();
-        $marcas = Marca::orderBy('order', 'asc')->get();
-        $modelos = Modelo::orderBy('order', 'asc')->get();
+
 
         $perPage = $request->input('per_page', default: 10);
 
-        $query = Producto::query()->orderBy('order', 'asc')->with(['marca', 'modelo', 'categoria', 'imagenes']);
+        $query = Producto::query()->with(['ambientes', 'imagenes', 'espacio', 'uso', 'linea'])->orderBy('order', 'asc');
 
         if ($request->has('search') && !empty($request->search)) {
             $searchTerm = $request->search;
@@ -43,15 +46,19 @@ class ProductoController extends Controller
 
         $productos = $query->paginate($perPage);
 
-
+        $espacios = Espacio::orderBy('order', 'asc')->get();
+        $usos = Uso::orderBy('order', 'asc')->get();
+        $lineas = Linea::orderBy('order', 'asc')->with('ambientes')->get();
+        $ambientes = Ambiente::orderBy('order', 'asc')->get();
 
 
 
         return Inertia::render('admin/productosAdmin', [
             'productos' => $productos,
-            'categorias' => $categorias,
-            'marcas' => $marcas,
-            'modelos' => $modelos,
+            'espacios' => $espacios,
+            'usos' => $usos,
+            'lineas' => $lineas,
+            'ambientes' => $ambientes,
         ]);
     }
 
@@ -61,17 +68,17 @@ class ProductoController extends Controller
         $query = Producto::query();
 
         // Filtro por categoría (a través de marcas)
-        if ($request->filled('tipo')) {
-            $query->where('categoria_id', $request->tipo);
+        if ($request->filled('espacio')) {
+            $query->where('espacio_id', $request->espacio);
         }
 
         // Filtro por modelo/subcategoría
-        if ($request->filled('marca')) {
-            $query->where('marca_id', $request->marca);
+        if ($request->filled('uso')) {
+            $query->where('uso_id', $request->uso);
         }
 
-        if ($request->filled('modelo')) {
-            $query->where('modelo_id', $request->modelo);
+        if ($request->filled('linea')) {
+            $query->where('linea_id', $request->linea);
         }
 
         // Filtro por código
@@ -80,60 +87,97 @@ class ProductoController extends Controller
         }
 
         // Filtro por código OEM
-        if ($request->filled('code_sr')) {
-            $query->where('code_sr', 'LIKE', '%' . $request->code_sr . '%');
+        if ($request->filled('ambiente')) {
+            $query->whereHas('ambientes', function ($q) use ($request) {
+                $q->where('ambiente_id', $request->ambiente);
+            });
         }
-
 
         // Aplicar ordenamiento por defecto
         $query->orderBy('order', 'asc');
 
         // Ejecutar query con paginación
-        $productos = $query->with(['marca', 'modelo', 'imagenes', 'categoria'])
+        $productos = $query
             ->paginate(15)
             ->appends($request->query());
 
-        // Si solo hay un producto en total (no en la página actual), redirigir
-        /* if ($productos->total() === 1) {
-            return redirect('/p/' . $productos->first()->code);
-        } */
+        // Cargar datos para los filtros
+        $espacios = Espacio::orderBy('order', 'asc')->get();
+        $lineas = Linea::orderBy('order', 'asc')->get();
 
-        // Cargar datos adicionales para la vista
-        $categorias = Categoria::with('subCategorias')->orderBy('order', 'asc')->get();
-        $marcas = Marca::orderBy('order', 'asc')->get();
-        $modelos = Modelo::orderBy('order', 'asc')->get();
+        // Cargar usos según el espacio seleccionado
+        if ($request->filled('espacio')) {
+            $usos = Uso::where('espacio_id', $request->espacio)
+                ->orderBy('order', 'asc')
+                ->get();
+        } else {
+            $usos = Uso::orderBy('order', 'asc')->get();
+        }
+
+        // Cargar ambientes según la línea seleccionada
+        if ($request->filled('linea')) {
+            $linea = Linea::find($request->linea);
+            $ambientes = $linea ? $linea->ambientes()->orderBy('order', 'asc')->get() : collect();
+        } else {
+            $ambientes = Ambiente::orderBy('order', 'asc')->get();
+        }
 
         return view('productos', [
-            'categorias' => $categorias,
             'productos' => $productos,
-            'tipo' => $request->tipo,
-            'marca' => $request->marca,
-            'modelo' => $request->modelo,
+            'espacios' => $espacios,
+            'espacio' => $request->espacio,
+            'uso' => $request->uso,
+            'linea' => $request->linea,
             'code' => $request->code,
-            'code_sr' => $request->code_sr,
-            'marcas' => $marcas,
-            'modelos' => $modelos,
+            'ambiente' => $request->ambiente,
+            'usos' => $usos,
+            'lineas' => $lineas,
+            'ambientes' => $ambientes,
         ]);
+    }
+
+    // Agregar estos métodos para las llamadas AJAX
+    public function getUsosByEspacio(Request $request)
+    {
+        $espacioId = $request->get('espacio_id');
+
+        if ($espacioId) {
+            $usos = Uso::where('espacio_id', $espacioId)
+                ->orderBy('order', 'asc')
+                ->get();
+        } else {
+            $usos = Uso::orderBy('order', 'asc')->get();
+        }
+
+        return response()->json($usos);
+    }
+
+    public function getAmbientesByLinea(Request $request)
+    {
+        $lineaId = $request->get('linea_id');
+
+        if ($lineaId) {
+            $linea = Linea::find($lineaId);
+            $ambientes = $linea ? $linea->ambientes()->orderBy('ambientes.order', 'asc')->get() : collect();
+        } else {
+            $ambientes = Ambiente::orderBy('order', 'asc')->get();
+        }
+
+        return response()->json($ambientes);
     }
 
     public function show($codigo, Request $request)
     {
-        $producto = Producto::with(['categoria:id,name', 'imagenes', 'marca', 'modelo'])->where('code', $codigo)->first();
+        $producto = Producto::with(['imagenes', 'colores'])->where('code', $codigo)->first();
 
-        $subcategorias = SubCategoria::orderBy('order', 'asc')->get();
 
-        $categorias = Categoria::select('id', 'name', 'order')->orderBy('order', 'asc')->get();
 
         // Obtener productos relacionados por marca y modelo
-        $productosRelacionados = Producto::where('id', '!=', $producto->id)->with(['categoria:id,name', 'imagenes', 'marca', 'modelo'])->orderBy('order', 'asc')->limit(3)->get();
+        $productosRelacionados = Producto::where('id', '!=', $producto->id)->orderBy('order', 'asc')->limit(3)->get();
 
         return view('producto', [
             'producto' => $producto,
-            'categorias' => $categorias,
-            'subcategorias' => $subcategorias,
-            'categoria' => $producto->categoria,
             'productosRelacionados' => $productosRelacionados,
-            'modelo_id' => $request->modelo_id ?? null
         ]);
     }
     public function indexPrivada(Request $request)
@@ -390,10 +434,16 @@ class ProductoController extends Controller
             'espacio_id' => 'nullable|exists:espacios,id',
             'uso_id' => 'nullable|exists:usos,id',
             'linea_id' => 'nullable|exists:lineas,id',
-            'ambiente_id' => 'nullable|exists:ambientes,id',
             'images' => 'nullable|array|min:1',
             'images.*' => 'required|file|image',
+            'ambientes' => 'nullable|array',
+            'ambientes.*' => 'integer|exists:ambientes,id',
+            'colores' => 'nullable|array',
+            'colores.*.color_hex' => 'required|string',
+            'colores.*.color_name' => 'nullable|string|max:255',
         ]);
+
+
 
         try {
             return DB::transaction(function () use ($request, $data) {
@@ -408,7 +458,7 @@ class ProductoController extends Controller
                     'espacio_id' => $data['espacio_id'] ?? null,
                     'uso_id' => $data['uso_id'] ?? null,
                     'linea_id' => $data['linea_id'] ?? null,
-                    'ambiente_id' => $data['ambiente_id'] ?? null,
+
                 ]);
 
                 $createdImages = [];
@@ -429,12 +479,40 @@ class ProductoController extends Controller
                         $createdImages[] = $imageRecord;
                     }
                 }
+
+                if ($request->has('colores')) {
+                    foreach ($data['colores'] as $colorData) {
+                        ProductoColor::create([
+                            'producto_id' => $producto->id,
+                            'color_hex' => $colorData['color_hex'],
+                            'color_name' => $colorData['color_name'] ?? null,
+                        ]);
+                    }
+                }
+
+                // guardar certificado e instructivo si existen
+
+                if ($request->hasFile('certificado')) {
+                    $producto->certificado = $request->file('certificado')->store('images', 'public');
+                    $producto->save();
+                }
+
+                if ($request->hasFile('instructivo')) {
+                    $producto->instructivo = $request->file('instructivo')->store('images', 'public');
+                    $producto->save();
+                }
+
+                if ($request->has('ambientes')) {
+                    foreach ($data['ambientes'] as $ambienteId) {
+                        ProductoAmbiente::create([
+                            'producto_id' => $producto->id,
+                            'ambiente_id' => $ambienteId,
+                        ]);
+                    }
+                }
             });
         } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Error al crear el producto',
-                'error' => $e->getMessage()
-            ], 500);
+            return back()->withErrors(['message' => 'Error al crear el producto: ' . $e->getMessage()])->withInput();
         }
     }
 
@@ -454,7 +532,8 @@ class ProductoController extends Controller
             'espacio_id' => 'nullable|exists:espacios,id',
             'uso_id' => 'nullable|exists:usos,id',
             'linea_id' => 'nullable|exists:lineas,id',
-            'ambiente_id' => 'nullable|exists:ambientes,id',
+            'ambientes' => 'nullable|array',
+            'ambientes.*' => 'integer|exists:ambientes,id',
 
             // Validaciones de las imágenes (opcionales)
             'images' => 'nullable|array|min:1',
@@ -482,6 +561,35 @@ class ProductoController extends Controller
                     'linea_id' => $data['linea_id'] ?? null,
                     'ambiente_id' => $data['ambiente_id'] ?? null,
                 ]);
+
+                if ($request->hasFile('certificado')) {
+                    // Eliminar el certificado anterior si existe
+                    if ($producto->certificado && Storage::disk('public')->exists($producto->certificado)) {
+                        Storage::disk('public')->delete($producto->certificado);
+                    }
+                    $producto->certificado = $request->file('certificado')->store('images', 'public');
+                    $producto->save();
+                }
+
+                if ($request->hasFile('instructivo')) {
+                    // Eliminar el instructivo anterior si existe
+                    if ($producto->instructivo && Storage::disk('public')->exists($producto->instructivo)) {
+                        Storage::disk('public')->delete($producto->instructivo);
+                    }
+                    $producto->instructivo = $request->file('instructivo')->store('images', 'public');
+                    $producto->save();
+                }
+
+                if ($request->has('ambientes')) {
+                    // Eliminar relaciones existentes
+                    ProductoAmbiente::where('producto_id', $producto->id)->delete();
+                    foreach ($data['ambientes'] as $ambienteId) {
+                        ProductoAmbiente::create([
+                            'producto_id' => $producto->id,
+                            'ambiente_id' => $ambienteId,
+                        ]);
+                    }
+                }
 
                 if ($request->has('images_to_delete')) {
                     foreach ($request->images_to_delete as $imageId) {
@@ -576,7 +684,9 @@ class ProductoController extends Controller
                     $imagen->delete();
                 }
 
-                // Eliminar relaciones con modelos
+
+                // Eliminar relaciones con ambientes
+                ProductoAmbiente::where('producto_id', $producto->id)->delete();
 
 
                 // Eliminar el producto

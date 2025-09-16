@@ -43,10 +43,7 @@ class HomePages extends Controller
         $subcategorias = SubCategoria::orderBy('order', 'asc')->get();
         $homeInfo = BannerPortada::first();
         $novedades = Novedades::where('featured', true)->orderBy('order', 'asc')->get();
-        $productos = Producto::where('destacado', true)
-            ->orderBy('order', 'asc')
-            ->with(['imagenes', 'marca', 'modelo', 'precio', 'categoria'])
-            ->get();
+
         $catalogos = ArchivoCalidad::orderBy('order', 'asc')->get();
         $espacios = Espacio::orderBy('order', 'asc')->with('usos')->get();
         $titulos = Titulo::orderBy('seccion')->get();
@@ -59,7 +56,6 @@ class HomePages extends Controller
             'novedades' => $novedades,
             'categorias' => $categorias,
             'subcategorias' => $subcategorias,
-            'productos' => $productos,
             'metadatos' => $metadatos,
             'espacios' => $espacios,
             'titulos' => $titulos,

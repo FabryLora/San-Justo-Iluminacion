@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Contacto;
+use App\Models\Espacio;
 use App\Models\Logos;
 use App\Models\Provincia;
 use Illuminate\Support\Facades\Blade;
@@ -29,7 +30,7 @@ class AppServiceProvider extends ServiceProvider
         View::composer('*', function ($view) {
             $view->with([
 
-
+                'espacios' => Espacio::orderBy('order', 'asc')->with('usos')->get(),
                 'contacto' => Contacto::first(),
                 'logos' => Logos::first()
             ]);

@@ -2,26 +2,25 @@ import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useForm, usePage } from '@inertiajs/react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import Switch from './Switch';
+import Select from 'react-select';
 
 export default function ProductosAdminRow({ producto }) {
     const [edit, setEdit] = useState(false);
 
-    const { categorias, modelos, marcas } = usePage().props;
+    const { lineas, ambientes, usos, espacios } = usePage().props;
 
     const { data, setData, post, reset, errors } = useForm({
         order: producto?.order,
         name: producto?.name,
         code: producto?.code,
-        code_sr: producto?.code_sr,
-        categoria_id: producto?.categoria_id,
-        marca_id: producto?.marca_id,
-        modelo_id: producto?.modelo_id,
-        desc: producto?.desc,
-        unidad_pack: producto?.unidad_pack,
+        espacio_id: producto?.espacio_id,
+        uso_id: producto?.uso_id,
+        linea_id: producto?.linea_id,
+        medidas: producto?.medidas,
         id: producto?.id,
+        ambientes: producto?.ambientes?.map((ambiente) => ambiente.id) || [],
     });
 
     const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
@@ -57,6 +56,14 @@ export default function ProductosAdminRow({ producto }) {
     const [existingImages, setExistingImages] = useState(producto.imagenes || []);
     const [newImagePreviews, setNewImagePreviews] = useState([]);
     const [imagesToDelete, setImagesToDelete] = useState([]);
+    const [ambienteSelected, setAmbienteSelected] = useState([]);
+
+    useEffect(() => {
+        setData(
+            'ambientes',
+            ambienteSelected.map((a) => a.value),
+        );
+    }, [ambienteSelected]);
 
     const handleFileChange = (e) => {
         const files = Array.from(e.target.files);
@@ -107,16 +114,18 @@ export default function ProductosAdminRow({ producto }) {
 
     return (
         <tr className={`border text-black odd:bg-gray-100 even:bg-white`}>
-            <td className="align-middle">{producto?.order}</td>
+            <td className="h-[90px] align-middle">{producto?.order}</td>
             <td className="align-middle">{producto?.code}</td>
-            <td className="align-middle">{producto?.code_sr}</td>
             <td className="align-middle">{producto?.name}</td>
-            <td className="align-middle">{producto?.categoria?.name}</td>
-            <td className="align-middle">{producto?.marca?.name}</td>
-            <td className="align-middle">{producto?.modelo?.name}</td>
-
-            <td className="flex h-[90px] flex-row items-center justify-center">
-                <Switch routeName="cambiarDestacado" id={producto?.id} status={producto?.destacado == 1} />
+            <td className="align-middle">{producto?.espacio?.name_es}</td>
+            <td className="align-middle">{producto?.uso?.name_es}</td>
+            <td className="align-middle">{producto?.linea?.name_es}</td>
+            <td className="align-middle">
+                {producto?.ambientes?.map((ambiente) => (
+                    <span key={ambiente.id} className="mr-1 mb-1 inline-block rounded bg-blue-100 px-2 py-1 text-xs text-blue-800">
+                        {ambiente.name_es}
+                    </span>
+                ))}
             </td>
 
             <td className="w-[140px] text-center">
@@ -179,14 +188,6 @@ export default function ProductosAdminRow({ producto }) {
                                         value={data.name}
                                         onChange={(e) => setData('name', e.target.value)}
                                     />
-                                    <label htmlFor="descripcion">Descripcion</label>
-                                    <textarea
-                                        className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
-                                        name="descripcion"
-                                        id="descripcion"
-                                        value={data.desc}
-                                        onChange={(e) => setData('desc', e.target.value)}
-                                    />
 
                                     <label htmlFor="code">
                                         Codigo <span className="text-red-500">*</span>
@@ -201,84 +202,113 @@ export default function ProductosAdminRow({ producto }) {
                                     />
 
                                     <label htmlFor="code_oem">
-                                        Codigo SR33 <span className="text-red-500">*</span>
+                                        Medidas <span className="text-red-500">*</span>
                                     </label>
                                     <input
                                         className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
                                         type="text"
                                         name="code_oem"
                                         id="code_oem"
-                                        value={data.code_sr}
-                                        onChange={(e) => setData('code_sr', e.target.value)}
-                                    />
-
-                                    <label htmlFor="unidad">
-                                        Unidad por pack <span className="text-red-500">*</span>
-                                    </label>
-                                    <input
-                                        className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
-                                        type="number"
-                                        name="unidad"
-                                        id="unidad"
-                                        value={data.unidad_pack}
-                                        onChange={(e) => setData('unidad_pack', e.target.value)}
+                                        value={data.medidas}
+                                        onChange={(e) => setData('medidas', e.target.value)}
                                     />
 
                                     <label htmlFor="categoria">
-                                        Tipo de producto <span className="text-red-500">*</span>
+                                        Espacios <span className="text-red-500">*</span>
                                     </label>
                                     <select
                                         className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
-                                        value={data.categoria_id}
-                                        onChange={(e) => setData('categoria_id', e.target.value)}
+                                        value={data.espacio_id || ''}
+                                        onChange={(e) => setData('espacio_id', e.target.value)}
                                         name=""
                                         id=""
                                     >
-                                        <option value="">Seleccionar Tipo de producto</option>
-                                        {categorias.map((categoria) => (
-                                            <option key={categoria.id} value={categoria.id}>
-                                                {categoria.name}
+                                        <option value="">Seleccionar Espacio</option>
+                                        {espacios.map((espacio) => (
+                                            <option className="text-black" key={espacio.id} value={espacio.id}>
+                                                {espacio.name_es}
                                             </option>
                                         ))}
                                     </select>
 
                                     <label htmlFor="categoria">
-                                        Marcas <span className="text-red-500">*</span>
+                                        Usos <span className="text-red-500">*</span>
                                     </label>
                                     <select
                                         className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
-                                        value={data.marca_id}
-                                        onChange={(e) => setData('marca_id', e.target.value)}
+                                        value={data.uso_id || ''}
+                                        onChange={(e) => setData('uso_id', e.target.value)}
                                         name=""
                                         id=""
                                     >
-                                        <option value="">Seleccionar marca</option>
-                                        {marcas.map((marca) => (
-                                            <option key={marca.id} value={marca.id}>
-                                                {marca.name}
+                                        <option value="">Seleccionar uso</option>
+                                        {usos
+                                            ?.filter((uso) => uso.espacio_id == data.espacio_id)
+                                            ?.map((uso) => (
+                                                <option key={uso.id} value={uso.id}>
+                                                    {uso.name_es}
+                                                </option>
+                                            ))}
+                                    </select>
+
+                                    <label htmlFor="subcategoria">
+                                        Lineas <span className="text-red-500">*</span>
+                                    </label>
+                                    <select
+                                        value={data.linea_id || ''}
+                                        onChange={(e) => setData('linea_id', e.target.value)}
+                                        className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
+                                        name="lineas"
+                                        id="lineas"
+                                    >
+                                        <option value="">Seleccionar linea</option>
+                                        {lineas.map((linea) => (
+                                            <option key={linea.id} value={linea.id}>
+                                                {linea.name_es}
                                             </option>
                                         ))}
                                     </select>
 
                                     <label htmlFor="subcategoria">
-                                        Modelos <span className="text-red-500">*</span>
+                                        Ambientes <span className="text-red-500">*</span>
                                     </label>
-                                    <select
-                                        value={data.modelo_id}
-                                        onChange={(e) => setData('modelo_id', e.target.value)}
-                                        className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
-                                        name="modelos"
-                                        id="modelos"
-                                    >
-                                        <option value="">Seleccionar modelo</option>
-                                        {modelos
-                                            .filter((modelo) => modelo?.marca_id == data.marca_id)
-                                            .map((modelo) => (
-                                                <option key={modelo.id} value={modelo.id}>
-                                                    {modelo.name}
-                                                </option>
-                                            ))}
-                                    </select>
+                                    <Select
+                                        options={ambientes?.map((ambiente) => ({
+                                            value: ambiente.id,
+                                            label: ambiente.name_es,
+                                        }))}
+                                        defaultValue={producto?.ambientes?.map((ambiente) => ({
+                                            value: ambiente.id,
+                                            label: ambiente.name_es,
+                                        }))}
+                                        onChange={(options) => setAmbienteSelected(options)}
+                                        className=""
+                                        name="subcategoria"
+                                        id="subcategoria"
+                                        isMulti
+                                    />
+
+                                    <div className="flex flex-col gap-2">
+                                        <label htmlFor="instructivo">Instructivo </label>
+                                        <input
+                                            className="file:bg-primary-orange focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 file:cursor-pointer file:rounded-sm file:px-2 file:py-1 file:text-white focus:outline"
+                                            type="file"
+                                            name="archivo_fotos"
+                                            id="archivo_fotos"
+                                            onChange={(e) => setData('instructivo', e.target.files[0])}
+                                        />
+                                    </div>
+
+                                    <div className="flex flex-col gap-2">
+                                        <label htmlFor="certificado">Certificado </label>
+                                        <input
+                                            className="file:bg-primary-orange focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 file:cursor-pointer file:rounded-sm file:px-2 file:py-1 file:text-white focus:outline"
+                                            type="file"
+                                            name="certificado"
+                                            id="certificado"
+                                            onChange={(e) => setData('certificado', e.target.files[0])}
+                                        />
+                                    </div>
 
                                     <label>Imágenes del Producto</label>
                                     <input

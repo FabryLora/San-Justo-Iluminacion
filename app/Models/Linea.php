@@ -12,4 +12,9 @@ class Linea extends Model
     {
         return $this->hasMany(Producto::class);
     }
+
+    public function ambientes()
+    {
+        return $this->belongsToMany(Ambiente::class, 'linea_ambientes');
+    }
 }

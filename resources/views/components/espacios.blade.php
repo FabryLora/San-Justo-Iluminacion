@@ -18,7 +18,7 @@
 
                     </div>
                 </div>
-                <a href="#"
+                <a href="/productos?espacio={{ $espacio->id }}"
                     class="absolute rounded-sm bottom-12 right-12 text-[14px] font-medium px-3 py-2 bg-white text-primary-orange transition-all duration-300"
                     :class="isHovered ? 'opacity-100' : 'opacity-0'">
                     {{__('VER TODA LA COLECCION')}}

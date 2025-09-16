@@ -36,8 +36,13 @@ class Producto extends Model
         return $this->belongsTo(Linea::class, 'linea_id');
     }
 
-    public function ambiente()
+    public function ambientes()
     {
-        return $this->belongsTo(Ambiente::class, 'ambiente_id');
+        return $this->belongsToMany(Ambiente::class, 'producto_ambientes');
+    }
+
+    public function colores()
+    {
+        return $this->hasMany(ProductoColor::class);
     }
 }

@@ -1,34 +1,40 @@
 import ProductosAdminRow from '@/components/productosAdminRow';
 import { router, useForm, usePage } from '@inertiajs/react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import Select from 'react-select';
 import Dashboard from './dashboard';
 
 export default function ProductosAdmin() {
-    const { productos, categorias, marcas, modelos } = usePage().props;
+    const { productos, espacios, usos, lineas, ambientes } = usePage().props;
 
     const { data, setData, post, reset, errors } = useForm({
         name: '',
         code: '',
-        code_sr: '',
-        categoria_id: '',
-        marca_id: '',
-        modelo_id: '',
-        desc: '',
-        unidad_pack: '',
+        medidas: '',
+        espacio_id: '',
+        uso_id: '',
+        linea_id: '',
+        ambiente_id: '',
+        ambientes: [],
         images: [],
     });
 
     const [searchTerm, setSearchTerm] = useState('');
     const [createView, setCreateView] = useState(false);
     const [subirProductos, setSubirProductos] = useState(false);
-    const [subirOfertas, setSubirOfertas] = useState(false);
     const [archivo, setArchivo] = useState();
 
     const [imagePreviews, setImagePreviews] = useState([]);
+    const [ambienteSelected, setAmbienteSelected] = useState([]);
 
-    const [marcaSelected, setMarcaSelected] = useState();
+    useEffect(() => {
+        setData(
+            'ambientes',
+            ambienteSelected.map((a) => a.value),
+        );
+    }, [ambienteSelected]);
 
     const handleFileChange = (e) => {
         const files = Array.from(e.target.files);
@@ -132,6 +138,31 @@ export default function ProductosAdmin() {
         );
     };
 
+    const [selectedColors, setSelectedColors] = useState([]);
+    const [currentColor, setCurrentColor] = useState('#000000');
+    const [colorName, setColorName] = useState('');
+
+    const addColor = () => {
+        if (currentColor && !selectedColors.some((c) => c.color_hex === currentColor)) {
+            const newColor = {
+                color_hex: currentColor,
+                color_name: colorName || `Color ${selectedColors.length + 1}`,
+                id: Date.now(),
+            };
+            setSelectedColors([...selectedColors, newColor]);
+            setColorName('');
+
+            // Actualizar los datos del formulario principal
+            setData('colores', [...selectedColors, newColor]);
+        }
+    };
+
+    const removeColor = (colorToRemove) => {
+        const updatedColors = selectedColors.filter((color) => color.color_hex !== colorToRemove.color_hex);
+        setSelectedColors(updatedColors);
+        setData('colores', updatedColors);
+    };
+
     return (
         <Dashboard>
             <div className="flex w-full flex-col p-6">
@@ -183,13 +214,6 @@ export default function ProductosAdmin() {
                                             id="nombree"
                                             onChange={(e) => setData('name', e.target.value)}
                                         />
-                                        <label htmlFor="descripcion">Descripcion</label>
-                                        <textarea
-                                            className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
-                                            name="descripcion"
-                                            id="descripcion"
-                                            onChange={(e) => setData('desc', e.target.value)}
-                                        />
 
                                         <label htmlFor="code">
                                             Codigo <span className="text-red-500">*</span>
@@ -203,81 +227,179 @@ export default function ProductosAdmin() {
                                         />
 
                                         <label htmlFor="code_oem">
-                                            Codigo SR33 <span className="text-red-500">*</span>
+                                            Medidas <span className="text-red-500">*</span>
                                         </label>
                                         <input
                                             className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
                                             type="text"
                                             name="code_oem"
                                             id="code_oem"
-                                            onChange={(e) => setData('code_sr', e.target.value)}
-                                        />
-
-                                        <label htmlFor="unidad">
-                                            Unidad por pack <span className="text-red-500">*</span>
-                                        </label>
-                                        <input
-                                            className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
-                                            type="number"
-                                            name="unidad"
-                                            id="unidad"
-                                            onChange={(e) => setData('unidad_pack', e.target.value)}
+                                            onChange={(e) => setData('medidas', e.target.value)}
                                         />
 
                                         <label htmlFor="categoria">
-                                            Tipo de producto <span className="text-red-500">*</span>
+                                            Espacios <span className="text-red-500">*</span>
                                         </label>
                                         <select
                                             className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
-                                            onChange={(e) => setData('categoria_id', e.target.value)}
+                                            onChange={(e) => setData('espacio_id', e.target.value)}
                                             name=""
                                             id=""
                                         >
-                                            <option value="">Seleccionar Tipo de producto</option>
-                                            {categorias.map((categoria) => (
-                                                <option key={categoria.id} value={categoria.id}>
-                                                    {categoria.name}
+                                            <option value="">Seleccionar Espacio</option>
+                                            {espacios.map((espacio) => (
+                                                <option className="text-black" key={espacio.id} value={espacio.id}>
+                                                    {espacio.name_es}
                                                 </option>
                                             ))}
                                         </select>
 
                                         <label htmlFor="categoria">
-                                            Marcas <span className="text-red-500">*</span>
+                                            Usos <span className="text-red-500">*</span>
                                         </label>
                                         <select
                                             className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
-                                            onChange={(e) => setData('marca_id', e.target.value)}
+                                            onChange={(e) => setData('uso_id', e.target.value)}
                                             name=""
                                             id=""
                                         >
-                                            <option value="">Seleccionar marca</option>
-                                            {marcas.map((marca) => (
-                                                <option key={marca.id} value={marca.id}>
-                                                    {marca.name}
+                                            <option value="">Seleccionar uso</option>
+                                            {usos
+                                                ?.filter((uso) => uso.espacio_id == data.espacio_id)
+                                                ?.map((uso) => (
+                                                    <option key={uso.id} value={uso.id}>
+                                                        {uso.name_es}
+                                                    </option>
+                                                ))}
+                                        </select>
+
+                                        <label htmlFor="subcategoria">
+                                            Lineas <span className="text-red-500">*</span>
+                                        </label>
+                                        <select
+                                            onChange={(e) => setData('linea_id', e.target.value)}
+                                            className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
+                                            name="lineas"
+                                            id="lineas"
+                                        >
+                                            <option value="">Seleccionar linea</option>
+                                            {lineas.map((linea) => (
+                                                <option key={linea.id} value={linea.id}>
+                                                    {linea.name_es}
                                                 </option>
                                             ))}
                                         </select>
 
                                         <label htmlFor="subcategoria">
-                                            Modelos <span className="text-red-500">*</span>
+                                            Ambientes <span className="text-red-500">*</span>
                                         </label>
-                                        <select
-                                            onChange={(e) => setData('modelo_id', e.target.value)}
-                                            className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
-                                            name="modelos"
-                                            id="modelos"
-                                        >
-                                            <option value="">Seleccionar modelo</option>
-                                            {modelos
-                                                .filter((modelo) => modelo?.marca_id == data.marca_id)
-                                                .map((modelo) => (
-                                                    <option key={modelo.id} value={modelo.id}>
-                                                        {modelo.name}
-                                                    </option>
-                                                ))}
-                                        </select>
+                                        <Select
+                                            options={lineas
+                                                ?.find((linea) => linea?.id == data?.linea_id)
+                                                ?.ambientes?.map((ambiente) => ({
+                                                    value: ambiente.id,
+                                                    label: ambiente.name_es,
+                                                }))}
+                                            onChange={(options) => setAmbienteSelected(options)}
+                                            className=""
+                                            name="subcategoria"
+                                            id="subcategoria"
+                                            isMulti
+                                        />
+
+                                        <div className="flex flex-col gap-4 border-t pt-4">
+                                            <label>Colores del Producto</label>
+
+                                            {/* Color Picker Input */}
+                                            <div className="flex flex-col gap-2">
+                                                <div className="flex items-end gap-2">
+                                                    <div className="flex flex-col gap-1">
+                                                        <label className="text-sm text-gray-600">Seleccionar Color</label>
+                                                        <input
+                                                            type="color"
+                                                            value={currentColor}
+                                                            onChange={(e) => setCurrentColor(e.target.value)}
+                                                            className="h-10 w-16 cursor-pointer rounded-md border border-gray-300"
+                                                        />
+                                                    </div>
+
+                                                    <div className="flex flex-1 flex-col gap-1">
+                                                        <label className="text-sm text-gray-600">Nombre del Color (opcional)</label>
+                                                        <input
+                                                            type="text"
+                                                            value={colorName}
+                                                            onChange={(e) => setColorName(e.target.value)}
+                                                            placeholder="Ej: Rojo Ferrari, Azul Marino, etc."
+                                                            className="rounded-md p-2 outline outline-gray-300 focus:outline focus:outline-orange-500"
+                                                        />
+                                                    </div>
+
+                                                    <button
+                                                        type="button"
+                                                        onClick={addColor}
+                                                        className="rounded-md bg-orange-500 px-4 py-2 text-white transition duration-300 hover:bg-orange-600"
+                                                    >
+                                                        Agregar
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            {/* Selected Colors Display */}
+                                            {selectedColors.length > 0 && (
+                                                <div className="space-y-2">
+                                                    <h4 className="font-medium">Colores seleccionados ({selectedColors.length})</h4>
+                                                    <div className="grid grid-cols-1 gap-2">
+                                                        {selectedColors.map((color) => (
+                                                            <div key={color.id} className="group relative">
+                                                                <div className="flex items-center gap-2 rounded-lg border bg-gray-50 p-2">
+                                                                    <div
+                                                                        className="h-8 w-8 flex-shrink-0 rounded-full border border-gray-300"
+                                                                        style={{ backgroundColor: color.color_hex }}
+                                                                        title={color.color_hex}
+                                                                    ></div>
+                                                                    <div className="min-w-0 flex-1">
+                                                                        <p className="truncate text-sm font-medium">{color.color_name}</p>
+                                                                        <p className="text-xs text-gray-500">{color.color_hex}</p>
+                                                                    </div>
+                                                                    <button
+                                                                        type="button"
+                                                                        onClick={() => removeColor(color)}
+                                                                        className="flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-sm text-white transition-colors hover:bg-red-600"
+                                                                    >
+                                                                        ×
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        <div className="flex flex-col gap-2">
+                                            <label htmlFor="instructivo">Instructivo </label>
+                                            <input
+                                                className="file:bg-primary-orange focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 file:cursor-pointer file:rounded-sm file:px-2 file:py-1 file:text-white focus:outline"
+                                                type="file"
+                                                name="archivo_fotos"
+                                                id="archivo_fotos"
+                                                onChange={(e) => setData('instructivo', e.target.files[0])}
+                                            />
+                                        </div>
+
+                                        <div className="flex flex-col gap-2">
+                                            <label htmlFor="certificado">Certificado </label>
+                                            <input
+                                                className="file:bg-primary-orange focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 file:cursor-pointer file:rounded-sm file:px-2 file:py-1 file:text-white focus:outline"
+                                                type="file"
+                                                name="certificado"
+                                                id="certificado"
+                                                onChange={(e) => setData('certificado', e.target.files[0])}
+                                            />
+                                        </div>
 
                                         <label>Imágenes del Producto</label>
+                                        <p>Resolucion recomendada: 288px x 261px</p>
                                         <input
                                             type="file"
                                             multiple
@@ -430,14 +552,11 @@ export default function ProductosAdmin() {
                                 <tr>
                                     <td className="text-center">ORDEN</td>
                                     <td className="text-center">CODIGO</td>
-                                    <td className="text-center">CODIGO SR33</td>
-
                                     <td className="text-center">NOMBRE</td>
-
-                                    <td className="text-center">TIPO</td>
-                                    <td className="text-center">MARCA</td>
-                                    <td className="py-2 text-center">MODELO</td>
-                                    <td className="text-center">DESTACADO</td>
+                                    <td className="text-center">ESPACIO</td>
+                                    <td className="text-center">USO</td>
+                                    <td className="py-2 text-center">LINEA</td>
+                                    <td className="text-center">AMBIENTES</td>
                                     <td className="text-center">EDITAR</td>
                                 </tr>
                             </thead>

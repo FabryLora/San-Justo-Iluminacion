@@ -25,10 +25,11 @@
                             {{ request('lang') == 'en' ? $homeInfo->title_banner_en : $homeInfo->title_banner_es }}
                         </h1>
                         <h3 class="text-[20px] max-w-[524px] ">
-                            {{request('lang') == 'en' ? $homeInfo->text_banner_en : $homeInfo->text_banner_es}}</h3>
+                            {{request('lang') == 'en' ? $homeInfo->text_banner_en : $homeInfo->text_banner_es}}
+                        </h3>
 
 
-                        <a href="{{ $homeInfo->link}}"
+                        <a href="/productos"
                             class="flex justify-center items-center w-[280px] h-[42px] bg-primary-orange rounded-sm font-medium text-[14px]">{{__('CONOCE NUESTROS PRODUCTOS')}}</a>
                     </div>
 

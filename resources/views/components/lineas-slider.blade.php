@@ -100,13 +100,14 @@
                                             <h2 class="text-[24px] font-medium">
                                                 {{request('lang') == 'en' ? $linea->name_en : $linea->name_es}}
                                             </h2>
-                                            <p class="text-[15px] font-light line-clamp-2 overflow-hidden">
+                                            <div class="text-[15px] font-light line-clamp-2 overflow-hidden">
                                                 {!! request('lang') == 'en' ? $linea->text_en : $linea->text_es !!}
-                                            </p>
+                                            </div>
                                         </div>
                                         <a class="flex flex-row gap-2 items-center font-medium text-[16px]"
-                                            href="">{{__("Ver productos")}} <span><svg xmlns="http://www.w3.org/2000/svg"
-                                                    width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                            href="/productos?linea={{ $linea->id }}">{{__("Ver productos")}} <span><svg
+                                                    xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                    viewBox="0 0 16 16" fill="none">
                                                     <path d="M8 0L6.59 1.41L12.17 7H0V9H12.17L6.59 14.59L8 16L16 8L8 0Z"
                                                         fill="black" />
                                                 </svg></span></a>

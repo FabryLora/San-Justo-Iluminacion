@@ -7,8 +7,8 @@
             <p class="text-[20px] max-w-[528px]">
                 {!!request('lang') == 'en' ? $homeInfo->text_seccion_tres_en : $homeInfo->text_seccion_tres_es !!}
             </p>
-            <button
-                class="text-[14px] font-medium h-[42px] border max-w-[225px] rounded-sm border-primary-orange text-primary-orange">{{__("TRABAJA CON NOSOTROS")}}</button>
+            <a href="/trabaja-con-nosotros"
+                class="text-[14px] font-medium h-[42px] border max-w-[225px] rounded-sm border-primary-orange text-primary-orange">{{__("TRABAJA CON NOSOTROS")}}</a>
         </div>
     </div>
     <div class="w-full">

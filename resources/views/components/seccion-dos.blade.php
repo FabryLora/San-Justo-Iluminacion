@@ -7,7 +7,7 @@
         <p class="text-[20px] text-white max-w-[642px] text-center leading-tight">
             {{request('lang') == 'en' ? $homeInfo->text_seccion_dos_en : $homeInfo->text_seccion_dos_es}}
         </p>
-        <a href="#"
+        <a href="/nosotros"
             class="flex items-center justify-center text-[14px] text-white font-medium py-2 px-3 bg-primary-orange rounded-sm">{{__("CONOCENOS")}}</a>
     </div>
 </div>
