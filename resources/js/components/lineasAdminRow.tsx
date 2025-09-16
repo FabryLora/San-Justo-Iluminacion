@@ -94,7 +94,7 @@ export default function LineasAdminRow({ linea }) {
                     <button onClick={() => setEdit(true)} className="h-10 w-10 rounded-md border border-blue-500 px-2 py-1 text-white">
                         <FontAwesomeIcon icon={faPen} size="lg" color="#3b82f6" />
                     </button>
-                    <button onClick={deleteLinea} className="h-10 w-10 rounded-md border border-red-500 px-2 py-1 text-white">
+                    <button type="button" onClick={deleteLinea} className="h-10 w-10 rounded-md border border-red-500 px-2 py-1 text-white">
                         <FontAwesomeIcon icon={faTrash} size="lg" color="#fb2c36" />
                     </button>
                 </div>

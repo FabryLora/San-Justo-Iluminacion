@@ -61,8 +61,8 @@ export default function Dashboard({ children }) {
                 { title: 'Usos', href: 'usos' },
                 { title: 'Lineas', href: 'lineas' },
                 { title: 'Ambientes', href: 'ambientes' },
+                { title: 'Colores', href: 'colores' },
                 { title: 'Productos', href: 'productos' },
-                { title: 'Lista de precios', href: 'listadeprecios' },
             ],
         },
         {

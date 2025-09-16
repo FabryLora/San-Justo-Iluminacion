@@ -1,7 +1,9 @@
-<div class="py-16">
-    <div class="flex flex-col gap-9 max-w-[90%] lg:max-w-[1224px] mx-auto">
-        <div class="flex ">
-            <h2 class="text-[32px] font-semibold font-custom! text-left text-black">
+<div class="py-16 max-lg:py-12 max-md:py-10 max-sm:py-8">
+    <div
+        class="flex flex-col gap-9 max-lg:gap-7 max-md:gap-6 max-sm:gap-5 max-w-[90%] lg:max-w-[1224px] max-xl:max-w-[1100px] mx-auto px-4 max-lg:px-3 max-md:px-2">
+        <div class="flex">
+            <h2
+                class="text-[32px] max-lg:text-[28px] max-md:text-[24px] max-sm:text-[20px] font-semibold font-custom! text-left text-black">
                 {{request('lang') == 'en' ? $titulo->title_en : $titulo->title_es}}
             </h2>
         </div>
@@ -10,6 +12,7 @@
             totalSlides: 0,
             autoSlideInterval: null,
             isMobile: window.innerWidth < 1024,
+            isTablet: window.innerWidth >= 768 && window.innerWidth < 1024,
             lineasCount: {{ count($lineas) }},
         
             init() {
@@ -19,6 +22,7 @@
                 // Actualizar cuando cambie el tamaño de la ventana
                 window.addEventListener('resize', () => {
                     this.isMobile = window.innerWidth < 1024;
+                    this.isTablet = window.innerWidth >= 768 && window.innerWidth < 1024;
                     this.calculateTotalSlides();
                     this.activeSlide = 0; // Reiniciar a la primera diapositiva al cambiar de tamaño
                     this.stopAutoSlide();
@@ -28,11 +32,15 @@
         
             calculateTotalSlides() {
                 if (this.isMobile) {
-                    this.totalSlides = this.lineasCount;
+                    if (this.isTablet) {
+                        this.totalSlides = Math.ceil(this.lineasCount / 2);
+                    } else {
+                        this.totalSlides = this.lineasCount;
+                    }
                 } else {
                     this.totalSlides = Math.ceil(this.lineasCount / 3);
                 }
-                console.log('Total slides:', this.totalSlides, 'Is mobile:', this.isMobile);
+                console.log('Total slides:', this.totalSlides, 'Is mobile:', this.isMobile, 'Is tablet:', this.isTablet);
             },
         
             startAutoSlide() {
@@ -78,7 +86,7 @@
 
             <!-- Carrusel de clientes -->
             <div class="relative">
-                <!-- Versión para escritorio (oculta en móvil) -->
+                <!-- Versión para escritorio (oculta en móvil y tablet) -->
                 <div class="hidden lg:block overflow-hidden">
                     <div class="flex transition-transform duration-500 ease-in-out"
                         :style="'transform: translateX(-' + (activeSlide * 100) + '%)'">
@@ -94,7 +102,7 @@
                                         <div
                                             class="w-[392px] min-h-[392px] rounded-tl-[36px] rounded-br-[36px] overflow-hidden">
                                             <img src="{{ asset("storage/" . $linea->image) }}" alt="cliente"
-                                                class="w-full h-full object-cover ">
+                                                class="w-full h-full object-cover">
                                         </div>
                                         <div class="flex flex-col h-full pt-5">
                                             <h2 class="text-[24px] font-medium">
@@ -104,12 +112,12 @@
                                                 {!! request('lang') == 'en' ? $linea->text_en : $linea->text_es !!}
                                             </div>
                                         </div>
-                                        <a class="flex flex-row gap-2 items-center font-medium text-[16px]"
+                                        <a class="flex flex-row gap-2 items-center font-medium text-[16px] hover:text-primary-orange transition-colors"
                                             href="/productos?linea={{ $linea->id }}">{{__("Ver productos")}} <span><svg
                                                     xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                                     viewBox="0 0 16 16" fill="none">
                                                     <path d="M8 0L6.59 1.41L12.17 7H0V9H12.17L6.59 14.59L8 16L16 8L8 0Z"
-                                                        fill="black" />
+                                                        fill="currentColor" />
                                                 </svg></span></a>
                                     </div>
                                 @endforeach
@@ -123,16 +131,79 @@
                     </div>
                 </div>
 
-                <!-- Versión para móvil (oculta en escritorio) -->
-                <div class="lg:hidden overflow-hidden">
+                <!-- Versión para tablet (768px - 1024px) -->
+                <div class="hidden md:block lg:hidden overflow-hidden">
+                    <div class="flex transition-transform duration-500 ease-in-out"
+                        :style="'transform: translateX(-' + (activeSlide * 100) + '%)'">
+
+                        @php
+                            $chunkedLineasTablet = $lineas->chunk(2);
+                        @endphp
+
+                        @foreach ($chunkedLineasTablet as $chunk)
+                            <div class="grid grid-cols-2 gap-4 min-w-full justify-center">
+                                @foreach ($chunk as $linea)
+                                    <div class="max-w-[350px] w-full mx-auto flex flex-col justify-between h-[480px]">
+                                        <div class="w-full min-h-[300px] rounded-tl-[30px] rounded-br-[30px] overflow-hidden">
+                                            <img src="{{ asset("storage/" . $linea->image) }}" alt="cliente"
+                                                class="w-full h-full object-cover">
+                                        </div>
+                                        <div class="flex flex-col pt-4 flex-1">
+                                            <h2 class="text-[20px] font-medium mb-2">
+                                                {{request('lang') == 'en' ? $linea->name_en : $linea->name_es}}
+                                            </h2>
+                                            <div class="text-[14px] font-light line-clamp-2 overflow-hidden mb-3 flex-1">
+                                                {!! request('lang') == 'en' ? $linea->text_en : $linea->text_es !!}
+                                            </div>
+                                            <a class="flex flex-row gap-2 items-center font-medium text-[15px] hover:text-primary-orange transition-colors mt-auto"
+                                                href="/productos?linea={{ $linea->id }}">{{__("Ver productos")}} <span><svg
+                                                        xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                                        viewBox="0 0 16 16" fill="none">
+                                                        <path d="M8 0L6.59 1.41L12.17 7H0V9H12.17L6.59 14.59L8 16L16 8L8 0Z"
+                                                            fill="currentColor" />
+                                                    </svg></span></a>
+                                        </div>
+                                    </div>
+                                @endforeach
+
+                                <!-- Agregar div vacío si solo hay un item en el chunk -->
+                                @if (count($chunk) === 1)
+                                    <div class="max-w-[350px] w-full mx-auto"></div>
+                                @endif
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+
+                <!-- Versión para móvil (menos de 768px) -->
+                <div class="md:hidden overflow-hidden">
                     <div class="flex transition-transform duration-500 ease-in-out"
                         :style="'transform: translateX(-' + (activeSlide * 100) + '%)'">
 
                         @foreach ($lineas as $linea)
-                            <div class="min-w-full flex justify-center">
-                                <div class="max-h-[190px] max-w-[300px] w-full bg-white">
-                                    <img src="{{ asset("storage/" . $linea->image) }}" alt="cliente"
-                                        class="w-full h-full object-cover transition-all duration-300 filter lg:grayscale hover:grayscale-0">
+                            <div class="min-w-full flex justify-center px-2">
+                                <div
+                                    class="max-w-[300px] w-full bg-white rounded-tl-[20px] rounded-br-[20px] overflow-hidden shadow-sm">
+                                    <div class="w-full h-[200px] max-sm:h-[180px]">
+                                        <img src="{{ asset("storage/" . $linea->image) }}" alt="cliente"
+                                            class="w-full h-full object-cover">
+                                    </div>
+                                    <div class="p-4 max-sm:p-3">
+                                        <h2 class="text-[18px] max-sm:text-[16px] font-medium mb-2 leading-tight">
+                                            {{request('lang') == 'en' ? $linea->name_en : $linea->name_es}}
+                                        </h2>
+                                        <div
+                                            class="text-[13px] max-sm:text-[12px] font-light line-clamp-2 overflow-hidden mb-3 text-gray-600 leading-relaxed">
+                                            {!! request('lang') == 'en' ? $linea->text_en : $linea->text_es !!}
+                                        </div>
+                                        <a class="flex flex-row gap-2 items-center font-medium text-[14px] max-sm:text-[13px] hover:text-primary-orange transition-colors"
+                                            href="/productos?linea={{ $linea->id }}">{{__("Ver productos")}} <span><svg
+                                                    xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                                                    viewBox="0 0 16 16" fill="none">
+                                                    <path d="M8 0L6.59 1.41L12.17 7H0V9H12.17L6.59 14.59L8 16L16 8L8 0Z"
+                                                        fill="currentColor" />
+                                                </svg></span></a>
+                                    </div>
                                 </div>
                             </div>
                         @endforeach
@@ -140,16 +211,43 @@
                 </div>
             </div>
 
-            <!-- Indicadores de paginación con forma de barras -->
-            <template x-if="totalSlides > 1">
-                <div class="flex justify-center space-x-2 mt-16">
-                    <template x-for="(slide, index) in Array.from({length: totalSlides})" :key="index">
-                        <button @click="goToSlide(index)"
-                            :class="{ 'bg-gray-800': activeSlide === index, 'bg-gray-300': activeSlide !== index }"
-                            class="w-10 h-1.5 rounded-full cursor-pointer transition-colors duration-300 hover:bg-gray-600"></button>
-                    </template>
+            <!-- Controles de navegación para móvil/tablet -->
+            <div class="lg:hidden flex justify-between items-center mt-6 max-sm:mt-4">
+                <button @click="prevSlide()"
+                    class="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors disabled:opacity-50"
+                    :disabled="totalSlides <= 1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <path d="M15 18l-6-6 6-6" />
+                    </svg>
+                </button>
+
+                <div class="flex items-center space-x-1">
+                    <span class="text-sm text-gray-600" x-text="(activeSlide + 1)"></span>
+                    <span class="text-sm text-gray-400">/</span>
+                    <span class="text-sm text-gray-600" x-text="totalSlides"></span>
                 </div>
-            </template>
+
+                <button @click="nextSlide()"
+                    class="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors disabled:opacity-50"
+                    :disabled="totalSlides <= 1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6" />
+                    </svg>
+            </div>
         </div>
+
+        <!-- Indicadores de paginación con forma de barras (solo desktop) -->
+        <template x-if="totalSlides > 1">
+            <div class="hidden lg:flex justify-center space-x-2 mt-16 max-lg:mt-12">
+                <template x-for="(slide, index) in Array.from({length: totalSlides})" :key="index">
+                    <button @click="goToSlide(index)"
+                        :class="{ 'bg-gray-800': activeSlide === index, 'bg-gray-300': activeSlide !== index }"
+                        class="w-10 h-1.5 rounded-full cursor-pointer transition-colors duration-300 hover:bg-gray-600"></button>
+                </template>
+            </div>
+        </template>
     </div>
+</div>
 </div>

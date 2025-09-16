@@ -7,7 +7,7 @@ import Select from 'react-select';
 import Dashboard from './dashboard';
 
 export default function ProductosAdmin() {
-    const { productos, espacios, usos, lineas, ambientes } = usePage().props;
+    const { productos, espacios, usos, lineas, ambientes, colores } = usePage().props;
 
     const { data, setData, post, reset, errors } = useForm({
         name: '',
@@ -18,6 +18,7 @@ export default function ProductosAdmin() {
         linea_id: '',
         ambiente_id: '',
         ambientes: [],
+        colores: [],
         images: [],
     });
 
@@ -28,6 +29,14 @@ export default function ProductosAdmin() {
 
     const [imagePreviews, setImagePreviews] = useState([]);
     const [ambienteSelected, setAmbienteSelected] = useState([]);
+    const [colorSelected, setColorSelected] = useState([]);
+
+    useEffect(() => {
+        setData(
+            'colores',
+            colorSelected.map((a) => a.value),
+        );
+    }, [colorSelected]);
 
     useEffect(() => {
         setData(
@@ -138,31 +147,6 @@ export default function ProductosAdmin() {
         );
     };
 
-    const [selectedColors, setSelectedColors] = useState([]);
-    const [currentColor, setCurrentColor] = useState('#000000');
-    const [colorName, setColorName] = useState('');
-
-    const addColor = () => {
-        if (currentColor && !selectedColors.some((c) => c.color_hex === currentColor)) {
-            const newColor = {
-                color_hex: currentColor,
-                color_name: colorName || `Color ${selectedColors.length + 1}`,
-                id: Date.now(),
-            };
-            setSelectedColors([...selectedColors, newColor]);
-            setColorName('');
-
-            // Actualizar los datos del formulario principal
-            setData('colores', [...selectedColors, newColor]);
-        }
-    };
-
-    const removeColor = (colorToRemove) => {
-        const updatedColors = selectedColors.filter((color) => color.color_hex !== colorToRemove.color_hex);
-        setSelectedColors(updatedColors);
-        setData('colores', updatedColors);
-    };
-
     return (
         <Dashboard>
             <div className="flex w-full flex-col p-6">
@@ -226,15 +210,61 @@ export default function ProductosAdmin() {
                                             onChange={(e) => setData('code', e.target.value)}
                                         />
 
-                                        <label htmlFor="code_oem">
-                                            Medidas <span className="text-red-500">*</span>
-                                        </label>
+                                        <label htmlFor="code_oem">Medidas</label>
                                         <input
                                             className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
                                             type="text"
                                             name="code_oem"
                                             id="code_oem"
                                             onChange={(e) => setData('medidas', e.target.value)}
+                                        />
+
+                                        <label htmlFor="origen">Origen</label>
+                                        <input
+                                            className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
+                                            type="text"
+                                            name="origen"
+                                            id="origen"
+                                            onChange={(e) => setData('origen', e.target.value)}
+                                        />
+
+                                        <label htmlFor="lampara">Lampara</label>
+                                        <input
+                                            className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
+                                            type="text"
+                                            name="lampara"
+                                            id="lampara"
+                                            onChange={(e) => setData('lampara', e.target.value)}
+                                        />
+
+                                        <label htmlFor="color">
+                                            Colores <span className="text-red-500">*</span>
+                                        </label>
+                                        <Select
+                                            options={colores?.map((color) => ({
+                                                value: color.id,
+                                                label: color.name,
+                                                hex: color.hex, // Incluimos el hex en la opción
+                                            }))}
+                                            onChange={(options) => setColorSelected(options)}
+                                            className=""
+                                            name="color"
+                                            id="color"
+                                            isMulti
+                                            formatOptionLabel={(option) => (
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                                    <div
+                                                        style={{
+                                                            width: '16px',
+                                                            height: '16px',
+                                                            backgroundColor: option.hex,
+                                                            border: '1px solid #ccc',
+                                                            borderRadius: '2px',
+                                                        }}
+                                                    />
+                                                    <span>{option.label}</span>
+                                                </div>
+                                            )}
                                         />
 
                                         <label htmlFor="categoria">
@@ -306,75 +336,6 @@ export default function ProductosAdmin() {
                                             id="subcategoria"
                                             isMulti
                                         />
-
-                                        <div className="flex flex-col gap-4 border-t pt-4">
-                                            <label>Colores del Producto</label>
-
-                                            {/* Color Picker Input */}
-                                            <div className="flex flex-col gap-2">
-                                                <div className="flex items-end gap-2">
-                                                    <div className="flex flex-col gap-1">
-                                                        <label className="text-sm text-gray-600">Seleccionar Color</label>
-                                                        <input
-                                                            type="color"
-                                                            value={currentColor}
-                                                            onChange={(e) => setCurrentColor(e.target.value)}
-                                                            className="h-10 w-16 cursor-pointer rounded-md border border-gray-300"
-                                                        />
-                                                    </div>
-
-                                                    <div className="flex flex-1 flex-col gap-1">
-                                                        <label className="text-sm text-gray-600">Nombre del Color (opcional)</label>
-                                                        <input
-                                                            type="text"
-                                                            value={colorName}
-                                                            onChange={(e) => setColorName(e.target.value)}
-                                                            placeholder="Ej: Rojo Ferrari, Azul Marino, etc."
-                                                            className="rounded-md p-2 outline outline-gray-300 focus:outline focus:outline-orange-500"
-                                                        />
-                                                    </div>
-
-                                                    <button
-                                                        type="button"
-                                                        onClick={addColor}
-                                                        className="rounded-md bg-orange-500 px-4 py-2 text-white transition duration-300 hover:bg-orange-600"
-                                                    >
-                                                        Agregar
-                                                    </button>
-                                                </div>
-                                            </div>
-
-                                            {/* Selected Colors Display */}
-                                            {selectedColors.length > 0 && (
-                                                <div className="space-y-2">
-                                                    <h4 className="font-medium">Colores seleccionados ({selectedColors.length})</h4>
-                                                    <div className="grid grid-cols-1 gap-2">
-                                                        {selectedColors.map((color) => (
-                                                            <div key={color.id} className="group relative">
-                                                                <div className="flex items-center gap-2 rounded-lg border bg-gray-50 p-2">
-                                                                    <div
-                                                                        className="h-8 w-8 flex-shrink-0 rounded-full border border-gray-300"
-                                                                        style={{ backgroundColor: color.color_hex }}
-                                                                        title={color.color_hex}
-                                                                    ></div>
-                                                                    <div className="min-w-0 flex-1">
-                                                                        <p className="truncate text-sm font-medium">{color.color_name}</p>
-                                                                        <p className="text-xs text-gray-500">{color.color_hex}</p>
-                                                                    </div>
-                                                                    <button
-                                                                        type="button"
-                                                                        onClick={() => removeColor(color)}
-                                                                        className="flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-sm text-white transition-colors hover:bg-red-600"
-                                                                    >
-                                                                        ×
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                </div>
-                                            )}
-                                        </div>
 
                                         <div className="flex flex-col gap-2">
                                             <label htmlFor="instructivo">Instructivo </label>

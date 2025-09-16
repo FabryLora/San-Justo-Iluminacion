@@ -6,7 +6,7 @@
 @section('keywords', $metadatos->keywords ?? "")
 
 @section('content')
-    <div class="relative w-full h-[570px]">
+    <div class="relative w-full h-[668px]">
         <div class="absolute top-5 left-1/2 w-[1224px] -translate-x-1/2 flex flex-row gap-1 z-100">
             <a href="/" class="text-white font-medium text-[12px]">{{__('Inicio')}}</a>
             <span class="text-white font-medium text-[12px]">/</span>

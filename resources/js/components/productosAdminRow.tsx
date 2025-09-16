@@ -9,11 +9,15 @@ import Select from 'react-select';
 export default function ProductosAdminRow({ producto }) {
     const [edit, setEdit] = useState(false);
 
-    const { lineas, ambientes, usos, espacios } = usePage().props;
+    const { lineas, ambientes, usos, espacios, colores } = usePage().props;
+
+    console.log(producto);
 
     const { data, setData, post, reset, errors } = useForm({
         order: producto?.order,
         name: producto?.name,
+        lampara: producto?.lampara,
+        origen: producto?.origen,
         code: producto?.code,
         espacio_id: producto?.espacio_id,
         uso_id: producto?.uso_id,
@@ -21,6 +25,7 @@ export default function ProductosAdminRow({ producto }) {
         medidas: producto?.medidas,
         id: producto?.id,
         ambientes: producto?.ambientes?.map((ambiente) => ambiente.id) || [],
+        colores: producto?.colores?.map * ((color) => color.id) || [],
     });
 
     const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
@@ -57,6 +62,14 @@ export default function ProductosAdminRow({ producto }) {
     const [newImagePreviews, setNewImagePreviews] = useState([]);
     const [imagesToDelete, setImagesToDelete] = useState([]);
     const [ambienteSelected, setAmbienteSelected] = useState([]);
+    const [colorSelected, setColorSelected] = useState([]);
+
+    useEffect(() => {
+        setData(
+            'colores',
+            colorSelected.map((a) => a.value),
+        );
+    }, [colorSelected]);
 
     useEffect(() => {
         setData(
@@ -201,9 +214,7 @@ export default function ProductosAdminRow({ producto }) {
                                         onChange={(e) => setData('code', e.target.value)}
                                     />
 
-                                    <label htmlFor="code_oem">
-                                        Medidas <span className="text-red-500">*</span>
-                                    </label>
+                                    <label htmlFor="code_oem">Medidas</label>
                                     <input
                                         className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
                                         type="text"
@@ -211,6 +222,61 @@ export default function ProductosAdminRow({ producto }) {
                                         id="code_oem"
                                         value={data.medidas}
                                         onChange={(e) => setData('medidas', e.target.value)}
+                                    />
+
+                                    <label htmlFor="origen">Origen</label>
+                                    <input
+                                        className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
+                                        type="text"
+                                        name="origen"
+                                        id="origen"
+                                        value={data.origen}
+                                        onChange={(e) => setData('origen', e.target.value)}
+                                    />
+
+                                    <label htmlFor="lampara">Lampara</label>
+                                    <input
+                                        className="focus:outline-primary-orange rounded-md p-2 outline outline-gray-300 focus:outline"
+                                        type="text"
+                                        name="lampara"
+                                        id="lampara"
+                                        value={data.lampara}
+                                        onChange={(e) => setData('lampara', e.target.value)}
+                                    />
+
+                                    <label htmlFor="color">
+                                        Colores <span className="text-red-500">*</span>
+                                    </label>
+                                    <Select
+                                        options={colores?.map((color) => ({
+                                            value: color.id,
+                                            label: color.name,
+                                            hex: color.hex, // Incluimos el hex en la opción
+                                        }))}
+                                        defaultValue={producto?.colores?.map((color) => ({
+                                            value: color.id,
+                                            label: color.name,
+                                            hex: color.hex, // Incluimos el hex en la opción
+                                        }))}
+                                        onChange={(options) => setColorSelected(options)}
+                                        className=""
+                                        name="color"
+                                        id="color"
+                                        isMulti
+                                        formatOptionLabel={(option) => (
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                                <div
+                                                    style={{
+                                                        width: '16px',
+                                                        height: '16px',
+                                                        backgroundColor: option.hex,
+                                                        border: '1px solid #ccc',
+                                                        borderRadius: '2px',
+                                                    }}
+                                                />
+                                                <span>{option.label}</span>
+                                            </div>
+                                        )}
                                     />
 
                                     <label htmlFor="categoria">

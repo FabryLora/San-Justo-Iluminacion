@@ -8,9 +8,6 @@ class Producto extends Model
 {
     protected $guarded = [];
 
-
-
-
     public function imagenes()
     {
         return $this->hasMany(ImagenProducto::class, 'producto_id');
@@ -43,6 +40,6 @@ class Producto extends Model
 
     public function colores()
     {
-        return $this->hasMany(ProductoColor::class);
+        return $this->belongsToMany(Color::class, 'producto_colors');
     }
 }

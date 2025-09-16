@@ -55,7 +55,7 @@ class LineaController extends Controller
 
         $otherData = $request->validate([
 
-            'ambientes' => 'required|array',
+            'ambientes' => 'sometimes|nullable|array',
             'ambientes.*' => 'exists:ambientes,id',
         ]);
 
@@ -134,7 +134,10 @@ class LineaController extends Controller
      */
     public function destroy(Request $request)
     {
-        $linea = Linea::firstOrFail($request->id);
+
+        $linea = Linea::where('id', $request->id)->first();
+
+
         $linea->delete();
     }
 }

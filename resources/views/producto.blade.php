@@ -30,7 +30,7 @@
                     <div class="relative w-full flex flex-col gap-5  max-sm:mt-10">
 
                         <!-- Main Image -->
-                        <div class="flex items-center w-full justify-center h-full border rounded-sm">
+                        <div class="flex items-center w-full justify-center h-[544px] border rounded-sm">
                             @if ($producto->imagenes->first())
                                 <img id="mainImage" class="rounded-sm" src="{{ $producto->imagenes->first()->image }}"
                                     alt="{{ $producto->name }}"
@@ -46,7 +46,7 @@
                             class="  gap-2 flex flex-row absolute -bottom-24  max-sm:static max-sm:mt-4 max-sm:justify-start max-sm:gap-1.5 max-sm:order-2">
                             @foreach ($producto->imagenes as $imagen)
                                 <div class="border border-gray-200 w-[78px] h-[78px] cursor-pointer hover:border-main-color rounded-sm max-sm:w-[60px] max-sm:h-[60px]
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    {{ $loop->first ? 'border-main-color' : '' }}"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    {{ $loop->first ? 'border-main-color' : '' }}"
                                     onclick="changeMainImage('{{ $imagen->image }}', this)">
                                     <img src="{{ $imagen->image }}" alt="Thumbnail"
                                         class="w-full h-full object-cover rounded-sm">
@@ -67,25 +67,40 @@
                             </div>
 
                             <div class="flex flex-col gap-2">
-                                <div class="flex flex-row text-[16px] justify-between border-b pb-2">
-                                    <p class="">{{__("Medidas")}}</p>
-                                    <p class="">{{$producto->medidas}}</p>
-                                </div>
 
-                                <div class="flex flex-row text-[16px] justify-between border-b pb-2">
-                                    <p class="">{{__("Colores")}}</p>
-
-                                    <div class="flex flex-row gap-1">
-                                        @foreach ($producto->colores as $color)
-                                            <div class="w-[26px] h-[26px] rounded-sm border "
-                                                style="background-color: {{ $color->color_hex }}">
-
-                                            </div>
-                                        @endforeach
-
+                                @if ($producto->lampara)
+                                    <div class="flex flex-row text-[16px] justify-between border-b pb-2">
+                                        <p class="">{{__("Lampara")}}</p>
+                                        <p class="">{{$producto->lampara}}</p>
                                     </div>
-                                </div>
-                                <p>Produccion nacional</p>
+                                @endif
+
+                                @if ($producto->medidas)
+                                    <div class="flex flex-row text-[16px] justify-between border-b pb-2">
+                                        <p class="">{{__("Medidas")}}</p>
+                                        <p class="">{{$producto->medidas}}</p>
+                                    </div>
+                                @endif
+
+                                @if ($producto->colores->count() > 0)
+                                    <div class="flex flex-row text-[16px] justify-between border-b pb-2">
+                                        <p class="">{{__("Colores")}}</p>
+
+                                        <div class="flex flex-row gap-1">
+                                            @foreach ($producto->colores as $color)
+                                                <div class="w-[26px] h-[26px] rounded-sm border "
+                                                    style="background-color: {{ $color->hex }}">
+
+                                                </div>
+                                            @endforeach
+
+                                        </div>
+                                    </div>
+                                @endif
+                                @if ($producto->origen)
+                                    <p>{{$producto->origen}}</p>
+                                @endif
+
                                 @if ($producto->certificado)
                                     <a href="{{asset('storage/' . $producto->certificado)}}" target="_blank"
                                         download="Certificado de seguridad electrica" class="underline text-[16px]">
@@ -140,7 +155,7 @@
                         @forelse($productosRelacionados as $prodRelacionado)
                             <a href="{{ "/productos/" . $prodRelacionado->code }}"
                                 class=" 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                min-h-[332px]  flex flex-col w-[288px] max-sm:w-full rounded-sm  border-[#DEDFE0]">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                min-h-[332px]  flex flex-col w-[288px] max-sm:w-full rounded-sm  border-[#DEDFE0]">
                                 <div class="h-full flex flex-col">
                                     @if ($prodRelacionado->imagenes->count() > 0)
                                         <div class="relative min-h-[287px] max-sm:h-[200px]">

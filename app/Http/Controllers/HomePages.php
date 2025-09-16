@@ -48,7 +48,7 @@ class HomePages extends Controller
         $espacios = Espacio::orderBy('order', 'asc')->with('usos')->get();
         $titulos = Titulo::orderBy('seccion')->get();
         $clientes = Cliente::orderBy('order', 'asc')->get();
-        $lineas = Linea::orderBy('order', 'asc')->get();
+        $lineas = Linea::orderBy('order', 'asc')->limit(9)->get();
 
         return view('home', [
             'catalogos' => $catalogos,

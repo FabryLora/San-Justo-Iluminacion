@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Ambiente;
 use App\Models\Categoria;
+use App\Models\Color;
 use App\Models\Espacio;
 use App\Models\ImagenProducto;
 use App\Models\Linea;
@@ -37,7 +38,7 @@ class ProductoController extends Controller
 
         $perPage = $request->input('per_page', default: 10);
 
-        $query = Producto::query()->with(['ambientes', 'imagenes', 'espacio', 'uso', 'linea'])->orderBy('order', 'asc');
+        $query = Producto::query()->with(['ambientes', 'imagenes', 'espacio', 'uso', 'linea', 'colores'])->orderBy('order', 'asc');
 
         if ($request->has('search') && !empty($request->search)) {
             $searchTerm = $request->search;
@@ -50,7 +51,7 @@ class ProductoController extends Controller
         $usos = Uso::orderBy('order', 'asc')->get();
         $lineas = Linea::orderBy('order', 'asc')->with('ambientes')->get();
         $ambientes = Ambiente::orderBy('order', 'asc')->get();
-
+        $colores = Color::orderBy('name')->get();
 
 
         return Inertia::render('admin/productosAdmin', [
@@ -59,6 +60,7 @@ class ProductoController extends Controller
             'usos' => $usos,
             'lineas' => $lineas,
             'ambientes' => $ambientes,
+            'colores' => $colores
         ]);
     }
 
@@ -95,7 +97,7 @@ class ProductoController extends Controller
 
         // Aplicar ordenamiento por defecto
         $query->orderBy('order', 'asc');
-
+        $query->where('name', '!=', "#N/D");
         // Ejecutar query con paginación
         $productos = $query
             ->paginate(15)
@@ -168,12 +170,12 @@ class ProductoController extends Controller
 
     public function show($codigo, Request $request)
     {
-        $producto = Producto::with(['imagenes', 'colores'])->where('code', $codigo)->first();
+        $producto = Producto::with(['imagenes', 'colores'])->where('code', $codigo)->where('name', "!=", "#N/D")->first();
 
 
 
         // Obtener productos relacionados por marca y modelo
-        $productosRelacionados = Producto::where('id', '!=', $producto->id)->orderBy('order', 'asc')->limit(3)->get();
+        $productosRelacionados = Producto::where('id', '!=', $producto->id)->where('name', "!=", "#N/D")->orderBy('order', 'asc')->limit(3)->get();
 
         return view('producto', [
             'producto' => $producto,
@@ -429,6 +431,8 @@ class ProductoController extends Controller
             'name' => 'required|string|max:255',
             'code' => 'required|string|max:255',
             'medidas' => 'nullable|string|max:255',
+            'origen' => 'nullable|string|max:255',
+            'lampara' => 'nullable|string|max:255',
             'certificado' => 'nullable|sometimes|file',
             'instructivo' => 'nullable|sometimes|file',
             'espacio_id' => 'nullable|exists:espacios,id',
@@ -439,8 +443,7 @@ class ProductoController extends Controller
             'ambientes' => 'nullable|array',
             'ambientes.*' => 'integer|exists:ambientes,id',
             'colores' => 'nullable|array',
-            'colores.*.color_hex' => 'required|string',
-            'colores.*.color_name' => 'nullable|string|max:255',
+            'colores.*' => 'integer|exists:colors,id',
         ]);
 
 
@@ -452,6 +455,8 @@ class ProductoController extends Controller
                     'order' => $data['order'] ?? 'zzz',
                     'name' => $data['name'],
                     'code' => $data['code'],
+                    'origen' => $data['origen'] ?? null,
+                    'lampara' => $data['lampara'] ?? null,
                     'medidas' => $data['medidas'] ?? null,
                     'certificado' => $request->hasFile('certificado') ? $request->file('certificado')->store('documents', 'public') : null,
                     'instructivo' => $request->hasFile('instructivo') ? $request->file('instructivo')->store('documents', 'public') : null,
@@ -481,11 +486,10 @@ class ProductoController extends Controller
                 }
 
                 if ($request->has('colores')) {
-                    foreach ($data['colores'] as $colorData) {
+                    foreach ($data['colores'] as $colorId) {
                         ProductoColor::create([
                             'producto_id' => $producto->id,
-                            'color_hex' => $colorData['color_hex'],
-                            'color_name' => $colorData['color_name'] ?? null,
+                            'color_id' => $colorId,
                         ]);
                     }
                 }
@@ -527,6 +531,8 @@ class ProductoController extends Controller
             'name' => 'required|string|max:255',
             'code' => 'required|string|max:255',
             'medidas' => 'nullable|string|max:255',
+            'origen' => 'nullable|string|max:255',
+            'lampara' => 'nullable|string|max:255',
             'certificado' => 'nullable|sometimes|file',
             'instructivo' => 'nullable|sometimes|file',
             'espacio_id' => 'nullable|exists:espacios,id',
@@ -534,6 +540,8 @@ class ProductoController extends Controller
             'linea_id' => 'nullable|exists:lineas,id',
             'ambientes' => 'nullable|array',
             'ambientes.*' => 'integer|exists:ambientes,id',
+            'colores' => 'nullable|array',
+            'colores.*' => 'integer|exists:colors,id',
 
             // Validaciones de las imágenes (opcionales)
             'images' => 'nullable|array|min:1',
@@ -554,6 +562,8 @@ class ProductoController extends Controller
                     'name' => $data['name'],
                     'code' => $data['code'],
                     'medidas' => $data['medidas'] ?? null,
+                    'origen' => $data['origen'] ?? null,
+                    'lampara' => $data['lampara'] ?? null,
                     'certificado' => $request->hasFile('certificado') ? $request->file('certificado')->store('documents', 'public') : $producto->certificado,
                     'instructivo' => $request->hasFile('instructivo') ? $request->file('instructivo')->store('documents', 'public') : $producto->instructivo,
                     'espacio_id' => $data['espacio_id'] ?? null,
@@ -582,14 +592,33 @@ class ProductoController extends Controller
 
                 if ($request->has('ambientes')) {
                     // Eliminar relaciones existentes
-                    ProductoAmbiente::where('producto_id', $producto->id)->delete();
+
                     foreach ($data['ambientes'] as $ambienteId) {
-                        ProductoAmbiente::create([
+                        ProductoAmbiente::updateOrCreate([
+                            'producto_id' => $producto->id,
+                            'ambiente_id' => $ambienteId,
+                        ], [
                             'producto_id' => $producto->id,
                             'ambiente_id' => $ambienteId,
                         ]);
                     }
                 }
+
+                if ($request->has('colores')) {
+                    // Eliminar relaciones existentes
+
+                    foreach ($data['colores'] as $colorId) {
+                        ProductoColor::updateOrCreate([
+                            'producto_id' => $producto->id,
+                            'color_id' => $colorId,
+                        ], [
+                            'producto_id' => $producto->id,
+                            'color_id' => $colorId,
+                        ]);
+                    }
+                }
+
+
 
                 if ($request->has('images_to_delete')) {
                     foreach ($request->images_to_delete as $imageId) {

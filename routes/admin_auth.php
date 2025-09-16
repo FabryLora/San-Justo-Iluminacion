@@ -8,6 +8,7 @@ use App\Http\Controllers\BannerPortadaController;
 use App\Http\Controllers\CalidadController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\ColorController;
 use App\Http\Controllers\ComercioExteriorController;
 use App\Http\Controllers\ComercioTarjetasController;
 use App\Http\Controllers\ContactoController;
@@ -252,4 +253,9 @@ Route::middleware('auth:admin')->group(function () {
 
     Route::get('admin/donde-comprar-contenido', [DondeComprarContenidoController::class, 'index'])->name('admin.donde-comprar-contenido');
     Route::post('admin/donde-comprar-contenido/update', [DondeComprarContenidoController::class, 'update'])->name('admin.donde-comprar-contenido.update');
+
+    Route::get('admin/colores', [ColorController::class, 'index'])->name('admin.colores');
+    Route::post('admin/colores', [ColorController::class, 'store'])->name('admin.colores.store');
+    Route::post('admin/colores/update', [ColorController::class, 'update'])->name('admin.colores.update');
+    Route::delete('admin/colores/destroy', [ColorController::class, 'destroy'])->name('admin.colores.destroy');
 });

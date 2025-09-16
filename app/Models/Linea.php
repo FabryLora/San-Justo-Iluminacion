@@ -8,6 +8,8 @@ class Linea extends Model
 {
     protected $guarded = [];
 
+    protected $table = "lineas";
+
     public function productos()
     {
         return $this->hasMany(Producto::class);

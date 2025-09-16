@@ -2,18 +2,21 @@
 
 namespace App\Jobs;
 
-use App\Models\Categoria;
+use App\Models\Ambiente;
+use App\Models\Espacio;
+use App\Models\ImagenProducto;
+use App\Models\Linea;
+use App\Models\LineaAmbiente;
+use App\Models\ListaProductos;
 use App\Models\Producto;
-use App\Models\ProductoMarca;
-use App\Models\ProductoModelo;
-use App\Models\SubCategoria;
-use App\Models\SubProducto;
+use App\Models\ProductoAmbiente;
+use App\Models\Uso;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use PhpOffice\PhpSpreadsheet\IOFactory;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
@@ -30,192 +33,130 @@ class ImportarProductosDesdeExcelJob implements ShouldQueue
 
     public function handle()
     {
-        try {
-            $filePath = Storage::path($this->archivoPath);
+        $filePath = Storage::path($this->archivoPath);
+        $spreadsheet = IOFactory::load($filePath);
+        $sheet = $spreadsheet->getActiveSheet();
+        $rows = $sheet->toArray(null, true, true, true);
 
-            // Verificar que el archivo existe
-            if (!file_exists($filePath)) {
-                Log::error("Archivo no encontrado: " . $filePath);
-                return;
+        Log::info('=== INICIO DEBUG EXCEL ===');
+        Log::info('Total de filas: ' . count($rows));
+
+
+        foreach ($rows as $index => $row) {
+            Log::info("Fila {$index}: " . json_encode($row));
+
+            if ($index === 0 || $row['N'] == "IMAGEN") {
+                Log::info('Saltando encabezado');
+                continue;
             }
 
-            $spreadsheet = IOFactory::load($filePath);
-            $sheet = $spreadsheet->getActiveSheet();
+            $espacio = trim($row['A']);
+            $uso = trim($row['B']);
+            $linea = trim($row['C']);
+            $codigo = trim($row['D']);
+            $ambiente_uno = trim($row['E']);
+            $ambiente_dos = trim($row['F']);
+            $ambiente_tres = trim($row['G']);
+            $ambiente_cuatro = trim($row['H']);
+            $ambiente_cinco = trim($row['I']);
+            $ambiente_seis = trim($row['J']);
+            $ambiente_siete = trim($row['K']);
+            $ambiente_ocho = trim($row['L']);
+            $ambiente_nueve = trim($row['M']);
+            $imagen = trim($row['N']);
+            $origen = trim($row['O']);
+            $nombre = trim($row['P']);
+            $medidas = trim($row['Q']);
+            $lampara = trim($row['R']);
 
-            // Obtener información del sheet
-            $highestRow = $sheet->getHighestRow();
-            $highestColumn = $sheet->getHighestColumn();
+            $ambiente_array = [
+                $ambiente_uno,
+                $ambiente_dos,
+                $ambiente_tres,
+                $ambiente_cuatro,
+                $ambiente_cinco,
+                $ambiente_seis,
+                $ambiente_siete,
+                $ambiente_ocho,
+                $ambiente_nueve
+            ];
+            $ambientes = array_filter($ambiente_array, fn($value) => !is_null($value) && $value !== '');
 
-            Log::info("Procesando Excel - Filas: {$highestRow}, Columnas: {$highestColumn}");
 
-            // Verificar que hay datos
-            if ($highestRow < 2) {
-                Log::warning("El archivo no tiene datos para procesar (solo tiene {$highestRow} fila(s))");
-                return;
-            }
 
-            $rows = $sheet->toArray(null, true, true, true);
+            if ($espacio) {
+                $espacio_nuevo = Espacio::updateOrCreate(
+                    ['name_es' => $espacio],
+                    ['name_es' => $espacio]
+                );
 
-            // Debug: mostrar estructura del array
-            Log::info("Estructura del array rows:", [
-                'total_rows' => count($rows),
-                'keys' => array_keys($rows),
-                'first_few_keys' => array_slice(array_keys($rows), 0, 3)
-            ]);
-
-            // Verificar que tenemos filas
-            if (empty($rows)) {
-                Log::error("El array de filas está vacío");
-                return;
-            }
-
-            // SOLUCIÓN MEJORADA: Usar array_values para reindexar y luego slice
-            $rowsReindexed = array_values($rows);
-            $dataRows = array_slice($rowsReindexed, 1);
-
-            Log::info("Procesando " . count($dataRows) . " filas de datos");
-
-            foreach ($dataRows as $index => $row) {
-                try {
-                    $this->procesarFila($row, $index + 2); // +2 porque empezamos desde fila 2 del Excel
-                } catch (\Exception $e) {
-                    Log::error("Error procesando fila " . ($index + 2) . ": " . $e->getMessage());
-                    continue; // Continuar con la siguiente fila
+                if ($espacio_nuevo) {
+                    $uso_nuevo = Uso::updateOrCreate(
+                        ['name_es' => $uso],
+                        ['name_es' => $uso, 'espacio_id' => $espacio_nuevo->id]
+                    );
                 }
             }
-        } catch (\Exception $e) {
-            Log::error("Error general en ImportarProductosDesdeExcelJob: " . $e->getMessage());
-            Log::error("Stack trace: " . $e->getTraceAsString());
-            throw $e;
-        }
 
-        // SOLUCIÓN 2 ALTERNATIVA: Usar contador manual
-        /*
-        $contador = 0;
-        foreach ($rows as $row) {
-            $contador++;
-            if ($contador === 1) continue; // Saltar encabezado
-            $this->procesarFila($row);
-        }
-        */
-
-        // SOLUCIÓN 3 ALTERNATIVA: Usar array_keys para obtener las claves reales
-        /*
-        $rowKeys = array_keys($rows);
-        foreach ($rowKeys as $key) {
-            if ($key === $rowKeys[0]) continue; // Saltar primera fila
-            $this->procesarFila($rows[$key]);
-        }
-        */
-
-        // SOLUCIÓN 4 ALTERNATIVA: Usar getHighestRow() para iterar manualmente
-        /*
-        $highestRow = $sheet->getHighestRow();
-        for ($rowIndex = 2; $rowIndex <= $highestRow; $rowIndex++) {
-            $row = [];
-            foreach (range('A', 'N') as $column) {
-                $row[$column] = $sheet->getCell($column . $rowIndex)->getValue();
+            if ($linea) {
+                $linea_nueva = Linea::updateOrCreate(
+                    ['name_es' => $linea],
+                    ['name_es' => $linea]
+                );
             }
-            $this->procesarFila($row);
-        }
-        */
-    }
 
-    private function procesarFila($row, $numeroFila = null)
-    {
-        // Validar que la fila tiene la estructura esperada
-        if (!is_array($row)) {
-            Log::warning("Fila {$numeroFila}: No es un array válido");
-            return;
-        }
+            foreach ($ambientes as $ambiente) {
+                $ambiente_nuevo = Ambiente::updateOrCreate(
+                    ['name_es' => $ambiente],
+                    ['name_es' => $ambiente]
+                );
 
-        // Verificar que las columnas necesarias existen
-        $columnasRequeridas = ['B', 'C'];
-        foreach ($columnasRequeridas as $columna) {
-            if (!isset($row[$columna])) {
-                Log::warning("Fila {$numeroFila}: Columna {$columna} no encontrada");
-                return;
+                if ($linea_nueva) {
+                    LineaAmbiente::updateOrCreate(
+                        ['linea_id' => $linea_nueva->id, 'ambiente_id' => $ambiente_nuevo->id],
+                        ['linea_id' => $linea_nueva->id, 'ambiente_id' => $ambiente_nuevo->id]
+                    );
+                }
             }
-        }
 
-        // Extraer datos con valores por defecto
-        $codigo = isset($row['B']) ? trim($row['B']) : '';
-        $nombre = isset($row['C']) ? trim($row['C']) : '';
-        $descripcion_visible = isset($row['D']) ? trim($row['D']) : '';
-        $desc_invisible = isset($row['E']) ? trim($row['E']) : '';
-        $unidad_pack = isset($row['F']) ? trim($row['F']) : '';
-        $familia = isset($row['G']) ? trim($row['G']) : '';
-        $codigo_oem = isset($row['H']) ? trim($row['H']) : '';
-        $codigo_competidor = isset($row['I']) ? trim($row['I']) : '';
-        $stock = isset($row['J']) ? trim($row['J']) : 0;
-        $modelos = isset($row['K']) ? trim($row['K']) : '';
-        $medida = isset($row['L']) ? trim($row['L']) : '';
-        $marcas = isset($row['M']) ? trim($row['M']) : '';
-        $descuento_oferta = isset($row['N']) ? trim($row['N']) : 0;
+            if ($codigo) {
+                $producto = Producto::updateOrCreate(
+                    ['code' => $codigo],
+                    [
+                        'lampara' => $lampara ?? null,
+                        'name' => $nombre,
+                        'medidas' => $medidas ?? null,
+                        'origen' => $origen ?? null,
+                        'espacio_id' => $espacio_nuevo ? $espacio_nuevo->id : null,
+                        'uso_id' => $uso_nuevo ? $uso_nuevo->id : null,
+                        'linea_id' => $linea_nueva ? $linea_nueva->id : null
+                    ]
 
-        // Validar que el código no esté vacío
-        if (empty($codigo)) {
-            Log::warning("Fila {$numeroFila}: Código vacío, saltando");
-            return;
-        }
+                );
 
-        try {
-            $producto = Producto::updateOrCreate(
-                ['code' => $codigo],
-                [
-                    'name' => $nombre,
-                    'desc_visible' => $descripcion_visible,
-                    'desc_invisible' => $desc_invisible,
-                    'unidad_pack' => $unidad_pack ?? null,
-                    'familia' => $familia,
-                    'code_oem' => $codigo_oem,
-                    'code_competitor' => $codigo_competidor,
-                    'stock' => is_numeric($stock) ? $stock : 0,
-                    'medida' => $medida,
-                    'descuento_oferta' => is_numeric($descuento_oferta) ? $descuento_oferta : 0
-                ]
-            );
+                if ($producto) {
+                    ImagenProducto::updateOrCreate(
+                        ['producto_id' => $producto->id, 'image' => "images/" . $codigo . ".png"],
+                        ['producto_id' => $producto->id, 'image' => "images/" . $codigo . ".png"]
+                    );
+                }
+            }
 
-            // Procesar marcas
-            if (!empty($marcas)) {
-                $marcas_array = array_filter(array_map('trim', explode(',', $marcas)));
-                foreach ($marcas_array as $marca) {
-                    if (empty($marca)) continue;
-
-                    $categoria = Categoria::where('name', $marca)->first();
-                    if ($categoria) {
-                        ProductoMarca::firstOrCreate([
-                            'producto_id' => $producto->id,
-                            'categoria_id' => $categoria->id
-                        ]);
-                    } else {
-                        Log::info("Marca no encontrada: {$marca} (Fila {$numeroFila})");
+            if ($ambientes && $producto) {
+                foreach ($ambientes as $ambiente) {
+                    $ambiente_producto = Ambiente::where('name_es', $ambiente)->first();
+                    if (!$ambiente_producto) {
+                        Log::warning("Ambiente no encontrado: {$ambiente}");
+                        continue;
                     }
+                    ProductoAmbiente::updateOrCreate(
+                        ['producto_id' => $producto->id, 'ambiente_id' => $ambiente_producto->id],
+                        ['producto_id' => $producto->id, 'ambiente_id' => $ambiente_producto->id]
+                    );
                 }
             }
-
-            // Procesar modelos
-            if (!empty($modelos)) {
-                $modelos_array = array_filter(array_map('trim', explode(',', $modelos)));
-                foreach ($modelos_array as $modelo) {
-                    if (empty($modelo)) continue;
-
-                    $subCategoria = SubCategoria::where('name', $modelo)->first();
-                    if ($subCategoria) {
-                        ProductoModelo::firstOrCreate([
-                            'producto_id' => $producto->id,
-                            'sub_categoria_id' => $subCategoria->id
-                        ]);
-                    } else {
-                        Log::info("Modelo no encontrado: {$modelo} (Fila {$numeroFila})");
-                    }
-                }
-            }
-
-            Log::info("Producto procesado exitosamente: {$codigo} (Fila {$numeroFila})");
-        } catch (\Exception $e) {
-            Log::error("Error procesando producto {$codigo} (Fila {$numeroFila}): " . $e->getMessage());
-            throw $e;
         }
+
+        Log::info('=== FIN DEBUG EXCEL ===');
     }
 }

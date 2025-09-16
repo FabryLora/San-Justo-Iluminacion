@@ -27,6 +27,8 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->string('code')->nullable();
             $table->string('medidas')->nullable();
+            $table->string('origen')->nullable();
+            $table->string('lampara')->nullable();
             $table->string('certificado')->nullable();
             $table->string('instructivo')->nullable();
             $table->foreignIdFor(Espacio::class)->nullable()
