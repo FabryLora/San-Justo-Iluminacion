@@ -221,6 +221,7 @@ export default function LineasAdmin() {
                                     <td className="text-center">TEXTO</td>
                                     <td className="text-center">AMBIENTES</td>
                                     <td className="text-center">IMAGEN</td>
+                                    <td className="text-center">DESTACADO</td>
                                     <td className="text-center">EDITAR</td>
                                 </tr>
                             </thead>

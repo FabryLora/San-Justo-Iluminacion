@@ -8,7 +8,7 @@
                     <img src="{{ $homeInfo->image_banner }}" alt="Slider Image" class="w-full h-full object-cover"
                         data-duration="6000">
                 @elseif (in_array($ext, ['mp4', 'webm', 'ogg']))
-                    <video class="w-full h-full object-cover object-center" autoplay muted>
+                    <video class="w-full h-full object-cover object-center" loop autoplay muted>
                         <source src="{{ $homeInfo->image_banner }}" type="video/{{ $ext }}">
                         {{ __('Tu navegador no soporta el formato de video.') }}
                     </video>

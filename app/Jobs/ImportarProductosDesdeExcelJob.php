@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Ambiente;
+use App\Models\Color;
 use App\Models\Espacio;
 use App\Models\ImagenProducto;
 use App\Models\Linea;
@@ -10,6 +11,7 @@ use App\Models\LineaAmbiente;
 use App\Models\ListaProductos;
 use App\Models\Producto;
 use App\Models\ProductoAmbiente;
+use App\Models\ProductoColor;
 use App\Models\Uso;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Illuminate\Bus\Queueable;
@@ -63,11 +65,14 @@ class ImportarProductosDesdeExcelJob implements ShouldQueue
             $ambiente_siete = trim($row['K']);
             $ambiente_ocho = trim($row['L']);
             $ambiente_nueve = trim($row['M']);
-            $imagen = trim($row['N']);
-            $origen = trim($row['O']);
-            $nombre = trim($row['P']);
-            $medidas = trim($row['Q']);
-            $lampara = trim($row['R']);
+            $origen = trim($row['P']);
+            $nombre = trim($row['Q']);
+            $colores = trim($row['R']);
+            $lampara = trim($row['S']);
+            $medidas = trim($row['T']);
+
+
+
 
             $ambiente_array = [
                 $ambiente_uno,
@@ -139,6 +144,21 @@ class ImportarProductosDesdeExcelJob implements ShouldQueue
                         ['producto_id' => $producto->id, 'image' => "images/" . $codigo . ".png"],
                         ['producto_id' => $producto->id, 'image' => "images/" . $codigo . ".png"]
                     );
+                }
+            }
+
+            if ($colores && $producto) {
+                $colores = array_map('trim', explode(',', $colores));
+                foreach ($colores as $color) {
+                    $color_model = Color::where('name', $color)->first();
+                    if ($color_model) {
+                        ProductoColor::updateOrCreate(
+                            ['producto_id' => $producto->id, 'color_id' => $color_model->id],
+                            ['producto_id' => $producto->id, 'color_id' => $color_model->id]
+                        );
+                    } else {
+                        Log::warning("Color no encontrado: {$color}");
+                    }
                 }
             }
 

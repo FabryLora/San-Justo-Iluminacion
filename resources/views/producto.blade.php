@@ -46,7 +46,7 @@
                             class="  gap-2 flex flex-row absolute -bottom-24  max-sm:static max-sm:mt-4 max-sm:justify-start max-sm:gap-1.5 max-sm:order-2">
                             @foreach ($producto->imagenes as $imagen)
                                 <div class="border border-gray-200 w-[78px] h-[78px] cursor-pointer hover:border-main-color rounded-sm max-sm:w-[60px] max-sm:h-[60px]
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    {{ $loop->first ? 'border-main-color' : '' }}"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            {{ $loop->first ? 'border-main-color' : '' }}"
                                     onclick="changeMainImage('{{ $imagen->image }}', this)">
                                     <img src="{{ $imagen->image }}" alt="Thumbnail"
                                         class="w-full h-full object-cover rounded-sm">
@@ -149,45 +149,48 @@
 
                 <!-- Productos relacionados -->
                 <div class="py-20 pt-30 max-sm:py-10">
-                    <h2 class="text-[28px] font-bold mb-8 max-sm:text-xl max-sm:mb-6">Productos relacionados</h2>
+                    <h2 class="text-[28px] font-bold mb-8 max-sm:text-xl max-sm:mb-6">{{__("Productos relacionados")}}</h2>
 
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 max-sm:grid-cols-1 max-sm:gap-4">
                         @forelse($productosRelacionados as $prodRelacionado)
                             <a href="{{ "/productos/" . $prodRelacionado->code }}"
-                                class=" 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                min-h-[332px]  flex flex-col w-[288px] max-sm:w-full rounded-sm  border-[#DEDFE0]">
-                                <div class="h-full flex flex-col">
-                                    @if ($prodRelacionado->imagenes->count() > 0)
-                                        <div class="relative min-h-[287px] max-sm:h-[200px]">
-                                            <img src="{{ $prodRelacionado->imagenes->first()->image }}"
-                                                alt="{{ $prodRelacionado->name }}"
-                                                class=" w-full h-full  object-cover rounded-t-sm">
-                                            <h2
-                                                class="absolute left-3 bottom-2 text-[14px] font-semibold uppercase text-primary-orange">
-                                                {{$prodRelacionado->categoria->name ?? ''}}
-                                            </h2>
-                                        </div>
-
-                                    @else
-                                        <div class="relative min-h-[287px] max-sm:h-[200px]">
-                                            <img src={{$logos->logo_principal}} alt="{{ $prodRelacionado->name }}"
-                                                class=" w-full h-full  object-contain rounded-t-sm">
-                                            <h2
-                                                class="absolute left-3 bottom-2 text-[14px] font-semibold uppercase text-primary-orange">
-                                                {{$prodRelacionado->categoria->name ?? ''}}
-                                            </h2>
-                                        </div>
-                                    @endif
-
-                                    <div class="flex flex-col justify-start   h-full px-1 mt-2">
-                                        <h2 class="text-[16px] font-semibold text-primary-orange">{{$prodRelacionado->code}}
+                            class="min-h-[332px] max-lg:min-h-[300px] max-md:min-h-[280px] max-sm:min-h-[250px] flex flex-col w-full max-w-[288px] max-lg:max-w-full mx-auto max-sm:mx-0 rounded-sm border-[#DEDFE0] hover:shadow-md transition-shadow duration-300 bg-white overflow-hidden group">
+                            <div class="h-full flex flex-col">
+                                @if ($prodRelacionado->imagenes->count() > 0)
+                                    <div class="relative min-h-[287px] max-lg:min-h-[250px] max-md:min-h-[220px] max-sm:h-[200px] overflow-hidden">
+                                        <img src="{{ $prodRelacionado->imagenes->first()->image}}" alt="{{ $prodRelacionado->name }}"
+                                            class="w-full h-full object-cover rounded-t-sm group-hover:scale-105 transition-transform duration-300">
+                                        <h2 class="absolute left-3 bottom-2 text-[14px] max-md:text-[13px] max-sm:text-[12px] font-semibold uppercase text-primary-orange bg-white/90 px-2 py-1 rounded max-sm:left-2 max-sm:bottom-1">
+                                            {{$prodRelacionado->categoria->name ?? ''}}
                                         </h2>
-                                        <p class="overflow-hidden line-clamp-2 text-[20px] font-custom! leading-tight">
-                                            {{$prodRelacionado->name}}
-                                        </p>
+                                    </div>
+                                @else
+                                    <div class="relative min-h-[287px] max-lg:min-h-[250px] max-md:min-h-[220px] max-sm:h-[200px] bg-gray-50 flex items-center justify-center overflow-hidden">
+                                        <img src="{{$logos->logo_principal}}" alt="{{ $prodRelacionado->name }}"
+                                            class="w-full h-full object-contain rounded-t-sm p-4 max-sm:p-3 group-hover:scale-105 transition-transform duration-300">
+                                        <h2 class="absolute left-3 bottom-2 text-[14px] max-md:text-[13px] max-sm:text-[12px] font-semibold uppercase text-primary-orange bg-white/90 px-2 py-1 rounded max-sm:left-2 max-sm:bottom-1">
+                                            {{$prodRelacionado->categoria->name ?? ''}}
+                                        </h2>
+                                    </div>
+                                @endif
+
+                                <div class="flex flex-col justify-start h-full px-3 max-sm:px-2 mt-3 max-sm:mt-2 pb-3 max-sm:pb-2">
+                                    <h2 class="text-[16px] max-md:text-[15px] max-sm:text-[14px] font-semibold text-primary-orange mb-1">
+                                        {{$prodRelacionado->code}}
+                                    </h2>
+                                    <p class="overflow-hidden line-clamp-2 text-[20px] max-lg:text-[18px] max-md:text-[16px] max-sm:text-[15px] font-custom! leading-tight text-gray-800 group-hover:text-black transition-colors flex-1">
+                                        {{$prodRelacionado->name}}
+                                    </p>
+                                    
+                                    <!-- Indicador visual para hover en desktop -->
+                                    <div class="mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 max-sm:opacity-100">
+                                        <span class="text-[12px] text-primary-orange font-medium">
+                                            {{__('Ver detalles')}} →
+                                        </span>
                                     </div>
                                 </div>
-                            </a>
+                            </div>
+                        </a>
                         @empty
                             <div class="col-span-4 py-8 text-center text-gray-500 max-sm:col-span-1 max-sm:py-6">
                                 No hay productos relacionados disponibles.

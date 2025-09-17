@@ -78,6 +78,22 @@ class LineaController extends Controller
         }
     }
 
+    public function changeDestacado(Request $request)
+    {
+        $linea = Linea::findOrFail($request->id);
+
+        // Check if the Linea entry exists
+        if (!$linea) {
+            return redirect()->back()->with('error', 'Linea not found.');
+        }
+
+        // Toggle the featured status
+        $linea->destacado = !$linea->destacado;
+        $linea->save();
+
+        return redirect()->back()->with('success', 'Linea featured status updated successfully.');
+    }
+
 
 
     /**

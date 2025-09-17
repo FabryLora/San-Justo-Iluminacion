@@ -113,6 +113,7 @@ Route::middleware('auth:admin')->group(function () {
     Route::post('cambiarOferta', [ProductoController::class, 'cambiarOferta'])->name('cambiarOferta');
 
     Route::post('admin.cambiardestacadoespacio', [EspacioController::class, 'changeDestacado'])->name('espacios.changeDestacado');
+    Route::post('admin.lineas', [LineaController::class, 'changeDestacado'])->name('lineas.changeDestacado');
 
 
     Route::get('admin/contacto', [ContactoController::class, 'index'])->name('admin.contacto');

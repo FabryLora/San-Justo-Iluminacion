@@ -43,7 +43,7 @@
                         <select value="{{ $uso ?? '' }}"
                             class="rounded-sm bg-white p-2 pr-10 focus:outline focus:outline-primary-orange transition duration-300 w-full text-sm max-sm:text-xs outline outline-gray-300"
                             name="uso" id="uso">
-                            <option value="">Elegir uso</option>
+                            <option value="">{{__("Elegir uso")}}</option>
                             @foreach ($usos as $usoItem)
                                 <option value="{{ $usoItem->id }}" {{ ($uso ?? '') == $usoItem->id ? 'selected' : '' }}>
                                     {{ request('lang') == 'en' ? $usoItem->name_en : $usoItem->name_es }}
@@ -66,12 +66,12 @@
 
                 <!-- Línea -->
                 <div class="flex flex-col gap-2 w-full">
-                    <label for="linea" class="text-[16px] max-sm:text-[14px] font-medium">{{__("Linea")}}</label>
+                    <label for="linea" class="text-[16px] max-sm:text-[14px] font-medium">{{__("Línea")}}</label>
                     <div class="relative">
                         <select value="{{ $linea ?? '' }}"
                             class="rounded-sm bg-white p-2 pr-10 focus:outline focus:outline-primary-orange transition duration-300 w-full text-sm max-sm:text-xs outline outline-gray-300"
                             name="linea" id="linea">
-                            <option value="">Elegir linea</option>
+                            <option value="">{{__("Elegir linea")}}</option>
                             @foreach ($lineas as $lineaItem)
                                 <option value="{{ $lineaItem->id }}" {{ ($linea ?? '') == $lineaItem->id ? 'selected' : '' }}>
                                     {{ request('lang') == 'en' ? $lineaItem->name_en : $lineaItem->name_es }}
@@ -99,7 +99,7 @@
                         <select value="{{ $ambiente ?? '' }}"
                             class="rounded-sm bg-white p-2 pr-10 focus:outline focus:outline-primary-orange transition duration-300 w-full text-sm max-sm:text-xs outline outline-gray-300"
                             name="ambiente" id="ambiente">
-                            <option value="">Elegir ambiente</option>
+                            <option value="">{{__("Elegir ambiente")}}</option>
                             @foreach ($ambientes as $ambienteItem)
                                 <option value="{{ $ambienteItem->id }}" {{ ($ambiente ?? '') == $ambienteItem->id ? 'selected' : '' }}>
                                     {{ request('lang') == 'en' ? $ambienteItem->name_en : $ambienteItem->name_es }}
@@ -127,7 +127,7 @@
                     <div class="relative">
                         <input value="{{ $code ?? '' }}" type="text"
                             class="rounded-sm bg-white p-2 pr-10 focus:outline focus:outline-primary-orange transition duration-300 w-full text-sm max-sm:text-xs outline outline-gray-300"
-                            id="codigo_original" name="code" placeholder="Ingrese código original">
+                            id="codigo_original" name="code" placeholder="{{__('Ingrese código')}}">
                         @if($code ?? '')
                             <a href="{{ route('productos', array_filter(request()->except('code'))) }}"
                                 class="absolute right-5 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-red-500 transition duration-200"
@@ -151,7 +151,7 @@
             class="flex flex-col items-center self-end h-full lg:items-end justify-end w-full lg:w-fit gap-2 mt-4 lg:mt-0">
             <button type="submit"
                 class="bg-primary-orange text-white rounded-sm px-6 py-2 max-sm:px-4 max-sm:py-1.5 text-[16px] max-sm:text-[14px] font-semibold hover:bg-primary-orange-dark transition duration-300 w-full lg:w-auto min-w-[120px] max-sm:min-w-[100px]">
-                Buscar
+                {{__("Buscar")}}
             </button>
         </div>
     </form>

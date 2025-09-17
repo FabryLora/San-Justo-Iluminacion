@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import Select from 'react-select';
 import CustomReactQuill from './CustomReactQuill';
+import Switch from './Switch';
 
 export default function LineasAdminRow({ linea }) {
     const [edit, setEdit] = useState(false);
@@ -85,8 +86,13 @@ export default function LineasAdminRow({ linea }) {
                     </span>
                 ))}
             </td>
+
             <td className="flex h-[90px] items-center justify-center">
                 <img className="w-[100px]" src={`/storage/${linea?.image}`} alt="" />
+            </td>
+
+            <td>
+                <Switch id={linea?.id} routeName="lineas.changeDestacado" status={linea?.destacado == 1} />
             </td>
 
             <td className="w-[140px] text-center">

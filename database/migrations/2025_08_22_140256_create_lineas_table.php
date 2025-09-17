@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->longText('text_es')->nullable();
             $table->longText('text_en')->nullable();
+            $table->boolean('destacado')->default(false);
             $table->timestamps();
         });
     }

@@ -44,7 +44,7 @@
             </div>
         @endforeach
         <div class="flex flex-col gap-5">
-            <h2 class="font-semibold text-[32px] font-custom!">Como hacemos las cosas</h2>
+            <h2 class="font-semibold text-[32px] font-custom!">{{__('Como hacemos las cosas')}}</h2>
             <div class="grid grid-cols-4 gap-5">
                 @foreach ($tarjetas as $tarjeta)
                     <div class="flex flex-col h-[278px] pt-6 border rounded-sm items-center px-4  ">

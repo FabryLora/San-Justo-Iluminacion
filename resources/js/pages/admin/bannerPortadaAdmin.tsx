@@ -154,27 +154,23 @@ export default function BannerPortadaAdmin() {
             title_banner_en: banner?.title_banner_en ?? '',
             text_banner_es: banner?.text_banner_es ?? '',
             text_banner_en: banner?.text_banner_en ?? '',
-            image_banner: null,
 
             // Sección 1
             title_seccion_uno_es: banner?.title_seccion_uno_es ?? '',
             title_seccion_uno_en: banner?.title_seccion_uno_en ?? '',
             text_seccion_uno_es: banner?.text_seccion_uno_es ?? '',
             text_seccion_uno_en: banner?.text_seccion_uno_en ?? '',
-            image_seccion_uno: null,
 
             // Sección 2
             title_seccion_dos_es: banner?.title_seccion_dos_es ?? '',
             title_seccion_dos_en: banner?.title_seccion_dos_en ?? '',
             text_seccion_dos_es: banner?.text_seccion_dos_es ?? '',
             text_seccion_dos_en: banner?.text_seccion_dos_en ?? '',
-            image_seccion_dos: null,
 
             title_seccion_tres_es: banner?.title_seccion_tres_es ?? '',
             title_seccion_tres_en: banner?.title_seccion_tres_en ?? '',
             text_seccion_tres_es: banner?.text_seccion_tres_es ?? '',
             text_seccion_tres_en: banner?.text_seccion_tres_en ?? '',
-            image_seccion_tres: null,
 
             title_espacios_es: titulos?.find((titulo) => titulo?.seccion == 'espacios')?.title_es ?? '',
             title_espacios_en: titulos?.find((titulo) => titulo?.seccion == 'espacios')?.title_en ?? '',
