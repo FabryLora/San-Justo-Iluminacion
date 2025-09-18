@@ -93,10 +93,11 @@
                         </option>
                     </select>
                     <span>|</span>
-                    <button class="border rounded-sm text-[14px] leading-none w-[136px] h-[42px]"
+                    <a href="https://sanjustoiluminacion.com.ar/pedidos/login.php" target="_blank"
+                        class="border flex items-center justify-center rounded-sm text-[14px] leading-none w-[136px] h-[42px]"
                         :class="scrolled ? 'border-black text-black' : 'border-white text-white'">
                         {{__('AREA CLIENTE')}}
-                    </button>
+                    </a>
                 </div>
 
                 <div class="flex gap-6 max-xl:gap-4 items-end flex-wrap" x-data="{ openProductos: false }">
@@ -105,8 +106,8 @@
                             <div class="" @click.away="openProductos = false">
                                 <button type="button" @click="openProductos = !openProductos; espacioSelected = null"
                                     class="flex items-center gap-1 text-[15px] max-xl:text-[14px] font-normal 
-                                                                                                                           transition-colors duration-300 whitespace-nowrap leading-none
-                                                                                                                           {{ Request::is(ltrim($link['href'], '/')) ? 'font-bold' : '' }}"
+                                                                                                                                           transition-colors duration-300 whitespace-nowrap leading-none
+                                                                                                                                           {{ Request::is(ltrim($link['href'], '/')) ? 'font-bold' : '' }}"
                                     :class="scrolled ? 'text-black' : 'text-white'">
                                     {{ $link['title'] }}
                                     <!-- Chevron -->
@@ -157,8 +158,8 @@
                             <a href="{{request('lang') == 'en' ? $link['href'] . '?lang=en' : $link['href'] . '?lang=es'}}"
                                 :class="scrolled ? 'text-black' : 'text-white'"
                                 class="text-[15px] max-xl:text-[14px] font-normal hover:text-primary-orange 
-                                                                                                                       transition-colors duration-300 whitespace-nowrap leading-none
-                                                                                                                       {{ Request::is(ltrim($link['href'], '/')) ? 'font-bold' : '' }}">
+                                                                                                                                       transition-colors duration-300 whitespace-nowrap leading-none
+                                                                                                                                       {{ Request::is(ltrim($link['href'], '/')) ? 'font-bold' : '' }}">
                                 {{ $link['title'] }}
                             </a>
                         @endif
@@ -203,7 +204,7 @@
                     <div x-data="{ openProductosMobile: false }">
                         <button @click="openProductosMobile = !openProductosMobile"
                             class="w-full flex items-center justify-between px-4 py-3 max-sm:px-3 max-sm:py-2 text-sm max-sm:text-xs text-gray-700 hover:bg-gray-50 hover:text-primary-orange transition-colors duration-300 border-b border-gray-100
-                                                                                                                   {{ Request::is(ltrim($link['href'], '/')) ? 'font-bold bg-orange-50 text-primary-orange' : '' }}">
+                                                                                                                                   {{ Request::is(ltrim($link['href'], '/')) ? 'font-bold bg-orange-50 text-primary-orange' : '' }}">
                             <span>{{ $link['title'] }}</span>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                                 stroke="currentColor" class="w-4 h-4 transition-transform duration-200"
@@ -247,7 +248,7 @@
                 @else
                     <a href="{{request('lang') == 'en' ? $link['href'] . '?lang=en' : $link['href'] . '?lang=es'}}"
                         class="block px-4 py-3 max-sm:px-3 max-sm:py-2 text-sm max-sm:text-xs text-gray-700 hover:bg-gray-50 hover:text-primary-orange transition-colors duration-300 border-b border-gray-100 last:border-b-0
-                                                                                                               {{ Request::is(ltrim($link['href'], '/')) ? 'font-bold bg-orange-50 text-primary-orange' : '' }}"
+                                                                                                                               {{ Request::is(ltrim($link['href'], '/')) ? 'font-bold bg-orange-50 text-primary-orange' : '' }}"
                         @click="mobileMenuOpen = false">
                         {{ $link['title'] }}
                     </a>

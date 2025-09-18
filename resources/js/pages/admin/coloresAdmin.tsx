@@ -35,7 +35,7 @@ export default function ColoresAdmin() {
     // Manejadores para la paginación del backend
     const handlePageChange = (page) => {
         router.get(
-            route('admin.colores.index'),
+            route('admin.colores'),
             {
                 page: page,
                 search: searchTerm,
@@ -50,7 +50,7 @@ export default function ColoresAdmin() {
     // Función para realizar la búsqueda
     const handleSearch = () => {
         router.get(
-            route('admin.colores.index'),
+            route('admin.colores'),
             {
                 search: searchTerm,
                 page: 1, // Resetear a la primera página al buscar

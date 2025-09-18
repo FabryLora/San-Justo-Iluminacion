@@ -14,46 +14,46 @@
     </div>
 
     <div class="w-[1224px] mx-auto min-h-[40vh] py-20 flex flex-col gap-14" x-data="{ 
-                            showModal: false,
-                            isLoading: false,
-                            error: '',
-                            async submitForm() {
-                                this.isLoading = true;
-                                this.error = '';
+                                                            showModal: false,
+                                                            isLoading: false,
+                                                            error: '',
+                                                            async submitForm() {
+                                                                this.isLoading = true;
+                                                                this.error = '';
 
-                                const formData = new FormData(this.$refs.workForm);
+                                                                const formData = new FormData(this.$refs.workForm);
 
-                                try {
-                                    const response = await fetch('{{ route('trabaja.enviar') }}', {
-                                        method: 'POST',
-                                        body: formData,
-                                        headers: {
-                                            'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').getAttribute('content'),
-                                            'Accept': 'application/json'
-                                        }
-                                    });
+                                                                try {
+                                                                    const response = await fetch('{{ route('trabaja.enviar') }}', {
+                                                                        method: 'POST',
+                                                                        body: formData,
+                                                                        headers: {
+                                                                            'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').getAttribute('content'),
+                                                                            'Accept': 'application/json'
+                                                                        }
+                                                                    });
 
-                                    const data = await response.json();
+                                                                    const data = await response.json();
 
-                                    if (response.ok) {
-                                        this.showModal = true;
-                                        this.$refs.workForm.reset();
-                                    } else {
-                                        // Manejar errores de validación
-                                        if (data.errors) {
-                                            this.error = Object.values(data.errors).flat().join(', ');
-                                        } else {
-                                            this.error = data.message || '{{__("Hubo un error al enviar el formulario")}}';
-                                        }
-                                    }
-                                } catch (error) {
-                                    console.error('Error:', error);
-                                    this.error = '{{__("Error de conexión. Inténtalo de nuevo.")}}';
-                                } finally {
-                                    this.isLoading = false;
-                                }
-                            }
-                        }">
+                                                                    if (response.ok) {
+                                                                        this.showModal = true;
+                                                                        this.$refs.workForm.reset();
+                                                                    } else {
+                                                                        // Manejar errores de validación
+                                                                        if (data.errors) {
+                                                                            this.error = Object.values(data.errors).flat().join(', ');
+                                                                        } else {
+                                                                            this.error = data.message || '{{__("Hubo un error al enviar el formulario")}}';
+                                                                        }
+                                                                    }
+                                                                } catch (error) {
+                                                                    console.error('Error:', error);
+                                                                    this.error = '{{__("Error de conexión. Inténtalo de nuevo.")}}';
+                                                                } finally {
+                                                                    this.isLoading = false;
+                                                                }
+                                                            }
+                                                        }">
         <div class="flex flex-col">
             <h2 class="text-[32px] font-semibold font-custom!">
                 {{request('lang') == 'en' ? $trabaja->title_en : $trabaja->title_es}}
@@ -124,9 +124,10 @@
                     </span>
                 </button>
 
-                <p class="text-[16px] font-medium mt-4">
-                    {{__("Tambien podes enviarlo por mail a")}} {{ ": " . $trabaja->email}}
-                </p>
+                <a href="mailto:{{ $trabaja->email }}" class="text-[16px] font-medium mt-4">
+                    {{__("Tambien podes enviarlo por mail a")}}
+                    {{ ": " . $trabaja->email}}
+                </a>
             </form>
         </div>
 
@@ -163,7 +164,7 @@
 
                     <p class="text-[20px] font-medium max-w-[462px]">
                         {{__('Recibimos tu información correctamente.
-                                                                            Si tu perfil se ajusta a nuestras búsquedas, nos vamos a estar contactando con vos.')}}
+                                                                                                            Si tu perfil se ajusta a nuestras búsquedas, nos vamos a estar contactando con vos.')}}
                     </p>
 
 

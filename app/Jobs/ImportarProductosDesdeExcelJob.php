@@ -88,10 +88,8 @@ class ImportarProductosDesdeExcelJob implements ShouldQueue
             $ambientes = array_filter($ambiente_array, fn($value) => !is_null($value) && $value !== '');
 
 
-
             if ($espacio) {
                 $espacio_nuevo = Espacio::updateOrCreate(
-                    ['name_es' => $espacio],
                     ['name_es' => $espacio]
                 );
 

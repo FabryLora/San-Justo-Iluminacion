@@ -8,6 +8,7 @@
         #mapa {
             height: 500px;
             width: 100%;
+            filter: grayscale(100%);
         }
 
         .punto-venta-card {
@@ -35,10 +36,12 @@
     <div class="w-[1224px] mx-auto  py-20" x-data="mapaComponent()">
         <!-- Header -->
         <div class="mb-8">
-            <h1 class="text-[32px] font-semibold font-custom! mb-2">Encontranos en Argentina</h1>
-            <p class="text-[20px]!">San Justo Iluminación está presente en más de 1000 puntos de venta en todo el
-                país.</p>
-            <p class="text-[20px]!">Hacé zoom en el mapa y descubrí el local más cercano a tu ubicación.</p>
+            <h1 class="text-[32px] font-semibold font-custom! mb-2">
+                {{request('lang') == 'en' ? $contenido->title_en : $contenido->title_es}}
+            </h1>
+            <div class="text-[20px]!">
+                {!! request('lang') == 'en' ? $contenido->text_en : $contenido->text_es !!}
+            </div>
         </div>
 
         <!-- Filtros -->
@@ -212,24 +215,24 @@
 
                 crearPopup(punto) {
                     return `
-                                                                                                            <div class="p-2">
-                                                                                                                <h3 class="font-semibold text-gray-900 mb-2">${punto.nombre}</h3>
-                                                                                                                <p class="text-sm text-gray-600 mb-1">${punto.direccion}</p>
-                                                                                                                <p class="text-sm text-gray-500 mb-2">${punto.localidad}, ${punto.provincia}</p>
-                                                                                                                ${punto.telefono ? `<div class="flex items-center text-sm text-gray-600 mb-1">
-                                                                                                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
-                                                                                                                    </svg>
-                                                                                                                    ${punto.telefono}
-                                                                                                                </div>` : ''}
-                                                                                                                ${punto.email ? `<div class="flex items-center text-sm text-gray-600">
-                                                                                                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                                                                                                                    </svg>
-                                                                                                                    ${punto.email}
-                                                                                                                </div>` : ''}
-                                                                                                            </div>
-                                                                                                        `;
+                                                                                                                            <div class="p-2">
+                                                                                                                                <h3 class="font-semibold text-gray-900 mb-2">${punto.nombre}</h3>
+                                                                                                                                <p class="text-sm text-gray-600 mb-1">${punto.direccion}</p>
+                                                                                                                                <p class="text-sm text-gray-500 mb-2">${punto.localidad}, ${punto.provincia}</p>
+                                                                                                                                ${punto.telefono ? `<div class="flex items-center text-sm text-gray-600 mb-1">
+                                                                                                                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                                                                                                                                    </svg>
+                                                                                                                                    ${punto.telefono}
+                                                                                                                                </div>` : ''}
+                                                                                                                                ${punto.email ? `<div class="flex items-center text-sm text-gray-600">
+                                                                                                                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                                                                                                                    </svg>
+                                                                                                                                    ${punto.email}
+                                                                                                                                </div>` : ''}
+                                                                                                                            </div>
+                                                                                                                        `;
                 },
 
                 seleccionarPunto(punto) {

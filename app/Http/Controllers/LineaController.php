@@ -134,8 +134,7 @@ class LineaController extends Controller
         /* actualizar ambientes */
         if ($request->has('ambientes')) {
 
-            // Eliminar las relaciones existentes
-            LineaAmbiente::where('linea_id', $linea->id)->delete();
+
             // Crear nuevas relaciones
             foreach ($otherData['ambientes'] as $ambienteId) {
                 LineaAmbiente::create([

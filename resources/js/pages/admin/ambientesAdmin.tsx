@@ -35,7 +35,7 @@ export default function AmbientesAdmin() {
     // Manejadores para la paginación del backend
     const handlePageChange = (page) => {
         router.get(
-            route('admin.ambientes.index'),
+            route('admin.ambientes'),
             {
                 page: page,
                 search: searchTerm,
@@ -50,7 +50,7 @@ export default function AmbientesAdmin() {
     // Función para realizar la búsqueda
     const handleSearch = () => {
         router.get(
-            route('admin.ambientes.index'),
+            route('admin.ambientes'),
             {
                 search: searchTerm,
                 page: 1, // Resetear a la primera página al buscar

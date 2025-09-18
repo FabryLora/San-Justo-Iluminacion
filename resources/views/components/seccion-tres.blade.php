@@ -11,12 +11,7 @@
                 class="text-[20px] max-lg:text-[18px] max-md:text-[16px] max-sm:text-[15px] max-w-[528px] max-lg:max-w-full max-lg:mx-auto leading-relaxed text-gray-700">
                 {!!request('lang') == 'en' ? $homeInfo->text_seccion_tres_en : $homeInfo->text_seccion_tres_es !!}
             </p>
-            <div class="max-lg:flex max-lg:justify-center">
-                <a href="/trabaja-con-nosotros"
-                    class="text-[14px] max-sm:text-[13px] flex items-center justify-center font-medium h-[42px] max-sm:h-[44px] border max-w-[225px] max-sm:max-w-full max-sm:w-full rounded-sm border-primary-orange text-primary-orange hover:bg-primary-orange hover:text-white transition-colors duration-300">
-                    {{__("TRABAJA CON NOSOTROS")}}
-                </a>
-            </div>
+
         </div>
     </div>
     <div class="w-full max-lg:order-2">

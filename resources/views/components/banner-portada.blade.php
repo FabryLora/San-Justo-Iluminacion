@@ -1,8 +1,8 @@
-<div class="overflow-hidden min-h-[768px] max-sm:min-h-[500px]">
-    <div class="slider-track h-[768px] max-sm:h-fit flex transition-transform duration-500 ease-in-out justify-center">
+<div class="overflow-hidden min-h-[655px] max-sm:min-h-[500px]">
+    <div class="slider-track h-[655px] max-sm:h-fit flex transition-transform duration-500 ease-in-out justify-center">
 
         @php $ext = pathinfo($homeInfo->image_banner, PATHINFO_EXTENSION); @endphp
-        <div class="slider-item min-w-full relative h-[768px]  max-sm:h-[500px]">
+        <div class="slider-item min-w-full relative h-[655px]  max-sm:h-[500px]">
             <div class="absolute inset-0 bg-black z-0">
                 @if (in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp']))
                     <img src="{{ $homeInfo->image_banner }}" alt="Slider Image" class="w-full h-full object-cover"

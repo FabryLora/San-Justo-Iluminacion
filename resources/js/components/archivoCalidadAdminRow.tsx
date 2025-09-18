@@ -11,9 +11,9 @@ export default function ArchivoCalidadAdminRow({ archivo }) {
 
     const updateForm = useForm({
         order: archivo?.order,
-        name_es: archivo?.name,
+        name_es: archivo?.name_es,
         name_en: archivo?.name_en,
-        subtitle_es: archivo?.subtitle,
+        subtitle_es: archivo?.subtitle_es,
         subtitle_en: archivo?.subtitle_en,
         id: archivo?.id,
     });

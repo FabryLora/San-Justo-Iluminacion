@@ -5,8 +5,8 @@
         class="text-[32px] max-lg:text-[28px] max-md:text-[24px] max-sm:text-[20px] font-semibold font-custom! mb-6 max-lg:mb-5 max-md:mb-4 max-sm:mb-3">
         {{request('lang') == 'en' ? $titulo->title_en : $titulo->title_es  }}
     </h2>
-    <div class="flex flex-row max-lg:flex-col w-full gap-6 max-lg:gap-5 max-md:gap-4 max-sm:gap-3">
-        @foreach ($espacios as $espacio)
+    <div class="flex flex-row flex-wrap max-lg:flex-col w-full gap-6 max-lg:gap-5 max-md:gap-4 max-sm:gap-3">
+        @foreach ($espaciosHome as $espacio)
             <div x-data="{ isHovered: false }" @mouseenter="isHovered = true" @mouseleave="isHovered = false"
                 style="background-image: url('{{ asset("storage/" . $espacio->image) }}');"
                 class="w-[600px] max-lg:w-full h-[390px] max-lg:h-[350px] max-md:h-[300px] max-sm:h-[250px] rounded-bl-[70px] max-lg:rounded-bl-[50px] max-md:rounded-bl-[40px] max-sm:rounded-bl-[30px] rounded-tr-[70px] max-lg:rounded-tr-[50px] max-md:rounded-tr-[40px] max-sm:rounded-tr-[30px] overflow-hidden relative bg-no-repeat bg-center bg-cover">

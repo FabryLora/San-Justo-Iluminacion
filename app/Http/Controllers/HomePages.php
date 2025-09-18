@@ -35,8 +35,6 @@ class HomePages extends Controller
 {
     public function home()
     {
-
-
         $metadatos = Metadatos::where('title', 'Inicio')->first();
 
         $categorias = Categoria::orderBy('order', 'asc')->get();
@@ -45,10 +43,12 @@ class HomePages extends Controller
         $novedades = Novedades::where('featured', true)->orderBy('order', 'asc')->get();
 
         $catalogos = ArchivoCalidad::orderBy('order', 'asc')->get();
-        $espacios = Espacio::orderBy('order', 'asc')->with('usos')->get();
+        $espaciosHome = Espacio::where('destacado', true)->orderBy('order', 'asc')->with('usos')->get();
         $titulos = Titulo::orderBy('seccion')->get();
         $clientes = Cliente::orderBy('order', 'asc')->get();
         $lineas = Linea::orderBy('order', 'asc')->where('destacado', true)->get();
+
+
 
         return view('home', [
             'catalogos' => $catalogos,
@@ -57,7 +57,7 @@ class HomePages extends Controller
             'categorias' => $categorias,
             'subcategorias' => $subcategorias,
             'metadatos' => $metadatos,
-            'espacios' => $espacios,
+            'espaciosHome' => $espaciosHome,
             'titulos' => $titulos,
             'clientes' => $clientes,
             'lineas' => $lineas

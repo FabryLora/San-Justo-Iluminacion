@@ -27,6 +27,7 @@ class ActualizarPreciosJob implements ShouldQueue
         $this->lista_id = $lista_id;
     }
 
+
     public function handle()
     {
         $filePath = Storage::disk('public')->path($this->archivoPath);

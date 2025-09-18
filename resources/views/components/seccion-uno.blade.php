@@ -17,7 +17,7 @@
             {{request('lang') == 'en' ? $homeInfo->text_seccion_uno_en : $homeInfo->text_seccion_uno_es}}
         </p>
         <a href="/trabaja-con-nosotros"
-            class="flex justify-center items-center w-[280px] max-lg:w-[300px] max-md:w-[280px] max-sm:w-full max-sm:max-w-[280px] h-[42px] max-sm:h-[44px] bg-primary-orange rounded-sm font-medium text-[14px] max-sm:text-[13px] text-white hover:bg-orange-600 transition-colors duration-300 mt-2 max-lg:mt-1">
+            class="flex justify-center items-center w-[280px] max-lg:w-[300px] max-md:w-[280px] max-sm:w-full max-sm:max-w-[280px] h-[42px] max-sm:h-[44px] bg-primary-orange rounded-sm font-medium text-[14px] max-sm:text-[13px] text-white hover:bg-primary-orange/90 transition-colors duration-300 mt-2 max-lg:mt-1">
             {{__("DESCUBRI COMO TRABAJAMOS")}}
         </a>
     </div>

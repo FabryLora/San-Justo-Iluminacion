@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DondeComprarContenido;
 use App\Models\Provincia;
 use App\Models\PuntoVenta;
 use Illuminate\Http\Request;
@@ -20,13 +21,14 @@ class PuntoVentaController extends Controller
             ->get();
 
         $provincias = PuntoVenta::getProvincias();
+        $contenido = DondeComprarContenido::first();
 
         $localidades = [];
         if ($provincia) {
             $localidades = PuntoVenta::getLocalidadesPorProvincia($provincia);
         }
 
-        return view('donde-comprar', compact('puntosVenta', 'provincias', 'localidades', 'provincia', 'localidad'));
+        return view('donde-comprar', compact('puntosVenta', 'provincias', 'localidades', 'provincia', 'localidad', 'contenido'));
     }
 
     // API para obtener puntos de venta (AJAX)

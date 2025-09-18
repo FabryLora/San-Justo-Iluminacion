@@ -13,7 +13,7 @@ class DondeComprarContenidoController extends Controller
     public function index()
     {
         $contenido = DondeComprarContenido::first();
-        return inertia('admin/dondeComprarContenido', ['contenido' => $contenido]);
+        return inertia('admin/dondeComprarContenido', ['dondeComprarContenido' => $contenido]);
     }
 
 

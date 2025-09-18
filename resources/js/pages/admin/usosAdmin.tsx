@@ -35,7 +35,7 @@ export default function UsosAdmin() {
     // Manejadores para la paginación del backend
     const handlePageChange = (page) => {
         router.get(
-            route('admin.usos.index'),
+            route('admin.usos'),
             {
                 page: page,
                 search: searchTerm,
@@ -50,7 +50,7 @@ export default function UsosAdmin() {
     // Función para realizar la búsqueda
     const handleSearch = () => {
         router.get(
-            route('admin.usos.index'),
+            route('admin.usos'),
             {
                 search: searchTerm,
                 page: 1, // Resetear a la primera página al buscar
