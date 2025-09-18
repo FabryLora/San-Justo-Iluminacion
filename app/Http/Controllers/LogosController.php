@@ -30,6 +30,7 @@ class LogosController extends Controller
         $data = $request->validate([
             'logo_principal' => 'sometimes|file',
             'logo_secundario' => 'sometimes|file',
+            'logo_tres' => 'sometimes|file',
         ]);
 
         $logos = Logos::first();
@@ -41,6 +42,9 @@ class LogosController extends Controller
             }
             if (isset($data['logo_secundario'])) {
                 $data['logo_secundario'] = $request->file('logo_secundario')->store('logos', 'public');
+            }
+            if (isset($data['logo_tres'])) {
+                $data['logo_tres'] = $request->file('logo_tres')->store('logos', 'public');
             }
             Logos::create($data);
         } else {
@@ -58,6 +62,13 @@ class LogosController extends Controller
                     Storage::disk('public')->delete($logos->getRawOriginal('logo_secundario'));
                 }
                 $data['logo_secundario'] = $request->file('logo_secundario')->store('logos', 'public');
+            }
+
+            if ($request->hasFile('logo_tres')) {
+                if ($logos->getRawOriginal('logo_tres')) {
+                    Storage::disk('public')->delete($logos->getRawOriginal('logo_tres'));
+                }
+                $data['logo_tres'] = $request->file('logo_tres')->store('logos', 'public');
             }
 
             $logos->update($data);

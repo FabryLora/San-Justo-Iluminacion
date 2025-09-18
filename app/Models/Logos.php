@@ -16,4 +16,9 @@ class Logos extends Model
     {
         return url("storage/" . $value);
     }
+
+    public function getLogoTresAttribute($value)
+    {
+        return url("storage/" . $value);
+    }
 }

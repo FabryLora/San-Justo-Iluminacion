@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('logo_principal')->nullable();
             $table->string('logo_secundario')->nullable();
+            $table->string('logo_tres')->nullable();
             $table->timestamps();
         });
     }

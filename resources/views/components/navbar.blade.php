@@ -13,6 +13,7 @@
     ];
     /* dd($espacios->first()->usos()->first()->name_es); */
 
+
 @endphp
 
 <div x-data="{
@@ -24,7 +25,7 @@
         mobileMenuOpen: false,
         espacioSelected: null,
         logoPrincipal: '{{ $logos->logo_principal ?? '' }}',
-        logoSecundario: '{{ $logos->logo_secundario ?? '' }}',
+        logoSecundario: '{{ $logos->logo_tres ?? '' }}',
         switchToLogin() {
             this.modalType = 'login';
         },
@@ -64,7 +65,7 @@
         class="mx-auto flex h-[96px] max-lg:h-[80px] max-md:h-[70px] max-sm:h-[60px] w-[1224px] max-w-[1224px] max-xl:w-full max-xl:px-6 max-lg:px-4 max-sm:px-3 items-center justify-between">
         <!-- Logo -->
         <div class="flex flex-row items-center h-fit gap-10 max-lg:gap-6 max-md:gap-4 w-full justify-between">
-            <a class="min-w-[258px] max-lg:min-w-[200px] max-md:min-w-[180px] max-sm:min-w-[150px] min-h-[57px] max-lg:min-h-[45px] max-md:min-h-[40px] max-sm:min-h-[35px]"
+            <a class="min-w-[258px] flex items-end self-end max-lg:min-w-[200px] max-md:min-w-[180px] max-sm:min-w-[150px] min-h-[57px] max-lg:min-h-[45px] max-md:min-h-[40px] max-sm:min-h-[35px]"
                 href="{{request('lang') == 'en' ? "/" . '?lang=en' : "/" . '?lang=es'}}">
                 <img class="w-full h-full object-contain" :src="scrolled ? logoSecundario : logoPrincipal" alt="Logo" />
             </a>
@@ -106,8 +107,8 @@
                             <div class="" @click.away="openProductos = false">
                                 <button type="button" @click="openProductos = !openProductos; espacioSelected = null"
                                     class="flex items-center gap-1 text-[15px] max-xl:text-[14px] font-normal 
-                                                                                                                                           transition-colors duration-300 whitespace-nowrap leading-none
-                                                                                                                                           {{ Request::is(ltrim($link['href'], '/')) ? 'font-bold' : '' }}"
+                                                                                                                                                                                                                                           transition-colors duration-300 whitespace-nowrap leading-none
+                                                                                                                                                                                                                                           {{ Request::is(ltrim($link['href'], '/')) ? 'font-bold' : '' }}"
                                     :class="scrolled ? 'text-black' : 'text-white'">
                                     {{ $link['title'] }}
                                     <!-- Chevron -->
@@ -157,9 +158,9 @@
                         @else
                             <a href="{{request('lang') == 'en' ? $link['href'] . '?lang=en' : $link['href'] . '?lang=es'}}"
                                 :class="scrolled ? 'text-black' : 'text-white'"
-                                class="text-[15px] max-xl:text-[14px] font-normal hover:text-primary-orange 
-                                                                                                                                       transition-colors duration-300 whitespace-nowrap leading-none
-                                                                                                                                       {{ Request::is(ltrim($link['href'], '/')) ? 'font-bold' : '' }}">
+                                class="text-[15px] max-xl:text-[14px]  hover:text-primary-orange 
+                                                                                                                               transition-colors duration-300 whitespace-nowrap leading-none
+                                                                                                                              {{ request()->fullUrl() == (request('lang') == 'en' ? asset($link['href'] . '?lang=en') : asset($link['href'] . '?lang=es')) ? 'font-medium!' : 'font-normal' }}">
                                 {{ $link['title'] }}
                             </a>
                         @endif
@@ -204,7 +205,7 @@
                     <div x-data="{ openProductosMobile: false }">
                         <button @click="openProductosMobile = !openProductosMobile"
                             class="w-full flex items-center justify-between px-4 py-3 max-sm:px-3 max-sm:py-2 text-sm max-sm:text-xs text-gray-700 hover:bg-gray-50 hover:text-primary-orange transition-colors duration-300 border-b border-gray-100
-                                                                                                                                   {{ Request::is(ltrim($link['href'], '/')) ? 'font-bold bg-orange-50 text-primary-orange' : '' }}">
+                                                                                                                                                                                                                                   {{ Request::is(ltrim($link['href'], '/')) ? 'font-bold bg-orange-50 text-primary-orange' : '' }}">
                             <span>{{ $link['title'] }}</span>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                                 stroke="currentColor" class="w-4 h-4 transition-transform duration-200"
@@ -248,7 +249,7 @@
                 @else
                     <a href="{{request('lang') == 'en' ? $link['href'] . '?lang=en' : $link['href'] . '?lang=es'}}"
                         class="block px-4 py-3 max-sm:px-3 max-sm:py-2 text-sm max-sm:text-xs text-gray-700 hover:bg-gray-50 hover:text-primary-orange transition-colors duration-300 border-b border-gray-100 last:border-b-0
-                                                                                                                               {{ Request::is(ltrim($link['href'], '/')) ? 'font-bold bg-orange-50 text-primary-orange' : '' }}"
+                                                                                                                                                                                                                               {{ Request::is(ltrim($link['href'], '/')) ? 'font-bold bg-orange-50 text-primary-orange' : '' }}"
                         @click="mobileMenuOpen = false">
                         {{ $link['title'] }}
                     </a>
