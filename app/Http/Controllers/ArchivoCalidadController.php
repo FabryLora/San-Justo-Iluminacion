@@ -76,7 +76,7 @@ class ArchivoCalidadController extends Controller
             $oldImagePath = $archivoCalidad->getRawOriginal('archivo');
 
             // Guardar el nuevo archivo
-            $data['image'] = $request->file('archivo')->store('archivos', 'public');
+            $data['archivo'] = $request->file('archivo')->store('images', 'public');
 
             // Eliminar el archivo antiguo si existe
             if ($oldImagePath && Storage::disk('public')->exists($oldImagePath)) {

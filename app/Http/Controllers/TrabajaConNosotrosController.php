@@ -26,7 +26,7 @@ class TrabajaConNosotrosController extends Controller
                 'apellido' => 'required|string|max:255',
                 'telefono' => 'required|string|max:255',
                 'email' => 'required|email|max:255',
-                'archivo' => 'required|file|mimes:pdf,doc,docx,png|max:2048',
+                'archivo' => 'required|file',
             ]);
 
             Mail::to(TrabajaConNosotros::first()->email)->send(new TrabajaConNosotrosMail($data, $request->file('archivo')));

@@ -33,8 +33,8 @@
                         <div class="flex items-center w-full justify-center h-[544px] border rounded-sm">
                             @if ($producto->imagenes->first())
                                 <img id="mainImage" class="rounded-sm" src="{{ $producto->imagenes->first()->image }}"
-                                    alt="{{ $producto->name }}"
-                                    class="w-full h-full object-cover object-center transition-opacity duration-300 ease-in-out">
+                                    alt="{{ $producto->name }}" 
+                                    class="w-full h-full object-cover object-center transition-opacity duration-300 ease-in-out" onerror="this.onerror=null; this.src='{{$logos->logo_secundario}}'; this.classList.remove('object-cover'); this.classList.add('object-contain', 'p-4', 'bg-gray-50');">
                             @else
                                 <div
                                     class="w-full h-full bg-gray-100 text-gray-400 flex items-center justify-center transition-opacity duration-300 ease-in-out">
@@ -48,7 +48,7 @@
                                 <div class="border border-gray-200 w-[78px] h-[78px] cursor-pointer hover:border-main-color rounded-sm max-sm:w-[60px] max-sm:h-[60px]
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             {{ $loop->first ? 'border-main-color' : '' }}"
                                     onclick="changeMainImage('{{ $imagen->image }}', this)">
-                                    <img src="{{ $imagen->image }}" alt="Thumbnail"
+                                    <img src="{{ $imagen->image }}" onerror="this.onerror=null; this.src='{{$logos->logo_secundario}}'; this.classList.remove('object-cover'); this.classList.add('object-contain', 'p-4', 'bg-gray-50');" alt="Thumbnail"
                                         class="w-full h-full object-cover rounded-sm">
                                 </div>
                             @endforeach
@@ -140,7 +140,7 @@
                     </div>
 
                     <div class="w-full h-[651px]">
-                        <img src="{{ asset("storage/" . $producto->linea->image) }}" alt="{{ $producto->linea->name }}"
+                        <img src="{{ asset("storage/" . $producto->linea->image) }}" onerror="this.onerror=null; this.src='{{$logos->logo_secundario}}'; this.classList.remove('object-cover'); this.classList.add('object-contain', 'p-4', 'bg-gray-50');" alt="{{ $producto->linea->name }}"
                             class="w-full h-full object-cover rounded-tr-[70px] rounded-bl-[70px] ">
                     </div>
                 </div>
@@ -158,7 +158,7 @@
                             <div class="h-full flex flex-col">
                                 @if ($prodRelacionado->imagenes->count() > 0)
                                     <div class="relative min-h-[287px] max-lg:min-h-[250px] max-md:min-h-[220px] max-sm:h-[200px] overflow-hidden">
-                                        <img src="{{ $prodRelacionado->imagenes->first()->image}}" alt="{{ $prodRelacionado->name }}"
+                                        <img src="{{ $prodRelacionado->imagenes->first()->image}}" onerror="this.onerror=null; this.src='{{$logos->logo_secundario}}'; this.classList.remove('object-cover'); this.classList.add('object-contain', 'p-4', 'bg-gray-50');" alt="{{ $prodRelacionado->name }}"
                                             class="w-full h-full object-cover rounded-t-sm group-hover:scale-105 transition-transform duration-300">
                                         <h2 class="absolute left-3 bottom-2 text-[14px] max-md:text-[13px] max-sm:text-[12px] font-semibold uppercase text-primary-orange bg-white/90 px-2 py-1 rounded max-sm:left-2 max-sm:bottom-1">
                                             {{$prodRelacionado->categoria->name ?? ''}}
@@ -166,7 +166,7 @@
                                     </div>
                                 @else
                                     <div class="relative min-h-[287px] max-lg:min-h-[250px] max-md:min-h-[220px] max-sm:h-[200px] bg-gray-50 flex items-center justify-center overflow-hidden">
-                                        <img src="{{$logos->logo_principal}}" alt="{{ $prodRelacionado->name }}"
+                                        <img src="{{$logos->logo_principal}}" alt="{{ $prodRelacionado->name }}" onerror="this.onerror=null; this.src='{{$logos->logo_secundario}}'; this.classList.remove('object-cover'); this.classList.add('object-contain', 'p-4', 'bg-gray-50');"
                                             class="w-full h-full object-contain rounded-t-sm p-4 max-sm:p-3 group-hover:scale-105 transition-transform duration-300">
                                         <h2 class="absolute left-3 bottom-2 text-[14px] max-md:text-[13px] max-sm:text-[12px] font-semibold uppercase text-primary-orange bg-white/90 px-2 py-1 rounded max-sm:left-2 max-sm:bottom-1">
                                             {{$prodRelacionado->categoria->name ?? ''}}

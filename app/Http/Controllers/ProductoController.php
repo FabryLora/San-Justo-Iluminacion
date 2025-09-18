@@ -97,7 +97,7 @@ class ProductoController extends Controller
 
         // Aplicar ordenamiento por defecto
         $query->orderBy('order', 'asc');
-        $query->where('name', '!=', "#N/D");
+
         // Ejecutar query con paginación
         $productos = $query
             ->paginate(15)
@@ -170,12 +170,12 @@ class ProductoController extends Controller
 
     public function show($codigo, Request $request)
     {
-        $producto = Producto::with(['imagenes', 'colores'])->where('code', $codigo)->where('name', "!=", "#N/D")->first();
+        $producto = Producto::with(['imagenes', 'colores'])->where('code', $codigo)->first();
 
 
 
         // Obtener productos relacionados por marca y modelo
-        $productosRelacionados = Producto::where('id', '!=', $producto->id)->where('name', "!=", "#N/D")->orderBy('order', 'asc')->limit(3)->get();
+        $productosRelacionados = Producto::where('id', '!=', $producto->id)->orderBy('order', 'asc')->limit(3)->get();
 
         return view('producto', [
             'producto' => $producto,
