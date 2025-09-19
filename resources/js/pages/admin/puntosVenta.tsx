@@ -20,20 +20,6 @@ export default function PuntosVenta() {
         activo: true,
     });
 
-    const signup = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        post(route('register'), {
-            onSuccess: () => {
-                toast.success('Punto de venta registrado correctamente');
-                setCreateView(false);
-            },
-            onError: (error) => {
-                toast.error('Error al registrar el punto de venta');
-                console.error('Error al registrar el punto de venta:', error);
-            },
-        });
-    };
-
     const [searchTerm, setSearchTerm] = useState('');
     const [createView, setCreateView] = useState(false);
     const [subirView, setSubirView] = useState(false);
@@ -42,7 +28,7 @@ export default function PuntosVenta() {
     // Manejadores para la paginación del backend
     const handlePageChange = (page) => {
         router.get(
-            route('admin.clientes'),
+            route('admin.donde-comprar'),
             {
                 page: page,
                 search: searchTerm,
@@ -57,7 +43,7 @@ export default function PuntosVenta() {
     // Función para realizar la búsqueda
     const handleSearch = () => {
         router.get(
-            route('admin.clientes'),
+            route('admin.donde-comprar'),
             {
                 search: searchTerm,
                 page: 1, // Resetear a la primera página al buscar
@@ -67,6 +53,32 @@ export default function PuntosVenta() {
                 preserveScroll: true,
             },
         );
+    };
+
+    const store = (e) => {
+        e.preventDefault();
+
+        post(route('admin.donde-comprar.store'), {
+            onSuccess: () => {
+                toast.success('Punto de venta creado correctamente');
+                setCreateView(false);
+                setData({
+                    nombre: '',
+                    direccion: '',
+                    provincia: '',
+                    localidad: '',
+                    telefono: '',
+                    email: '',
+                    latitud: '',
+                    longitud: '',
+                    activo: true,
+                });
+            },
+            onError: (errors) => {
+                toast.error('Error al crear el punto de venta');
+                console.log(errors);
+            },
+        });
     };
 
     const importarClientes = (e) => {
@@ -103,7 +115,7 @@ export default function PuntosVenta() {
                             className="fixed top-0 left-0 z-50 flex h-full w-full items-center justify-center bg-black/50 text-left"
                         >
                             <form
-                                onSubmit={signup}
+                                onSubmit={store}
                                 className="flex h-fit max-h-[90vh] w-[600px] flex-col gap-6 overflow-y-auto bg-white p-5 shadow-md"
                             >
                                 <h2 className="text-xl font-bold text-black">Agregar puntos de venta</h2>
@@ -339,7 +351,7 @@ export default function PuntosVenta() {
                                 </tr>
                             </thead>
                             <tbody className="text-center">
-                                {puntosVenta?.map((puntoVenta) => <PuntosAdminRow key={puntoVenta.id} puntoVenta={puntoVenta} />)}
+                                {puntosVenta.data?.map((puntoVenta) => <PuntosAdminRow key={puntoVenta.id} puntoVenta={puntoVenta} />)}
                             </tbody>
                         </table>
                     </div>

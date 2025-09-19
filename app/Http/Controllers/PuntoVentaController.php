@@ -90,9 +90,19 @@ class PuntoVentaController extends Controller
         return response()->json($todasLocalidades);
     }
 
-    public function indexAdmin()
+    public function indexAdmin(Request $request)
     {
-        $puntosVenta = PuntoVenta::orderBy('nombre')->get();
+        $perPage = $request->input('per_page', 10);
+
+        $query = PuntoVenta::query()->orderBy('nombre',  'asc');
+
+        if ($request->has('search') && !empty($request->search)) {
+            $searchTerm = $request->search;
+            $query->where('nombre', 'LIKE', '%' . $searchTerm . '%');
+        }
+
+        $puntosVenta = $query->paginate($perPage);
+
         $provincias = Provincia::orderBy('name')->with('localidades')->get();
         return inertia('admin/puntosVenta', ['puntosVenta' => $puntosVenta, 'provincias' => $provincias]);
     }

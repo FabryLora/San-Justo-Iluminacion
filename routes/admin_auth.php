@@ -242,7 +242,7 @@ Route::middleware('auth:admin')->group(function () {
     Route::get('admin/comercio-tarjetas', [ComercioTarjetasController::class, 'index'])->name('admin.comercio-tarjetas');
     Route::post('admin/comercio-tarjetas', [ComercioTarjetasController::class, 'store'])->name('admin.comercio-tarjetas.store');
     Route::post('admin/comercio-tarjetas/update', [ComercioTarjetasController::class, 'update'])->name('admin.comercio-tarjetas.update');
-    Route::delete('admin/comercio-tarjetas/destroy', [ComercioTarjetasController::class, 'destroy'])->name('admin.comercio-tarjetas.destroy');
+    Route::post('admin/comercio-tarjetas/destroy', [ComercioTarjetasController::class, 'destroy'])->name('admin.comercio-tarjetas.destroy');
 
     Route::get('admin/recursos', [RecursosController::class, 'index'])->name('admin.recursos');
     Route::post('admin/recursos', [RecursosController::class, 'update'])->name('admin.recursos.update');
@@ -250,7 +250,7 @@ Route::middleware('auth:admin')->group(function () {
     Route::get('admin/donde-comprar', [PuntoVentaController::class, 'indexAdmin'])->name('admin.donde-comprar');
     Route::post('admin/donde-comprar', [PuntoVentaController::class, 'store'])->name('admin.donde-comprar.store');
     Route::post('admin/donde-comprar/update', [PuntoVentaController::class, 'update'])->name('admin.donde-comprar.update');
-    Route::delete('admin/donde-comprar/destroy', [PuntoVentaController::class, 'destroy'])->name('admin.donde-comprar.destroy');
+    Route::post('admin/donde-comprar/destroy', [PuntoVentaController::class, 'destroy'])->name('admin.donde-comprar.destroy');
 
     Route::get('admin/donde-comprar-contenido', [DondeComprarContenidoController::class, 'index'])->name('admin.donde-comprar-contenido');
     Route::post('admin/donde-comprar-contenido/update', [DondeComprarContenidoController::class, 'update'])->name('admin.donde-comprar-contenido.update');
@@ -258,5 +258,5 @@ Route::middleware('auth:admin')->group(function () {
     Route::get('admin/colores', [ColorController::class, 'index'])->name('admin.colores');
     Route::post('admin/colores', [ColorController::class, 'store'])->name('admin.colores.store');
     Route::post('admin/colores/update', [ColorController::class, 'update'])->name('admin.colores.update');
-    Route::delete('admin/colores/destroy', [ColorController::class, 'destroy'])->name('admin.colores.destroy');
+    Route::post('admin/colores/destroy', [ColorController::class, 'destroy'])->name('admin.colores.destroy');
 });

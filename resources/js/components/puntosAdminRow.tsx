@@ -20,12 +20,13 @@ export default function PuntosAdminRow({ puntoVenta }) {
         latitud: puntoVenta?.latitud,
         longitud: puntoVenta?.longitud,
         activo: puntoVenta?.activo,
+        id: puntoVenta?.id,
     });
 
     const update = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        post(route('admin.puntos-venta.update'), {
+        post(route('admin.donde-comprar.update'), {
             preserveScroll: true,
             onSuccess: () => {
                 toast.success('Punto de venta actualizado correctamente');
@@ -40,7 +41,7 @@ export default function PuntosAdminRow({ puntoVenta }) {
 
     const deletePuntoVenta = () => {
         if (confirm('¿Estas seguro de eliminar este punto de venta?')) {
-            post(route('admin.puntos-venta.destroy'), {
+            post(route('admin.donde-comprar.destroy'), {
                 preserveScroll: true,
                 onSuccess: () => {
                     toast.success('Punto de venta eliminada correctamente');
