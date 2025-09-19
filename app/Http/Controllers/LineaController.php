@@ -22,7 +22,7 @@ class LineaController extends Controller
 
         if ($request->has('search') && !empty($request->search)) {
             $searchTerm = $request->search;
-            $query->where('name', 'LIKE', '%' . $searchTerm . '%');
+            $query->where('name_es', 'LIKE', '%' . $searchTerm . '%')->orWhere('name_en', 'LIKE', '%' . $searchTerm . '%');
         }
 
         $lineas = $query->paginate($perPage);
