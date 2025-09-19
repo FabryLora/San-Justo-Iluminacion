@@ -33,7 +33,9 @@ Route::middleware(['LocaleMiddleware'])->group(function () {
     Route::post('/contacto/sendemail', [ContactoController::class, 'sendContact'])->name('send.contact');
     Route::post('/trabaja-con-nosotros/enviar', [TrabajaConNosotrosController::class, 'mandarMail'])->name('trabaja.enviar');
     # ---------------------- Rutas de zona pública ---------------------- #
-
+    Route::get('/donde-comprar', [PuntoVentaController::class, 'index'])->name('donde-comprar.index');
+    Route::get('/donde-comprar/api', [PuntoVentaController::class, 'api'])->name('donde-comprar.api');
+    Route::get('/donde-comprar/localidades', [PuntoVentaController::class, 'getLocalidades'])->name('donde-comprar.localidades');
 
 
     Route::get('/productos', [ProductoController::class, 'indexVistaPrevia'])->name('productos');

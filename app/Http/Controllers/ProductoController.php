@@ -175,7 +175,7 @@ class ProductoController extends Controller
 
 
         // Obtener productos relacionados por marca y modelo
-        $productosRelacionados = Producto::where('id', '!=', $producto->id)->orderBy('order', 'asc')->limit(3)->get();
+        $productosRelacionados = Producto::where('id', '!=', $producto->id)->orderBy('order', 'asc')->limit(4)->get();
 
         return view('producto', [
             'producto' => $producto,

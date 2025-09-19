@@ -239,20 +239,20 @@ export default function ComercioExterior() {
                     <TextInput key={f.name} {...f} data={data} setData={setData} errors={errors} />
                 ))}
 
+                <ImagePicker name="image_seccion_tres" label="Imagen" previewUrl={banner?.image_seccion_tres} data={data} setData={setData} />
+
                 <ImagePicker
-                    name="image_seccion_tres_tres"
-                    label="Imagen"
-                    previewUrl={banner?.image_seccion_tres_tres}
+                    name="image_seccion_tres_dos"
+                    label="Icono 1"
+                    previewUrl={banner?.image_seccion_tres_dos}
                     data={data}
                     setData={setData}
                 />
 
-                <ImagePicker name="image_seccion_tres" label="Icono 1" previewUrl={banner?.image_seccion_tres} data={data} setData={setData} />
-
                 <ImagePicker
-                    name="image_seccion_tres_dos"
+                    name="image_seccion_tres_tres"
                     label="Icono 2"
-                    previewUrl={banner?.image_seccion_tres_dos}
+                    previewUrl={banner?.image_seccion_tres_tres}
                     data={data}
                     setData={setData}
                 />

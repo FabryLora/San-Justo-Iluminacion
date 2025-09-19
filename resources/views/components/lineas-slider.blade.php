@@ -100,7 +100,7 @@
                                 @foreach ($chunk as $linea)
                                     <div class="w-[392px] h-[554px] flex flex-col justify-between">
                                         <div
-                                            class="w-[392px] min-h-[392px] rounded-tl-[36px] rounded-br-[36px] overflow-hidden">
+                                            class="w-[392px] min-h-[392px] rounded-tr-[70px] rounded-bl-[70px] overflow-hidden">
                                             <img src="{{ asset("storage/" . $linea->image) }}" alt="cliente"
                                                 class="w-full h-full object-cover">
                                         </div>
@@ -144,7 +144,7 @@
                             <div class="grid grid-cols-2 gap-4 min-w-full justify-center">
                                 @foreach ($chunk as $linea)
                                     <div class="max-w-[350px] w-full mx-auto flex flex-col justify-between h-[480px]">
-                                        <div class="w-full min-h-[300px] rounded-tl-[30px] rounded-br-[30px] overflow-hidden">
+                                        <div class="w-full min-h-[300px] rounded-tr-[70px] rounded-bl-[70px] overflow-hidden">
                                             <img src="{{ asset("storage/" . $linea->image) }}" alt="cliente"
                                                 class="w-full h-full object-cover">
                                         </div>
@@ -183,7 +183,7 @@
                         @foreach ($lineas as $linea)
                             <div class="min-w-full flex justify-center px-2">
                                 <div
-                                    class="max-w-[300px] w-full bg-white rounded-tl-[20px] rounded-br-[20px] overflow-hidden shadow-sm">
+                                    class="max-w-[300px] w-full bg-white rounded-tr-[70px] rounded-bl-[70px] overflow-hidden shadow-sm">
                                     <div class="w-full h-[200px] max-sm:h-[180px]">
                                         <img src="{{ asset("storage/" . $linea->image) }}" alt="cliente"
                                             class="w-full h-full object-cover">
@@ -235,19 +235,33 @@
                         stroke="currentColor" stroke-width="2">
                         <path d="M9 18l6-6-6-6" />
                     </svg>
-            </div>
-        </div>
+                </button> <!-- ✅ Cerrar el botón correctamente -->
+            </div> <!-- ✅ Cerrar el contenedor de controles de navegación -->
 
-        <!-- Indicadores de paginación con forma de barras (solo desktop) -->
-        <template x-if="totalSlides > 1">
-            <div class="hidden lg:flex justify-center space-x-2 mt-16 max-lg:mt-12">
-                <template x-for="(slide, index) in Array.from({length: totalSlides})" :key="index">
-                    <button @click="goToSlide(index)"
-                        :class="{ 'bg-gray-800': activeSlide === index, 'bg-gray-300': activeSlide !== index }"
-                        class="w-10 h-1.5 rounded-full cursor-pointer transition-colors duration-300 hover:bg-gray-600"></button>
-                </template>
-            </div>
-        </template>
+            <!-- Indicadores de paginación con forma de barras (solo desktop) -->
+            <template x-if="totalSlides > 1">
+                <div class="hidden lg:flex justify-center space-x-2 mt-16 max-lg:mt-12">
+                    <template x-for="(slide, index) in Array.from({length: totalSlides})" :key="index">
+                        <button @click="goToSlide(index)"
+                            :class="{ 'bg-gray-800': activeSlide === index, 'bg-gray-300': activeSlide !== index }"
+                            class="w-10 h-1.5 rounded-full cursor-pointer transition-colors duration-300 hover:bg-gray-600">
+                        </button>
+                    </template>
+                </div>
+            </template>
+        </div>
     </div>
+
+    <!-- Indicadores de paginación con forma de barras (solo desktop) -->
+    <template x-if="totalSlides > 1">
+        <div class="hidden lg:flex justify-center space-x-2 mt-16 max-lg:mt-12">
+            <template x-for="(slide, index) in Array.from({length: totalSlides})" :key="index">
+                <button @click="goToSlide(index)"
+                    :class="{ 'bg-gray-800': activeSlide === index, 'bg-gray-300': activeSlide !== index }"
+                    class="w-10 h-1.5 rounded-full cursor-pointer transition-colors duration-300 hover:bg-gray-600"></button>
+            </template>
+        </div>
+    </template>
+</div>
 </div>
 </div>

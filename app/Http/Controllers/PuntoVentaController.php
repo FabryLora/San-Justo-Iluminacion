@@ -20,12 +20,13 @@ class PuntoVentaController extends Controller
             ->porLocalidad($localidad)
             ->get();
 
-        $provincias = PuntoVenta::getProvincias();
+        $provincias = Provincia::orderBy('name')->with('localidades')->get();
         $contenido = DondeComprarContenido::first();
 
         $localidades = [];
         if ($provincia) {
-            $localidades = PuntoVenta::getLocalidadesPorProvincia($provincia);
+            $provinciaObj = Provincia::where('name', $provincia)->with('localidades')->first();
+            $localidades = $provinciaObj ? $provinciaObj->localidades : [];
         }
 
         return view('donde-comprar', compact('puntosVenta', 'provincias', 'localidades', 'provincia', 'localidad', 'contenido'));
@@ -36,11 +37,23 @@ class PuntoVentaController extends Controller
     {
         $provincia = $request->get('provincia');
         $localidad = $request->get('localidad');
+        $nombre = $request->get('nombre');
 
-        $puntosVenta = PuntoVenta::activos()
-            ->porProvincia($provincia)
-            ->porLocalidad($localidad)
-            ->get();
+        $query = PuntoVenta::activos();
+
+        if ($provincia) {
+            $query->porProvincia($provincia);
+        }
+
+        if ($localidad) {
+            $query->porLocalidad($localidad);
+        }
+
+        if ($nombre) {
+            $query->where('nombre', $nombre);
+        }
+
+        $puntosVenta = $query->get();
 
         return response()->json($puntosVenta);
     }
@@ -49,9 +62,32 @@ class PuntoVentaController extends Controller
     public function getLocalidades(Request $request)
     {
         $provincia = $request->get('provincia');
-        $localidades = PuntoVenta::getLocalidadesPorProvincia($provincia);
 
-        return response()->json($localidades);
+        if (!$provincia) {
+            return response()->json([]);
+        }
+
+        // Obtener localidades desde la tabla de provincias/localidades
+        $provinciaObj = Provincia::where('name', $provincia)->with('localidades')->first();
+        $localidadesDB = $provinciaObj ? $provinciaObj->localidades : collect([]);
+
+        // También obtener localidades únicas desde los puntos de venta
+        $localidadesPuntos = PuntoVenta::where('provincia', $provincia)
+            ->whereNotNull('localidad')
+            ->distinct()
+            ->pluck('localidad')
+            ->filter()
+            ->map(function ($nombre) {
+                return ['name' => $nombre];
+            });
+
+        // Combinar y eliminar duplicados
+        $todasLocalidades = $localidadesDB->concat($localidadesPuntos)
+            ->unique('name')
+            ->sortBy('name')
+            ->values();
+
+        return response()->json($todasLocalidades);
     }
 
     public function indexAdmin()
@@ -74,9 +110,6 @@ class PuntoVentaController extends Controller
             'email' => 'nullable|sometimes|email|max:255',
             'activo' => 'sometimes|boolean',
         ]);
-
-
-
         PuntoVenta::create($data);
     }
 
@@ -93,9 +126,6 @@ class PuntoVentaController extends Controller
             'email' => 'nullable|sometimes|email|max:255',
             'activo' => 'sometimes|boolean',
         ]);
-
-
-
         $puntoVenta = PuntoVenta::find($request->id);
         $puntoVenta->update($data);
     }

@@ -55,7 +55,7 @@ export default function NosotrosTarjetas() {
                             exit={{ opacity: 0 }}
                             className="fixed top-0 left-0 z-50 flex h-full w-full items-center justify-center bg-black/50 text-left"
                         >
-                            <form onSubmit={handleSubmit} method="POST" className="text-black">
+                            <form onSubmit={handleSubmit} method="POST" className="max-h-[90vh] overflow-y-auto text-black">
                                 <div className="w-[800px] rounded-md bg-white p-4">
                                     <h2 className="mb-4 text-2xl font-semibold">Cargar tarjeta</h2>
                                     <div className="grid grid-cols-2 gap-4">
@@ -97,13 +97,13 @@ export default function NosotrosTarjetas() {
                                             <label htmlFor="subtitulo">
                                                 Texto {'(Español)'} <span className="text-red-500">*</span>
                                             </label>
-                                            <CustomReactQuill value={textEs} onChange={setTextEs} />
+                                            <CustomReactQuill additionalStyles="max-w-[380px]" value={textEs} onChange={setTextEs} />
                                         </div>
                                         <div className="flex flex-col gap-2">
                                             <label htmlFor="subtitulo_en">
                                                 Texto {'(Inglés)'} <span className="text-red-500">*</span>
                                             </label>
-                                            <CustomReactQuill value={textEn} onChange={setTextEn} />
+                                            <CustomReactQuill additionalStyles="max-w-[380px]" value={textEn} onChange={setTextEn} />
                                         </div>
                                         <div className="col-span-2 flex flex-col gap-2">
                                             <label htmlFor="imagennn">Imagen</label>

@@ -87,8 +87,8 @@ export default function LineasAdminRow({ linea }) {
                 ))}
             </td>
 
-            <td className="flex h-[90px] items-center justify-center">
-                <img className="w-[100px]" src={`/storage/${linea?.image}`} alt="" />
+            <td className="flex h-[90px] max-w-[100px] items-center justify-center">
+                <img className="h-full w-full" src={`/storage/${linea?.image}`} alt="" />
             </td>
 
             <td>
@@ -113,7 +113,7 @@ export default function LineasAdminRow({ linea }) {
                         exit={{ opacity: 0 }}
                         className="fixed top-0 left-0 z-50 flex h-full w-full items-center justify-center bg-black/50 text-left"
                     >
-                        <form onSubmit={handleUpdate} method="POST" className="text-black">
+                        <form onSubmit={handleUpdate} method="POST" className="max-h-[90vh] overflow-y-auto text-black">
                             <div className="w-[800px] rounded-md bg-white p-4">
                                 <h2 className="mb-4 text-2xl font-semibold">Actualizar Linea</h2>
                                 <div className="flex flex-col gap-4">
@@ -157,11 +157,11 @@ export default function LineasAdminRow({ linea }) {
                                     <div className="flex flex-row gap-2">
                                         <div className="flex flex-col gap-3">
                                             <label htmlFor="texto">Texto {'(Español)'}</label>
-                                            <CustomReactQuill value={text_es} onChange={setTextEs} />
+                                            <CustomReactQuill additionalStyles="max-w-[380px]" value={text_es} onChange={setTextEs} />
                                         </div>
                                         <div className="flex flex-col gap-3">
                                             <label htmlFor="texto">Texto {'(Ingles)'}</label>
-                                            <CustomReactQuill value={text_en} onChange={setTextEn} />
+                                            <CustomReactQuill additionalStyles="max-w-[380px]" value={text_en} onChange={setTextEn} />
                                         </div>
                                     </div>
 
