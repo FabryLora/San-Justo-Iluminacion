@@ -100,7 +100,7 @@ class ProductoController extends Controller
 
         // Ejecutar query con paginación
         $productos = $query
-            ->paginate(15)
+            ->paginate(16)
             ->appends($request->query());
 
         // Cargar datos para los filtros

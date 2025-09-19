@@ -8,7 +8,7 @@
 
     <div class="flex flex-col gap-10 max-sm:gap-6">
         <!-- Breadcrumb navigation -->
-        <div class="absolute top-30 left-1/2 w-[1224px] -translate-x-1/2 flex flex-row gap-1 z-100">
+        <div class="absolute top-30 max-sm:top-5 left-1/2 w-[1224px] max-sm:w-full max-sm:px-4 -translate-x-1/2 flex flex-row gap-1 z-100">
             <a href="/" class="text-black font-medium text-[12px]">{{__('Inicio')}}</a>
             <span class="text-black font-medium text-[12px]">/</span>
             <a href="/productos" class="text-black font-medium text-[12px]">{{__('Productos')}}</a>
@@ -19,7 +19,7 @@
 
 
         <!-- Main content with sidebar and product detail -->
-        <div class="flex flex-col lg:flex-row gap-6 w-[1224px] mx-auto max-sm:w-full max-sm:px-4 max-sm:gap-4 py-20">
+        <div class="flex flex-col lg:flex-row gap-6 w-[1224px] mx-auto max-sm:w-full max-sm:px-4 max-sm:gap-4 py-20 max-sm:py-8">
             <!-- Sidebar (1/4 width) -->
 
 
@@ -27,12 +27,12 @@
             <div class="w-full max-sm:w-full">
                 <div class="flex flex-col md:flex-row gap-5 max-sm:gap-4">
                     <!-- Image Gallery -->
-                    <div class="relative w-full flex flex-col gap-5  max-sm:mt-10">
+                    <div class="relative w-full flex flex-col gap-5 max-sm:mt-10">
 
                         <!-- Main Image -->
-                        <div class="flex items-center w-full justify-center h-[544px] border rounded-sm">
+                        <div class="flex items-center w-full justify-center h-[544px] max-sm:h-[300px] border rounded-sm">
                             @if ($producto->imagenes->first())
-                                <img id="mainImage" class="rounded-sm" src="{{ $producto->imagenes->first()->image }}"
+                                <img id="mainImage" class="rounded-sm w-full h-full object-cover" src="{{ $producto->imagenes->first()->image }}"
                                     alt="{{ $producto->name }}" 
                                     class="w-full h-full object-cover object-center transition-opacity duration-300 ease-in-out" onerror="this.onerror=null; this.src='{{$logos->logo_secundario}}'; this.classList.remove('object-cover'); this.classList.add('object-contain', 'p-4', 'bg-gray-50');">
                             @else
@@ -43,10 +43,10 @@
                             @endif
                         </div>
                         <div
-                            class="  gap-2 flex flex-row absolute -bottom-24  max-sm:static max-sm:mt-4 max-sm:justify-start max-sm:gap-1.5 max-sm:order-2">
+                            class="gap-2 flex flex-row absolute -bottom-24 max-sm:static max-sm:mt-4 max-sm:justify-start max-sm:gap-1.5 max-sm:order-2">
                             @foreach ($producto->imagenes as $imagen)
                                 <div class="border border-gray-200 w-[78px] h-[78px] cursor-pointer hover:border-main-color rounded-sm max-sm:w-[60px] max-sm:h-[60px]
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            {{ $loop->first ? 'border-main-color' : '' }}"
+                                            {{ $loop->first ? 'border-main-color' : '' }}"
                                     onclick="changeMainImage('{{ $imagen->image }}', this)">
                                     <img src="{{ $imagen->image }}" onerror="this.onerror=null; this.src='{{$logos->logo_secundario}}'; this.classList.remove('object-cover'); this.classList.add('object-contain', 'p-4', 'bg-gray-50');" alt="Thumbnail"
                                         class="w-full h-full object-cover rounded-sm">
@@ -59,36 +59,36 @@
                     </div>
 
                     <!-- Product Info -->
-                    <div class="w-full  flex flex-col min-h-full justify-between max-sm:w-full max-sm:mt-6">
-                        <div class="flex flex-col gap-10">
+                    <div class="w-full flex flex-col min-h-full justify-between max-sm:w-full max-sm:mt-6">
+                        <div class="flex flex-col gap-10 max-sm:gap-6">
                             <div class="flex flex-col">
-                                <h2 class="text-[24px] leading-tight">{{ $producto->code }}</h2>
-                                <h2 class="font-semibold text-[32px] leading-tight">{{ $producto->name }}</h2>
+                                <h2 class="text-[24px] max-sm:text-[18px] leading-tight">{{ $producto->code }}</h2>
+                                <h2 class="font-semibold text-[32px] max-sm:text-[24px] leading-tight">{{ $producto->name }}</h2>
                             </div>
 
                             <div class="flex flex-col gap-2">
 
                                 @if ($producto->lampara)
-                                    <div class="flex flex-row text-[16px] justify-between border-b pb-2">
+                                    <div class="flex flex-row text-[16px] max-sm:text-[14px] justify-between border-b pb-2">
                                         <p class="">{{__("Lampara")}}</p>
                                         <p class="">{{$producto->lampara}}</p>
                                     </div>
                                 @endif
 
                                 @if ($producto->medidas)
-                                    <div class="flex flex-row text-[16px] justify-between border-b pb-2">
+                                    <div class="flex flex-row text-[16px] max-sm:text-[14px] justify-between border-b pb-2">
                                         <p class="">{{__("Medidas")}}</p>
                                         <p class="">{{$producto->medidas}}</p>
                                     </div>
                                 @endif
 
                                 @if ($producto->colores->count() > 0)
-                                    <div class="flex flex-row text-[16px] justify-between border-b pb-2">
+                                    <div class="flex flex-row text-[16px] max-sm:text-[14px] justify-between border-b pb-2">
                                         <p class="">{{__("Colores")}}</p>
 
                                         <div class="flex flex-row gap-1">
                                             @foreach ($producto->colores as $color)
-                                                <div class="w-[26px] h-[26px] rounded-sm border "
+                                                <div class="w-[26px] h-[26px] max-sm:w-[20px] max-sm:h-[20px] rounded-sm border"
                                                     style="background-color: {{ $color->hex }}">
 
                                                 </div>
@@ -98,19 +98,19 @@
                                     </div>
                                 @endif
                                 @if ($producto->origen)
-                                    <p>{{$producto->origen}}</p>
+                                    <p class="max-sm:text-[14px]">{{$producto->origen}}</p>
                                 @endif
 
                                 @if ($producto->certificado)
                                     <a href="{{asset('storage/' . $producto->certificado)}}" target="_blank"
-                                        download="Certificado de seguridad electrica" class="underline text-[16px]">
+                                        download="Certificado de seguridad electrica" class="underline text-[16px] max-sm:text-[14px]">
                                         {{__("Certificado de seguridad eléctrica")}}
                                     </a>
                                 @endif
                             </div>
 
                         </div>
-                        <div class="flex flex-row gap-5">
+                        <div class="flex flex-row max-sm:flex-col gap-5 max-sm:gap-3 max-sm:mt-6">
                             <a href="{{ route('contacto', ['mensaje' => $producto->name]) }}"
                                 class="w-full flex justify-center rounded-sm items-center bg-primary-orange text-white font-bold h-[41px] max-sm:h-[36px] max-sm:text-sm">
                                 {{__("Consultar")}}
@@ -129,26 +129,26 @@
                 </div>
 
 
-                <div class="pt-40 flex flex-row gap-5">
-                    <div class="flex flex-col gap-3 w-full">
-                        <h2 class="font-semibold text-[32px]">
+                <div class="pt-40 max-sm:pt-20 flex flex-row max-sm:flex-col gap-5 max-sm:gap-4">
+                    <div class="flex flex-col gap-3 max-sm:gap-2 w-full">
+                        <h2 class="font-semibold text-[32px] max-sm:text-[24px]">
                             {{request('lang') == 'en' ? $producto->linea->name_en : $producto->linea->name_es}}
                         </h2>
-                        <div class="text-[20px] leading-tight">
+                        <div class="text-[20px] max-sm:text-[16px] leading-tight">
                             {!! request('lang') == 'en' ? $producto->linea->text_en : $producto->linea->text_es !!}
                         </div>
                     </div>
 
-                    <div class="w-full h-[651px]">
+                    <div class="w-full h-[651px] max-sm:h-[300px]">
                         <img src="{{ asset("storage/" . $producto->linea->image) }}" onerror="this.onerror=null; this.src='{{$logos->logo_secundario}}'; this.classList.remove('object-cover'); this.classList.add('object-contain', 'p-4', 'bg-gray-50');" alt="{{ $producto->linea->name }}"
-                            class="w-full h-full object-cover rounded-tr-[70px] rounded-bl-[70px] ">
+                            class="w-full h-full object-cover rounded-tr-[70px] rounded-bl-[70px] max-sm:rounded-tr-[30px] max-sm:rounded-bl-[30px]">
                     </div>
                 </div>
 
 
 
                 <!-- Productos relacionados -->
-                <div class="py-20 pt-30 max-sm:py-10">
+                <div class="py-20 pt-30 max-sm:py-10 max-sm:pt-15">
                     <h2 class="text-[28px] font-bold mb-8 max-sm:text-xl max-sm:mb-6">{{__("Productos relacionados")}}</h2>
 
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 max-sm:grid-cols-1 max-sm:gap-4">

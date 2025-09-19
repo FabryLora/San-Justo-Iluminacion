@@ -1,4 +1,4 @@
-<div class="w-[1224px] mx-auto h-fit max-lg:min-h-0 gap-5 flex flex-col justify-center max-lg:py-4">
+<div class="max-w-[1224px] mx-auto h-fit max-lg:min-h-0 gap-5 flex flex-col justify-center max-lg:py-4">
     <h2 class="text-[32px] font-semibold font-custom!">{{__("Descubrí nuestra línea de productos")}}</h2>
     <form action="{{ route('productos') }}" method="GET"
         class="flex flex-col lg:flex-row gap-6 max-sm:gap-4 w-[1224px] max-xl:w-full max-xl:px-6 max-lg:px-4 max-sm:px-4 mx-auto h-auto items-start lg:items-center">

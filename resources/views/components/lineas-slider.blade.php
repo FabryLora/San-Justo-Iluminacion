@@ -183,7 +183,7 @@
                         @foreach ($lineas as $linea)
                             <div class="min-w-full flex justify-center px-2">
                                 <div
-                                    class="max-w-[300px] w-full bg-white rounded-tr-[70px] rounded-bl-[70px] overflow-hidden shadow-sm">
+                                    class="max-w-[300px] w-full bg-white rounded-tr-[70px] rounded-bl-[70px] max-sm:rounded-none overflow-hidden shadow-sm">
                                     <div class="w-full h-[200px] max-sm:h-[180px]">
                                         <img src="{{ asset("storage/" . $linea->image) }}" alt="cliente"
                                             class="w-full h-full object-cover">
